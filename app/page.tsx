@@ -69,6 +69,7 @@ export default function Home() {
   const generatePDFReceipt = (orderData: any) => {
     const doc = new jsPDF();
 
+    // En-tête / Branding (Noir d'encre & Or Champagne)
     doc.setFillColor(9, 10, 12);
     doc.rect(0, 0, 210, 40, 'F');
 
@@ -81,6 +82,7 @@ export default function Home() {
     doc.setFontSize(10);
     doc.text('REÇU DE PAIEMENT OFFICIEL', 135, 25);
 
+    // Informations générales
     doc.setTextColor(50, 50, 50);
     doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
@@ -91,6 +93,7 @@ export default function Home() {
       doc.text(`Code Partenaire : ${orderData.partnerCode}`, 20, 76);
     }
 
+    // Cadre Informations Client
     doc.setDrawColor(200, 200, 200);
     doc.setFillColor(248, 250, 252);
     doc.roundedRect(20, 85, 170, 35, 3, 3, 'FD');
@@ -102,6 +105,7 @@ export default function Home() {
     doc.text(`Email : ${orderData.email}`, 25, 108);
     doc.text(`Téléphone : ${orderData.phone} | Ville : ${orderData.city}`, 25, 115);
 
+    // Tableau de l'article commandé
     doc.setFillColor(9, 10, 12);
     doc.rect(20, 130, 170, 10, 'F');
     doc.setTextColor(255, 255, 255);
@@ -115,6 +119,7 @@ export default function Home() {
     doc.setFont('helvetica', 'bold');
     doc.text(orderData.price, 150, 150);
 
+    // Ligne de séparation et Totaux
     doc.setDrawColor(200, 200, 200);
     doc.line(20, 160, 190, 160);
 
@@ -131,6 +136,7 @@ export default function Home() {
     doc.text('Total Payé :', 120, 192);
     doc.text(orderData.price, 150, 192);
 
+    // Pied de page
     doc.setTextColor(100, 100, 100);
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(9);
@@ -290,7 +296,7 @@ export default function Home() {
             <a href="#" className="text-[#D4AF37] hover:text-white transition">Accueil</a>
             <a href="#poles" className="hover:text-[#D4AF37] transition">Nos Pôles</a>
             <a href="#boutique" className="hover:text-[#D4AF37] transition">Boutique & Négoce</a>
-            <a href="#carrieres" className="hover:text-[#D4AF37] transition">Carrières</a>
+            <a href="#carrieres" className="hover:text-[#D4AF37] transition">Carrières & Partenaires</a>
             <a href="#contact" className="hover:text-[#D4AF37] transition">Contact</a>
           </nav>
 
@@ -324,7 +330,7 @@ export default function Home() {
             <a href="#" onClick={() => setMobileMenuOpen(false)} className="block text-slate-200 hover:text-[#D4AF37] font-medium py-1">Accueil</a>
             <a href="#poles" onClick={() => setMobileMenuOpen(false)} className="block text-slate-200 hover:text-[#D4AF37] font-medium py-1">Nos Pôles</a>
             <a href="#boutique" onClick={() => setMobileMenuOpen(false)} className="block text-slate-200 hover:text-[#D4AF37] font-medium py-1">Boutique & Négoce</a>
-            <a href="#carrieres" onClick={() => setMobileMenuOpen(false)} className="block text-slate-200 hover:text-[#D4AF37] font-medium py-1">Carrières</a>
+            <a href="#carrieres" onClick={() => setMobileMenuOpen(false)} className="block text-slate-200 hover:text-[#D4AF37] font-medium py-1">Carrières & Partenaires</a>
             <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block text-slate-200 hover:text-[#D4AF37] font-medium py-1">Contact</a>
             <div className="pt-2">
               <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block text-center px-5 py-3 rounded-lg bg-[#D4AF37] text-[#090A0C] font-bold text-sm">
@@ -335,39 +341,39 @@ export default function Home() {
         )}
       </header>
 
-      {/* Hero Section avec visuel de grande entreprise / partenariats */}
+      {/* Hero Section avec image d'entreprise et partenariats */}
       <section className="relative min-h-[85vh] flex items-center justify-center text-center px-6 overflow-hidden py-16">
         <div className="absolute inset-0 z-0">
           <img 
             src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1920&q=80" 
-            alt="Partenariats et Équipe SAB MIDLEY" 
-            className="w-full h-full object-cover opacity-25"
+            alt="SAB MIDLEY Entreprise & Partenariats" 
+            className="w-full h-full object-cover opacity-25 scale-105 animate-pulse duration-1000"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#090A0C] via-[#090A0C]/80 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-b from-[#090A0C]/80 via-[#090A0C]/90 to-[#090A0C]" />
         </div>
 
         <div className="relative z-10 max-w-5xl mx-auto space-y-8">
-          <span className="inline-block py-2 px-5 rounded-full bg-[#D4AF37]/10 text-[#D4AF37] text-sm font-medium tracking-wider uppercase border border-[#D4AF37]/30 shadow-lg backdrop-blur-md">
-            Réseau Commercial International & Alliances Stratégiques
+          <span className="inline-block py-2 px-5 rounded-full bg-[#D4AF37]/10 text-[#D4AF37] text-sm font-medium tracking-wider uppercase border border-[#D4AF37]/30 shadow-lg">
+            Réseau Commercial International SAB MIDLEY — +500 Partenaires Actifs
           </span>
           
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white leading-tight">
             L'Excellence Multiservice <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e5c558] via-[#D4AF37] to-[#b39229]">
-              Sans Frontières
+              Sans Frontières & Partenariats Solides
             </span>
           </h1>
-
+          
           <p className="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
-            Basé au Bénin et en Côte d'Ivoire, SAB MIDLEY structure vos projets d'avenir à travers 4 pôles d'excellence, une plateforme e-commerce et un vaste réseau de plus de 500 partenaires indépendants.
+            Basé au Bénin (Aïchedji, Abomey-Calavi) et en Côte d'Ivoire (Angré Château, Abidjan), SAB MIDLEY propulse votre activité et structure vos projets à travers nos pôles d'excellence et notre réseau d'indépendants.
           </p>
-
+          
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-            <a href="#contact" className="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold hover:bg-[#c5a030] transition shadow-xl shadow-[#D4AF37]/20">
-              Initier une demande de service
+            <a href="#carrieres" className="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold hover:bg-[#c5a030] transition shadow-xl shadow-[#D4AF37]/20">
+              Devenir Partenaire (10% à 20% de commission)
             </a>
-            <a href="#carrieres" className="w-full sm:w-auto px-8 py-4 rounded-xl bg-slate-900 text-white font-semibold hover:bg-slate-800 transition border border-[#D4AF37]/30">
-              Rejoindre nos offres (Carrières)
+            <a href="#contact" className="w-full sm:w-auto px-8 py-4 rounded-xl bg-slate-900 text-white font-semibold hover:bg-slate-800 transition border border-[#D4AF37]/30">
+              Nos Contacts & Agences
             </a>
           </div>
         </div>
@@ -419,7 +425,7 @@ export default function Home() {
             <span className="text-[#D4AF37] font-semibold text-sm uppercase tracking-wider">Catalogue & Négoce</span>
             <h2 className="text-3xl md:text-5xl font-extrabold text-white">Boutique & Équipements</h2>
             <p className="text-slate-400 max-w-xl text-lg">
-              Cliquez sur un article pour commander, remplir vos coordonnées de livraison et régler directement par paiement sécurisé.
+              Commandez nos articles, indiquez votre code partenaire si vous en possédez un, et réglez par paiement sécurisé (Mobile Money / Cartes).
             </p>
           </div>
           <a 
@@ -487,87 +493,95 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SECTION CARRIÈRES (RECRUTEMENT) */}
+      {/* ================= SECTION CARRIÈRES & RECRUTEMENT ================= */}
       <section id="carrieres" className="py-24 px-6 max-w-7xl mx-auto border-t border-[#D4AF37]/20">
         <div className="text-center space-y-4 mb-16">
-          <span className="text-[#D4AF37] font-semibold text-sm uppercase tracking-wider">Rejoignez notre dynamique</span>
-          <h2 className="text-3xl md:text-5xl font-extrabold text-white">Carrières & Opportunités</h2>
-          <p className="text-slate-400 max-w-2xl mx-auto text-lg">
-            SAB MIDLEY grandit vite et recrute des talents motivés et des partenaires d'exception pour propulser ses activités au Bénin et en Côte d'Ivoire.
+          <span className="text-[#D4AF37] font-semibold text-sm uppercase tracking-wider">Opportunités professionnelles</span>
+          <h2 className="text-3xl md:text-5xl font-extrabold text-white">Carrières & Réseau de Partenaires</h2>
+          <p className="text-slate-400 max-w-3xl mx-auto text-lg">
+            Rejoignez une dynamique entrepreneuriale forte en Afrique de l'Ouest. Que vous souhaitez devenir partenaire indépendant, assistant(e) commercial(e) ou livreur, SAB MIDLEY vous offre un cadre structuré et rémunérateur.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
           
-          {/* Offre 1 : Partenaires Commerciaux Indépendants */}
-          <div className="rounded-2xl bg-slate-900/80 border border-[#D4AF37]/40 p-8 flex flex-col justify-between shadow-xl relative overflow-hidden group hover:border-[#D4AF37] transition">
+          {/* Offre 1 : Partenaires Indépendants */}
+          <div className="rounded-3xl bg-slate-900/80 border border-[#D4AF37]/40 p-8 space-y-6 flex flex-col justify-between shadow-2xl relative overflow-hidden">
             <div className="absolute top-0 right-0 bg-[#D4AF37] text-[#090A0C] text-xs font-extrabold px-4 py-1.5 rounded-bl-xl">
-              +500 Partenaires
+              +500 Partenaires Actifs
             </div>
-            <div className="space-y-4">
-              <h3 className="text-2xl font-bold text-white group-hover:text-[#D4AF37] transition">Partenaires Commerciaux Indépendants</h3>
+            <div className="space-y-4 pt-2">
+              <h3 className="text-2xl font-bold text-white">Partenaires Commerciaux Indépendants</h3>
+              <p className="text-[#D4AF37] font-bold text-lg">Gagnez entre 10% et 20% de commission par vente</p>
               <p className="text-slate-300 text-sm leading-relaxed">
-                Rejoignez notre réseau fort de plus de **500 partenaires** actifs. Votre mission : publier nos articles et trouver des clients.
+                Notre réseau compte déjà plus de 500 partenaires prospères. Votre rôle est simple : 
               </p>
-              <div className="bg-[#090A0C]/70 p-4 rounded-xl border border-slate-800 space-y-2">
-                <p className="text-xs text-slate-300"><strong className="text-[#D4AF37]">Rémunération :</strong> Percevez entre <strong className="text-[#D4AF37]">10% et 20% de commission</strong> par vente.</p>
-                <p className="text-xs text-slate-300"><strong className="text-[#D4AF37]">Fonctionnement simple :</strong> Vous ne faites que publier et trouver le client. <strong className="text-white">Nous gérons la livraison et l'encaissement !</strong></p>
-              </div>
+              <ul className="space-y-2 text-sm text-slate-300 list-disc list-inside">
+                <li>Publier nos articles sur vos canaux et réseaux.</li>
+                <li>Trouver et orienter les clients vers SAB MIDLEY.</li>
+                <li><strong>Nous nous occupons de la livraison</strong> et vous percevez directement vos commissions.</li>
+              </ul>
             </div>
-            <div className="pt-6">
+            <div>
               <a 
-                href="mailto:rh@sabmidley.co?subject=Candidature%20Partenaire%20Commercial%20Indépendant" 
-                className="w-full py-3 text-center rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-sm hover:bg-[#c5a030] transition block shadow-md"
+                href="https://wa.me/2290169325576?text=Bonjour,%20je%20souhaite%20rejoindre%20le%20r%C3%A9seau%20des%20partenaires%20ind%C3%A9pendants%20SAB%20MIDLEY" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-full py-3.5 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-sm hover:bg-[#c5a030] transition block text-center shadow-lg shadow-[#D4AF37]/20"
               >
-                Postuler comme Partenaire
+                Devenir Partenaire Indépendant
               </a>
             </div>
           </div>
 
           {/* Offre 2 : Assistance Commerciale */}
-          <div className="rounded-2xl bg-slate-900/80 border border-[#D4AF37]/40 p-8 flex flex-col justify-between shadow-xl group hover:border-[#D4AF37] transition">
+          <div className="rounded-3xl bg-slate-900/80 border border-[#D4AF37]/40 p-8 space-y-6 flex flex-col justify-between shadow-2xl">
             <div className="space-y-4">
-              <span className="text-xs font-bold px-3 py-1 rounded-md bg-slate-800 text-[#D4AF37] border border-slate-700">Abomey-Calavi, Bénin</span>
-              <h3 className="text-2xl font-bold text-white group-hover:text-[#D4AF37] transition">Assistance Commerciale</h3>
+              <span className="text-xs font-bold px-3 py-1 rounded-md bg-slate-800 text-[#D4AF37] border border-[#D4AF37]/30">Poste à Abomey-Calavi</span>
+              <h3 className="text-2xl font-bold text-white">Assistance Commerciale</h3>
+              <p className="text-[#D4AF37] font-bold text-lg">Bureau physique à Aicthedji, Abomey-Calavi</p>
               <p className="text-slate-300 text-sm leading-relaxed">
-                Nous recrutons un(e) assistant(e) commercial(e) dynamique pour travailler directement depuis notre pôle à <strong className="text-white">Abomey-Calavi</strong>.
+                Nous recrutons une assistance commerciale motivée et rigoureuse pour travailler directement depuis notre site d'Abomey-Calavi au Bénin.
               </p>
-              <ul className="text-xs text-slate-300 space-y-2 list-disc list-inside bg-[#090A0C]/70 p-4 rounded-xl border border-slate-800">
-                <li>Accueil et suivi des clients et partenaires</li>
-                <li>Gestion administrative des commandes et du catalogue</li>
-                <li>Appui aux opérations quotidiennes du centre d'affaires</li>
+              <ul className="space-y-2 text-sm text-slate-300 list-disc list-inside">
+                <li>Accueil et suivi des clients et partenaires.</li>
+                <li>Gestion administrative des commandes et du négoce.</li>
+                <li>Coordination avec les équipes logistiques.</li>
               </ul>
             </div>
-            <div className="pt-6">
+            <div>
               <a 
-                href="mailto:rh@sabmidley.co?subject=Candidature%20Assistance%20Commerciale%20Abomey-Calavi" 
-                className="w-full py-3 text-center rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-sm hover:bg-[#c5a030] transition block shadow-md"
+                href="mailto:rh@sabmidley.co?subject=Candidature%20-%20Assistance%20Commerciale%20Abomey-Calavi" 
+                className="w-full py-3.5 rounded-xl bg-slate-800 text-white font-bold text-sm hover:bg-slate-700 transition block text-center border border-slate-700"
               >
-                Postuler à l'offre
+                Postuler (Envoyer CV par Email)
               </a>
             </div>
           </div>
 
           {/* Offre 3 : Livreur */}
-          <div className="rounded-2xl bg-slate-900/80 border border-[#D4AF37]/40 p-8 flex flex-col justify-between shadow-xl group hover:border-[#D4AF37] transition">
+          <div className="rounded-3xl bg-slate-900/80 border border-[#D4AF37]/40 p-8 space-y-6 flex flex-col justify-between shadow-2xl">
             <div className="space-y-4">
-              <span className="text-xs font-bold px-3 py-1 rounded-md bg-slate-800 text-[#D4AF37] border border-slate-700">Abomey-Calavi, Bénin</span>
-              <h3 className="text-2xl font-bold text-white group-hover:text-[#D4AF37] transition">Livreur / Logisticien</h3>
+              <span className="text-xs font-bold px-3 py-1 rounded-md bg-slate-800 text-[#D4AF37] border border-[#D4AF37]/30">Logistique & Terrain</span>
+              <h3 className="text-2xl font-bold text-white">Livreur Professionnel</h3>
+              <p className="text-[#D4AF37] font-bold text-lg">Zone : Abomey-Calavi (Bénin)</p>
               <p className="text-slate-300 text-sm leading-relaxed">
-                Vous avez le sens du service, une bonne connaissance de la zone d'Abomey-Calavi et un moyen de déplacement fiable ? Rejoignez notre équipe logistique.
+                Intégrez notre pôle logistique pour assurer la livraison rapide et sécurisée de nos articles et équipements commandés par nos clients.
               </p>
-              <ul className="text-xs text-slate-300 space-y-2 list-disc list-inside bg-[#090A0C]/70 p-4 rounded-xl border border-slate-800">
-                <li>Livraison rapide et sécurisée des articles de la boutique</li>
-                <li>Encaissement et gestion des reçus clients sur le terrain</li>
-                <li>Rigueur et ponctualité exigées</li>
+              <ul className="space-y-2 text-sm text-slate-300 list-disc list-inside">
+                <li>Parfaite connaissance de la zone d'Abomey-Calavi et environs.</li>
+                <li>Ponctualité, intégrité et sens du service client.</li>
+                <li>Possession d'un moyen de déplacement fiable.</li>
               </ul>
             </div>
-            <div className="pt-6">
+            <div>
               <a 
-                href="mailto:rh@sabmidley.co?subject=Candidature%20Livreur%20Abomey-Calavi" 
-                className="w-full py-3 text-center rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-sm hover:bg-[#c5a030] transition block shadow-md"
+                href="https://wa.me/2290169325576?text=Bonjour,%20je%20souhaite%20postuler%20pour%20le%20poste%20de%20livreur%20à%20Abomey-Calavi" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="w-full py-3.5 rounded-xl bg-slate-800 text-white font-bold text-sm hover:bg-slate-700 transition block text-center border border-slate-700"
               >
-                Postuler comme Livreur
+                Postuler via WhatsApp
               </a>
             </div>
           </div>
@@ -575,81 +589,312 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SECTION CONTACT */}
+      {/* ================= SECTION CONTACT & COORDONNÉES ================= */}
       <section id="contact" className="py-24 px-6 max-w-7xl mx-auto border-t border-[#D4AF37]/20">
         <div className="text-center space-y-4 mb-16">
           <span className="text-[#D4AF37] font-semibold text-sm uppercase tracking-wider">Restons en contact</span>
-          <h2 className="text-3xl md:text-5xl font-extrabold text-white">Nos Bureaux & Coordonnées</h2>
+          <h2 className="text-3xl md:text-5xl font-extrabold text-white">Nos Coordonnées & Implantations</h2>
           <p className="text-slate-400 max-w-2xl mx-auto text-lg">
-            Une question, un projet ou besoin d'assistance ? Contactez nos équipes au Bénin ou en Côte d'Ivoire.
+            Retrouvez-nous dans nos bureaux officiels au Bénin et en Côte d'Ivoire ou contactez nos équipes par email et téléphone.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
           
-          {/* Adresse Bénin */}
-          <div className="rounded-2xl bg-slate-900/60 border border-[#D4AF37]/30 p-8 space-y-4 backdrop-blur-sm">
-            <span className="text-xs font-bold px-3 py-1 rounded-md bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/30">Siège — Bénin</span>
-            <h3 className="text-2xl font-bold text-white">Aïhedji, Abomey-Calavi, Bénin</h3>
-            <p className="text-slate-300 text-sm leading-relaxed">
-              Centre d'affaires principal, gestion des pôles négoce international, immobilier et logistique régionale.
-            </p>
-            <div className="pt-2">
-              <a href="tel:+2290169325576" className="text-[#D4AF37] font-extrabold text-lg hover:underline block">
-                +229 01 69 32 55 76
-              </a>
+          {/* Bureau Bénin */}
+          <div className="rounded-3xl bg-slate-900/60 border border-[#D4AF37]/30 p-8 space-y-6 shadow-xl backdrop-blur-sm">
+            <div className="flex items-center space-x-4 border-b border-slate-800 pb-4">
+              <div className="w-12 h-12 rounded-xl bg-[#D4AF37]/10 border border-[#D4AF37]/30 flex items-center justify-center text-[#D4AF37] font-bold text-xl">
+                BJ
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold text-white">Siège — Bénin</h3>
+                <p className="text-slate-400 text-sm">Abomey-Calavi</p>
+              </div>
+            </div>
+            <div className="space-y-3 text-slate-300 text-sm">
+              <p><strong>Adresse :</strong> Aicthedji, Abomey-Calavi, Bénin</p>
+              <p><strong>Téléphone :</strong> <a href="tel:+2290169325576" className="text-[#D4AF37] hover:underline">+229 01 69 32 55 76</a></p>
             </div>
           </div>
 
-          {/* Adresse Côte d'Ivoire */}
-          <div className="rounded-2xl bg-slate-900/60 border border-[#D4AF37]/30 p-8 space-y-4 backdrop-blur-sm">
-            <span className="text-xs font-bold px-3 py-1 rounded-md bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/30">Bureau — Côte d'Ivoire</span>
-            <h3 className="text-2xl font-bold text-white">Angré Château, Abidjan, Côte d'Ivoire</h3>
-            <p className="text-slate-300 text-sm leading-relaxed">
-              Antenne commerciale, développement du réseau d'indépendants et partenariats ouest-africains.
-            </p>
-            <div className="pt-2">
-              <a href="tel:+2250710410604" className="text-[#D4AF37] font-extrabold text-lg hover:underline block">
-                +225 07 104 106 04
-              </a>
+          {/* Bureau Côte d'Ivoire */}
+          <div className="rounded-3xl bg-slate-900/60 border border-[#D4AF37]/30 p-8 space-y-6 shadow-xl backdrop-blur-sm">
+            <div className="flex items-center space-x-4 border-b border-slate-800 pb-4">
+              <div className="w-12 h-12 rounded-xl bg-[#D4AF37]/10 border border-[#D4AF37]/30 flex items-center justify-center text-[#D4AF37] font-bold text-xl">
+                CI
+              </div>
+              <div>
+                <h3 className="text-2xl font-bold text-white">Antenne — Côte d'Ivoire</h3>
+                <p className="text-slate-400 text-sm">Abidjan</p>
+              </div>
+            </div>
+            <div className="space-y-3 text-slate-300 text-sm">
+              <p><strong>Adresse :</strong> Angré Château, Abidjan, Côte d'Ivoire</p>
+              <p><strong>Téléphone :</strong> <a href="tel:+2250710410604" className="text-[#D4AF37] hover:underline">+225 07 104 106 04</a></p>
             </div>
           </div>
 
         </div>
 
-        {/* E-mails officiels */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-center">
-          <div className="p-6 rounded-xl bg-slate-900/40 border border-slate-800">
-            <span className="text-xs font-semibold text-slate-400 block mb-1">Informations & Partenariats</span>
-            <a href="mailto:contact@sabmidley.co" className="text-[#D4AF37] font-bold text-sm hover:underline">contact@sabmidley.co</a>
-          </div>
-          <div className="p-6 rounded-xl bg-slate-900/40 border border-slate-800">
-            <span className="text-xs font-semibold text-slate-400 block mb-1">Boutique & Commandes</span>
-            <a href="mailto:shop@sabmidley.co" className="text-[#D4AF37] font-bold text-sm hover:underline">shop@sabmidley.co</a>
-          </div>
-          <div className="p-6 rounded-xl bg-slate-900/40 border border-slate-800">
-            <span className="text-xs font-semibold text-slate-400 block mb-1">Ressources Humaines (RH)</span>
-            <a href="mailto:rh@sabmidley.co" className="text-[#D4AF37] font-bold text-sm hover:underline">rh@sabmidley.co</a>
+        {/* Adresses Email Officielles */}
+        <div className="rounded-3xl bg-slate-900/80 border border-[#D4AF37]/40 p-8 shadow-2xl text-center space-y-6">
+          <h3 className="text-2xl font-bold text-white">Nos Adresses Email Officielles</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4">
+            <div className="p-4 rounded-2xl bg-[#090A0C]/80 border border-slate-800 space-y-2">
+              <span className="text-xs uppercase tracking-wider text-slate-400 block font-semibold">Contact Général</span>
+              <a href="mailto:contact@sabmidley.co" className="text-[#D4AF37] font-bold text-sm hover:underline block">contact@sabmidley.co</a>
+            </div>
+            <div className="p-4 rounded-2xl bg-[#090A0C]/80 border border-slate-800 space-y-2">
+              <span className="text-xs uppercase tracking-wider text-slate-400 block font-semibold">Boutique & Négoce</span>
+              <a href="mailto:shop@sabmidley.co" className="text-[#D4AF37] font-bold text-sm hover:underline block">shop@sabmidley.co</a>
+            </div>
+            <div className="p-4 rounded-2xl bg-[#090A0C]/80 border border-slate-800 space-y-2">
+              <span className="text-xs uppercase tracking-wider text-slate-400 block font-semibold">Ressources Humaines</span>
+              <a href="mailto:rh@sabmidley.co" className="text-[#D4AF37] font-bold text-sm hover:underline block">rh@sabmidley.co</a>
+            </div>
           </div>
         </div>
+
       </section>
+
+      {/* FENÊTRE DE MODAL : DÉTAILS DE L'ARTICLE */}
+      {selectedProduct && !orderProduct && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#090A0C]/85 backdrop-blur-sm p-4 overflow-y-auto">
+          <div className="bg-slate-900 border border-[#D4AF37]/40 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl relative my-auto">
+            <button 
+              onClick={() => setSelectedProduct(null)}
+              className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-[#090A0C]/90 text-white font-bold flex items-center justify-center hover:bg-[#D4AF37] hover:text-[#090A0C] transition border border-[#D4AF37]/30"
+            >
+              ✕
+            </button>
+            <div className="h-64 overflow-hidden relative">
+              <img src={(selectedProduct as any).image} alt={(selectedProduct as any).title} className="w-full h-full object-cover" />
+              <span className="absolute bottom-3 left-3 bg-[#090A0C]/90 text-[#D4AF37] text-xs font-bold px-3 py-1 rounded-md border border-[#D4AF37]/30">
+                {(selectedProduct as any).category}
+              </span>
+            </div>
+            <div className="p-6 space-y-4">
+              <h3 className="text-2xl font-bold text-white">{(selectedProduct as any).title}</h3>
+              <p className="text-[#D4AF37] font-extrabold text-2xl">{(selectedProduct as any).price}</p>
+              
+              <div className="space-y-2">
+                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Description détaillée de l'article :</span>
+                <p className="text-slate-200 text-sm leading-relaxed bg-[#090A0C]/70 p-4 rounded-xl border border-slate-800">
+                  {(selectedProduct as any).description}
+                </p>
+              </div>
+
+              <div className="space-y-3 pt-2">
+                <button 
+                  onClick={() => setOrderProduct(selectedProduct)}
+                  className="w-full py-3.5 text-center rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-sm hover:bg-[#c5a030] transition shadow-lg shadow-[#D4AF37]/20 block"
+                >
+                  Commander (Remplir le formulaire)
+                </button>
+                
+                <a 
+                  href={`https://wa.me/2290169325576?text=${encodeURIComponent(`Bonjour, je souhaite échanger avec un agent au sujet de l'article : ${(selectedProduct as any).title} (${(selectedProduct as any).price}). Description : ${(selectedProduct as any).description}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-3.5 text-center rounded-xl bg-emerald-600 text-white font-bold text-sm hover:bg-emerald-500 transition shadow-lg block"
+                >
+                  Discuter d'abord avec un agent sur WhatsApp
+                </a>
+
+                <button 
+                  onClick={() => setSelectedProduct(null)}
+                  className="w-full py-2.5 text-center rounded-xl bg-slate-800 text-slate-300 font-semibold text-xs hover:bg-slate-700 transition border border-slate-700"
+                >
+                  Fermer la fenêtre
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* FENÊTRE DE FORMULAIRE DE COMMANDE */}
+      {orderProduct && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#090A0C]/85 backdrop-blur-sm p-4 overflow-y-auto">
+          <div className="bg-slate-900 border border-[#D4AF37]/40 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl relative my-auto p-6 space-y-6">
+            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+              <div>
+                <span className="text-xs font-semibold text-[#D4AF37] uppercase tracking-wider">Validation de commande</span>
+                <h3 className="text-xl font-bold text-white mt-1">{(orderProduct as any).title}</h3>
+              </div>
+              <button 
+                onClick={() => setOrderProduct(null)}
+                className="w-9 h-9 rounded-full bg-[#090A0C]/90 text-white font-bold flex items-center justify-center hover:bg-[#D4AF37] hover:text-[#090A0C] transition border border-[#D4AF37]/30"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="bg-[#090A0C]/60 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
+              <span className="text-sm text-slate-300">Montant de l'article :</span>
+              <span className="text-[#D4AF37] font-extrabold text-lg">{(orderProduct as any).price}</span>
+            </div>
+
+            <form onSubmit={handleOrderSubmit} className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Nom et Prénom <span className="text-[#D4AF37]">*</span></label>
+                <input 
+                  type="text" 
+                  name="fullName"
+                  value={formData.fullName}
+                  onChange={handleInputChange}
+                  placeholder="Ex: Jean Dupont" 
+                  required
+                  className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Email <span className="text-[#D4AF37]">*</span></label>
+                <input 
+                  type="email" 
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  placeholder="nom@exemple.com" 
+                  required
+                  className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Pays <span className="text-[#D4AF37]">*</span></label>
+                  <select
+                    name="country"
+                    value={formData.country}
+                    onChange={handleInputChange}
+                    required
+                    className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm"
+                  >
+                    <option value="BJ">Bénin</option>
+                    <option value="CI">Côte d'Ivoire</option>
+                    <option value="BF">Burkina Faso</option>
+                    <option value="TG">Togo</option>
+                    <option value="SN">Sénégal</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Ville <span className="text-[#D4AF37]">*</span></label>
+                  <input 
+                    type="text" 
+                    name="city"
+                    value={formData.city}
+                    onChange={handleInputChange}
+                    placeholder="Ex: Abidjan / Cotonou" 
+                    required
+                    className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Téléphone <span className="text-[#D4AF37]">*</span></label>
+                <input 
+                  type="tel" 
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  placeholder="Ex: +229..." 
+                  required
+                  className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
+                />
+              </div>
+
+              {/* Bouton pour activer le champ Code Partenaire */}
+              {!showPartnerField ? (
+                <button
+                  type="button"
+                  onClick={() => setShowPartnerField(true)}
+                  className="text-xs text-[#D4AF37] hover:underline font-semibold"
+                >
+                  + J'ai un code partenaire
+                </button>
+              ) : (
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-[#D4AF37] mb-1">Code Partenaire (Optionnel)</label>
+                  <input 
+                    type="text" 
+                    name="partnerCode"
+                    value={formData.partnerCode}
+                    onChange={handleInputChange}
+                    placeholder="Ex: SM-PARTNER-123" 
+                    className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-[#D4AF37]/40 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
+                  />
+                </div>
+              )}
+
+              <div className="pt-4">
+                <button 
+                  type="submit"
+                  className="w-full py-4 text-center rounded-xl bg-[#D4AF37] text-[#090A0C] font-extrabold text-sm hover:bg-[#c5a030] transition shadow-xl shadow-[#D4AF37]/20 block"
+                >
+                  Procéder au Paiement Sécurisé (FedaPay)
+                </button>
+              </div>
+
+              <button 
+                type="button"
+                onClick={() => setOrderProduct(null)}
+                className="w-full py-2.5 text-center rounded-xl bg-slate-800 text-slate-300 font-semibold text-xs hover:bg-slate-700 transition border border-slate-700 block"
+              >
+                Annuler
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* POPUP DE SUCCÈS DE COMMANDE */}
+      {orderSuccess && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#090A0C]/90 backdrop-blur-md p-4">
+          <div className="bg-slate-900 border border-[#D4AF37] rounded-3xl max-w-md w-full p-8 text-center space-y-6 shadow-2xl">
+            <div className="w-16 h-16 bg-[#D4AF37]/20 text-[#D4AF37] rounded-full flex items-center justify-center mx-auto text-3xl font-bold border border-[#D4AF37]/40">
+              ✓
+            </div>
+            <div className="space-y-2">
+              <h3 className="text-2xl font-bold text-white">Commande Validée avec Succès !</h3>
+              <p className="text-slate-300 text-sm">
+                Merci <strong>{orderSuccess.fullName}</strong>. Votre paiement a été validé et votre reçu officiel PDF vient d'être téléchargé automatiquement.
+              </p>
+            </div>
+            <div className="bg-[#090A0C]/70 p-4 rounded-xl text-left space-y-1 text-xs text-slate-300 border border-slate-800">
+              <p><strong>Article :</strong> {orderSuccess.productTitle}</p>
+              <p><strong>Montant :</strong> {orderSuccess.price}</p>
+              <p><strong>Ville / Livraison :</strong> {orderSuccess.city}</p>
+            </div>
+            <button 
+              onClick={() => setOrderSuccess(null)}
+              className="w-full py-3 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-sm hover:bg-[#c5a030] transition shadow-lg"
+            >
+              Fermer et retourner au site
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Bouton Retour en haut */}
       {showScrollTop && (
-        <button 
+        <button
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-40 w-12 h-12 rounded-full bg-[#D4AF37] text-[#090A0C] font-bold flex items-center justify-center shadow-xl hover:bg-[#c5a030] transition"
+          className="fixed bottom-6 right-6 z-30 w-12 h-12 rounded-full bg-[#D4AF37] text-[#090A0C] font-bold shadow-2xl flex items-center justify-center hover:bg-[#c5a030] transition border border-white/20"
           aria-label="Retour en haut"
         >
           ↑
         </button>
       )}
 
-      {/* FOOTER */}
-      <footer className="bg-[#090A0C] border-t border-[#D4AF37]/20 py-12 px-6 text-center text-slate-500 text-xs space-y-4">
-        <p>© 2026 SAB MIDLEY. Tous droits réservés. Abomey-Calavi (Bénin) & Abidjan (Côte d'Ivoire).</p>
+      {/* Footer */}
+      <footer className="border-t border-[#D4AF37]/20 bg-[#090A0C] py-12 px-6 text-center text-xs text-slate-500 space-y-4">
+        <p>© 2026 SAB MIDLEY. Tous droits réservés. Bénin & Côte d'Ivoire.</p>
+        <p className="text-slate-400">Réseau commercial international, négoce et services associés.</p>
       </footer>
-
     </div>
   );
 }
