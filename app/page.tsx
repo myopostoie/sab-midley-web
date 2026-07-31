@@ -646,255 +646,251 @@ export default function Home() {
               <a href="mailto:contact@sabmidley.co" className="text-[#D4AF37] font-bold text-sm hover:underline block">contact@sabmidley.co</a>
             </div>
             <div className="p-4 rounded-2xl bg-[#090A0C]/80 border border-slate-800 space-y-2">
-              <span className="text-xs uppercase tracking-wider text-slate-400 block font-semibold">Boutique & Négoce</span>
-              <a href="mailto:shop@sabmidley.co" className="text-[#D4AF37] font-bold text-sm hover:underline block">shop@sabmidley.co</a>
-            </div>
-            <div className="p-4 rounded-2xl bg-[#090A0C]/80 border border-slate-800 space-y-2">
               <span className="text-xs uppercase tracking-wider text-slate-400 block font-semibold">Ressources Humaines</span>
               <a href="mailto:rh@sabmidley.co" className="text-[#D4AF37] font-bold text-sm hover:underline block">rh@sabmidley.co</a>
             </div>
+            <div className="p-4 rounded-2xl bg-[#090A0C]/80 border border-slate-800 space-y-2">
+              <span className="text-xs uppercase tracking-wider text-slate-400 block font-semibold">Support Partenaires</span>
+              <a href="mailto:partenaires@sabmidley.co" className="text-[#D4AF37] font-bold text-sm hover:underline block">partenaires@sabmidley.co</a>
+            </div>
           </div>
         </div>
-
       </section>
 
-      {/* FENÊTRE DE MODAL : DÉTAILS DE L'ARTICLE */}
-      {selectedProduct && !orderProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#090A0C]/85 backdrop-blur-sm p-4 overflow-y-auto">
-          <div className="bg-slate-900 border border-[#D4AF37]/40 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl relative my-auto">
+      {/* Footer */}
+      <footer className="bg-[#090A0C] border-t border-[#D4AF37]/20 py-12 px-6 text-center text-slate-500 text-sm space-y-4">
+        <p>© {new Date().getFullYear()} SAB MIDLEY. Tous droits réservés. Basé au Bénin et en Côte d'Ivoire.</p>
+        <p className="text-xs text-slate-600">Paiements sécurisés par FedaPay — Traçabilité et reçus automatiques PDF.</p>
+      </footer>
+
+      {/* Modal Détails du Produit */}
+      {selectedProduct && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-[#D4AF37]/40 rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-6 relative shadow-2xl max-h-[90vh] overflow-y-auto">
             <button 
               onClick={() => setSelectedProduct(null)}
-              className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-[#090A0C]/90 text-white font-bold flex items-center justify-center hover:bg-[#D4AF37] hover:text-[#090A0C] transition border border-[#D4AF37]/30"
+              className="absolute top-6 right-6 text-slate-400 hover:text-white bg-slate-800 p-2 rounded-full transition"
             >
               ✕
             </button>
-            <div className="h-64 overflow-hidden relative">
-              <img src={(selectedProduct as any).image} alt={(selectedProduct as any).title} className="w-full h-full object-cover" />
-              <span className="absolute bottom-3 left-3 bg-[#090A0C]/90 text-[#D4AF37] text-xs font-bold px-3 py-1 rounded-md border border-[#D4AF37]/30">
-                {(selectedProduct as any).category}
-              </span>
+            <div className="h-64 rounded-2xl overflow-hidden border border-slate-800">
+              <img src={selectedProduct.image} alt={selectedProduct.title} className="w-full h-full object-cover" />
             </div>
-            <div className="p-6 space-y-4">
-              <h3 className="text-2xl font-bold text-white">{(selectedProduct as any).title}</h3>
-              <p className="text-[#D4AF37] font-extrabold text-2xl">{(selectedProduct as any).price}</p>
-              
-              <div className="space-y-2">
-                <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Description détaillée de l'article :</span>
-                <p className="text-slate-200 text-sm leading-relaxed bg-[#090A0C]/70 p-4 rounded-xl border border-slate-800">
-                  {(selectedProduct as any).description}
-                </p>
-              </div>
-
-              <div className="space-y-3 pt-2">
-                <button 
-                  onClick={() => setOrderProduct(selectedProduct)}
-                  className="w-full py-3.5 text-center rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-sm hover:bg-[#c5a030] transition shadow-lg shadow-[#D4AF37]/20 block"
-                >
-                  Commander (Remplir le formulaire)
-                </button>
-                
-                <a 
-                  href={`https://wa.me/2290169325576?text=${encodeURIComponent(`Bonjour, je souhaite échanger avec un agent au sujet de l'article : ${(selectedProduct as any).title} (${(selectedProduct as any).price}). Description : ${(selectedProduct as any).description}`)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full py-3.5 text-center rounded-xl bg-emerald-600 text-white font-bold text-sm hover:bg-emerald-500 transition shadow-lg block"
-                >
-                  Discuter d'abord avec un agent sur WhatsApp
-                </a>
-
-                <button 
-                  onClick={() => setSelectedProduct(null)}
-                  className="w-full py-2.5 text-center rounded-xl bg-slate-800 text-slate-300 font-semibold text-xs hover:bg-slate-700 transition border border-slate-700"
-                >
-                  Fermer la fenêtre
-                </button>
-              </div>
+            <div className="space-y-3">
+              <span className="text-xs font-bold px-3 py-1 rounded-md bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/30">
+                {selectedProduct.category}
+              </span>
+              <h3 className="text-2xl font-extrabold text-white">{selectedProduct.title}</h3>
+              <p className="text-[#D4AF37] font-extrabold text-xl">{selectedProduct.price}</p>
+              <p className="text-slate-300 text-sm leading-relaxed">{selectedProduct.description}</p>
+            </div>
+            <div className="flex gap-4 pt-4 border-t border-slate-800">
+              <button 
+                onClick={() => {
+                  const prod = selectedProduct;
+                  setSelectedProduct(null);
+                  setOrderProduct(prod);
+                }}
+                className="flex-1 py-3.5 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-sm hover:bg-[#c5a030] transition shadow-lg shadow-[#D4AF37]/20 text-center"
+              >
+                Commander cet article
+              </button>
+              <button 
+                onClick={() => setSelectedProduct(null)}
+                className="px-6 py-3.5 rounded-xl bg-slate-800 text-slate-300 font-semibold text-sm hover:bg-slate-700 hover:text-white transition border border-slate-700"
+              >
+                Fermer
+              </button>
             </div>
           </div>
         </div>
       )}
 
-      {/* FENÊTRE DE FORMULAIRE DE COMMANDE */}
+      {/* Modal Formulaire de Commande & Paiement */}
       {orderProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#090A0C]/85 backdrop-blur-sm p-4 overflow-y-auto">
-          <div className="bg-slate-900 border border-[#D4AF37]/40 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl relative my-auto p-6 space-y-6">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-              <div>
-                <span className="text-xs font-semibold text-[#D4AF37] uppercase tracking-wider">Validation de commande</span>
-                <h3 className="text-xl font-bold text-white mt-1">{(orderProduct as any).title}</h3>
-              </div>
-              <button 
-                onClick={() => setOrderProduct(null)}
-                className="w-9 h-9 rounded-full bg-[#090A0C]/90 text-white font-bold flex items-center justify-center hover:bg-[#D4AF37] hover:text-[#090A0C] transition border border-[#D4AF37]/30"
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="bg-[#090A0C]/60 p-4 rounded-xl border border-slate-800 flex justify-between items-center">
-              <span className="text-sm text-slate-300">Montant de l'article :</span>
-              <span className="text-[#D4AF37] font-extrabold text-lg">{(orderProduct as any).price}</span>
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-[#D4AF37]/40 rounded-3xl max-w-xl w-full p-6 sm:p-8 space-y-6 relative shadow-2xl max-h-[90vh] overflow-y-auto">
+            <button 
+              onClick={() => setOrderProduct(null)}
+              className="absolute top-6 right-6 text-slate-400 hover:text-white bg-slate-800 p-2 rounded-full transition"
+            >
+              ✕
+            </button>
+            <div className="space-y-2 border-b border-slate-800 pb-4">
+              <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider">Validation de commande</span>
+              <h3 className="text-xl font-bold text-white">{(orderProduct as any).title}</h3>
+              <p className="text-[#D4AF37] font-extrabold text-lg">{(orderProduct as any).price}</p>
             </div>
 
             <form onSubmit={handleOrderSubmit} className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Nom et Prénom <span className="text-[#D4AF37]">*</span></label>
+              <div className="space-y-1">
+                <label className="text-xs font-semibold text-slate-300">Nom et Prénom *</label>
                 <input 
                   type="text" 
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={handleInputChange}
+                  name="fullName" 
+                  required 
+                  value={formData.fullName} 
+                  onChange={handleInputChange} 
                   placeholder="Ex: Jean Dupont" 
-                  required
-                  className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Email <span className="text-[#D4AF37]">*</span></label>
-                <input 
-                  type="email" 
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  placeholder="nom@exemple.com" 
-                  required
-                  className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
+                  className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-[#D4AF37] focus:outline-none text-sm"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Pays <span className="text-[#D4AF37]">*</span></label>
-                  <select
-                    name="country"
-                    value={formData.country}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm"
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-slate-300">Téléphone (Mobile Money) *</label>
+                  <input 
+                    type="text" 
+                    name="phone" 
+                    required 
+                    value={formData.phone} 
+                    onChange={handleInputChange} 
+                    placeholder="Ex: +229 01..." 
+                    className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-[#D4AF37] focus:outline-none text-sm"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-slate-300">Email (optionnel)</label>
+                  <input 
+                    type="email" 
+                    name="email" 
+                    value={formData.email} 
+                    onChange={handleInputChange} 
+                    placeholder="Ex: jean@gmail.com" 
+                    className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-[#D4AF37] focus:outline-none text-sm"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-slate-300">Pays *</label>
+                  <select 
+                    name="country" 
+                    value={formData.country} 
+                    onChange={handleInputChange} 
+                    className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-[#D4AF37] focus:outline-none text-sm"
                   >
                     <option value="BJ">Bénin</option>
                     <option value="CI">Côte d'Ivoire</option>
                     <option value="BF">Burkina Faso</option>
                     <option value="TG">Togo</option>
+                    <option value="NE">Niger</option>
                     <option value="SN">Sénégal</option>
+                    <option value="ML">Mali</option>
+                    <option value="FR">France</option>
                   </select>
                 </div>
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Ville <span className="text-[#D4AF37]">*</span></label>
+                <div className="space-y-1">
+                  <label className="text-xs font-semibold text-slate-300">Ville / Quartier *</label>
                   <input 
                     type="text" 
-                    name="city"
-                    value={formData.city}
-                    onChange={handleInputChange}
-                    placeholder="Ex: Abidjan / Cotonou" 
-                    required
-                    className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
+                    name="city" 
+                    required 
+                    value={formData.city} 
+                    onChange={handleInputChange} 
+                    placeholder="Ex: Abomey-Calavi / Abidjan" 
+                    className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-[#D4AF37] focus:outline-none text-sm"
                   />
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Téléphone <span className="text-[#D4AF37]">*</span></label>
-                <input 
-                  type="tel" 
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  placeholder="Ex: +229..." 
-                  required
-                  className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
-                />
+              {/* Code Partenaire Optionnel */}
+              <div className="space-y-2 pt-2 border-t border-slate-800">
+                {!showPartnerField ? (
+                  <button 
+                    type="button" 
+                    onClick={() => setShowPartnerField(true)}
+                    className="text-xs text-[#D4AF37] hover:underline font-semibold flex items-center gap-1"
+                  >
+                    + Avez-vous un code partenaire (recommandé par un membre) ?
+                  </button>
+                ) : (
+                  <div className="space-y-1">
+                    <label className="text-xs font-semibold text-[#D4AF37]">Code Partenaire</label>
+                    <input 
+                      type="text" 
+                      name="partnerCode" 
+                      value={formData.partnerCode} 
+                      onChange={handleInputChange} 
+                      placeholder="Ex: SM-PARTNER-123" 
+                      className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-[#D4AF37]/50 text-white focus:border-[#D4AF37] focus:outline-none text-sm"
+                    />
+                  </div>
+                )}
               </div>
 
-              {/* Bouton pour activer le champ Code Partenaire */}
-              {!showPartnerField ? (
-                <button
-                  type="button"
-                  onClick={() => setShowPartnerField(true)}
-                  className="text-xs text-[#D4AF37] hover:underline font-semibold"
-                >
-                  + J'ai un code partenaire
-                </button>
-              ) : (
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-[#D4AF37] mb-1">Code Partenaire (Optionnel)</label>
-                  <input 
-                    type="text" 
-                    name="partnerCode"
-                    value={formData.partnerCode}
-                    onChange={handleInputChange}
-                    placeholder="Ex: SM-PARTNER-123" 
-                    className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-[#D4AF37]/40 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
-                  />
-                </div>
-              )}
-
-              <div className="pt-4">
+              <div className="pt-4 flex gap-4">
                 <button 
-                  type="submit"
-                  className="w-full py-4 text-center rounded-xl bg-[#D4AF37] text-[#090A0C] font-extrabold text-sm hover:bg-[#c5a030] transition shadow-xl shadow-[#D4AF37]/20 block"
+                  type="submit" 
+                  className="flex-1 py-4 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-sm hover:bg-[#c5a030] transition shadow-xl shadow-[#D4AF37]/25 text-center"
                 >
-                  Procéder au Paiement Sécurisé (FedaPay)
+                  Procéder au Paiement Sécurisé &rarr;
+                </button>
+                <button 
+                  type="button" 
+                  onClick={() => setOrderProduct(null)}
+                  className="px-5 py-4 rounded-xl bg-slate-800 text-slate-300 font-semibold text-sm hover:bg-slate-700 transition border border-slate-700"
+                >
+                  Annuler
                 </button>
               </div>
-
-              <button 
-                type="button"
-                onClick={() => setOrderProduct(null)}
-                className="w-full py-2.5 text-center rounded-xl bg-slate-800 text-slate-300 font-semibold text-xs hover:bg-slate-700 transition border border-slate-700 block"
-              >
-                Annuler
-              </button>
             </form>
           </div>
         </div>
       )}
 
-      {/* POPUP DE SUCCÈS DE COMMANDE */}
+      {/* Modal de Succès après Paiement & Reçu PDF */}
       {orderSuccess && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#090A0C]/90 backdrop-blur-md p-4">
-          <div className="bg-slate-900 border border-[#D4AF37] rounded-3xl max-w-md w-full p-8 text-center space-y-6 shadow-2xl">
-            <div className="w-16 h-16 bg-[#D4AF37]/20 text-[#D4AF37] rounded-full flex items-center justify-center mx-auto text-3xl font-bold border border-[#D4AF37]/40">
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-slate-900 border border-[#D4AF37]/60 rounded-3xl max-w-lg w-full p-8 text-center space-y-6 shadow-2xl relative">
+            <div className="w-16 h-16 bg-[#D4AF37]/20 border border-[#D4AF37]/50 text-[#D4AF37] rounded-full flex items-center justify-center mx-auto text-2xl font-bold">
               ✓
             </div>
             <div className="space-y-2">
-              <h3 className="text-2xl font-bold text-white">Commande Validée avec Succès !</h3>
-              <p className="text-slate-300 text-sm">
-                Merci <strong>{orderSuccess.fullName}</strong>. Votre paiement a été validé et votre reçu officiel PDF vient d'être téléchargé automatiquement.
+              <span className="text-xs font-bold text-[#D4AF37] tracking-wider uppercase">Paiement Validé avec Succès</span>
+              <h3 className="text-2xl font-extrabold text-white">Merci pour votre commande !</h3>
+              <p className="text-slate-300 text-sm leading-relaxed">
+                Votre transaction a été traitée avec succès. Votre reçu officiel PDF a été téléchargé automatiquement sur votre appareil.
               </p>
             </div>
-            <div className="bg-[#090A0C]/70 p-4 rounded-xl text-left space-y-1 text-xs text-slate-300 border border-slate-800">
+
+            <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-left space-y-2 text-xs text-slate-300">
               <p><strong>Article :</strong> {orderSuccess.productTitle}</p>
-              <p><strong>Montant :</strong> {orderSuccess.price}</p>
-              <p><strong>Ville / Livraison :</strong> {orderSuccess.city}</p>
+              <p><strong>Montant payé :</strong> <span className="text-[#D4AF37] font-bold">{orderSuccess.price}</span></p>
+              <p><strong>Client :</strong> {orderSuccess.fullName} ({orderSuccess.phone})</p>
+              <p><strong>Lieu de livraison :</strong> {orderSuccess.city}</p>
             </div>
-            <button 
-              onClick={() => setOrderSuccess(null)}
-              className="w-full py-3 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-sm hover:bg-[#c5a030] transition shadow-lg"
-            >
-              Fermer et retourner au site
-            </button>
+
+            <div className="space-y-3">
+              <button 
+                onClick={() => generatePDFReceipt(orderSuccess)}
+                className="w-full py-3.5 rounded-xl bg-slate-800 text-white font-bold text-sm hover:bg-slate-700 transition border border-slate-700 shadow-md"
+              >
+                Télécharger à nouveau le reçu PDF
+              </button>
+              <button 
+                onClick={() => setOrderSuccess(null)}
+                className="w-full py-3.5 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-sm hover:bg-[#c5a030] transition shadow-lg shadow-[#D4AF37]/20"
+              >
+                Retourner à la boutique
+              </button>
+            </div>
           </div>
         </div>
       )}
 
-      {/* Bouton Retour en haut */}
+      {/* Flèche de retour en haut */}
       {showScrollTop && (
-        <button
+        <button 
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-30 w-12 h-12 rounded-full bg-[#D4AF37] text-[#090A0C] font-bold shadow-2xl flex items-center justify-center hover:bg-[#c5a030] transition border border-white/20"
+          className="fixed bottom-6 right-6 z-30 p-3 rounded-full bg-[#D4AF37] text-[#090A0C] shadow-2xl hover:bg-[#c5a030] transition font-bold border border-white/20"
           aria-label="Retour en haut"
         >
           ↑
         </button>
       )}
 
-      {/* Footer */}
-      <footer className="border-t border-[#D4AF37]/20 bg-[#090A0C] py-12 px-6 text-center text-xs text-slate-500 space-y-4">
-        <p>© 2026 SAB MIDLEY. Tous droits réservés. Bénin & Côte d'Ivoire.</p>
-        <p className="text-slate-400">Réseau commercial international, négoce et services associés.</p>
-      </footer>
     </div>
   );
 }
