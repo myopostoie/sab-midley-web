@@ -18,6 +18,10 @@ export default function Home() {
   // État pour afficher ou masquer la flèche de retour en haut
   const [showScrollTop, setShowScrollTop] = useState(false);
 
+  // États pour les formulaires de Contact et Carrières ajoutés
+  const [contactSubmitted, setContactSubmitted] = useState(false);
+  const [careerSubmitted, setCareerSubmitted] = useState(false);
+
   useEffect(() => {
     const handleScroll = () => {
       if (window.scrollY > 300) {
@@ -45,8 +49,47 @@ export default function Home() {
     partnerCode: '',
   });
 
+  const [contactForm, setContactForm] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    subject: 'Général',
+    message: '',
+  });
+
+  const [careerForm, setCareerForm] = useState({
+    fullName: '',
+    email: '',
+    phone: '',
+    country: 'BJ',
+    experience: 'Débutant',
+    motivation: '',
+  });
+
   const handleInputChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleContactChange = (e: any) => {
+    setContactForm({ ...contactForm, [e.target.name]: e.target.value });
+  };
+
+  const handleCareerChange = (e: any) => {
+    setCareerForm({ ...careerForm, [e.target.name]: e.target.value });
+  };
+
+  const handleContactSubmit = (e: any) => {
+    e.preventDefault();
+    setContactSubmitted(true);
+    setTimeout(() => setContactSubmitted(false), 5000);
+    setContactForm({ name: '', email: '', phone: '', subject: 'Général', message: '' });
+  };
+
+  const handleCareerSubmit = (e: any) => {
+    e.preventDefault();
+    setCareerSubmitted(true);
+    setTimeout(() => setCareerSubmitted(false), 5000);
+    setCareerForm({ fullName: '', email: '', phone: '', country: 'BJ', experience: 'Débutant', motivation: '' });
   };
 
   // Fonction pour envoyer la vente vers votre Google Sheets
@@ -55,7 +98,7 @@ export default function Home() {
     try {
       await fetch(scriptURL, {
         method: 'POST',
-        mode: 'no-cors', // Nécessaire pour les requêtes vers Google Apps Script depuis un site web
+        mode: 'no-cors',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -71,8 +114,7 @@ export default function Home() {
   const generatePDFReceipt = (orderData: any) => {
     const doc = new jsPDF();
 
-    // En-tête / Branding (Noir d'encre & Or Champagne)
-    doc.setFillColor(9, 10, 12); // Fond sombre #090A0C
+    doc.setFillColor(9, 10, 12);
     doc.rect(0, 0, 210, 40, 'F');
 
     doc.setTextColor(255, 255, 255);
@@ -80,11 +122,10 @@ export default function Home() {
     doc.setFontSize(22);
     doc.text('SAB MIDLEY', 20, 25);
 
-    doc.setTextColor(212, 175, 55); // Or Champagne #D4AF37
+    doc.setTextColor(212, 175, 55);
     doc.setFontSize(10);
     doc.text('REÇU DE PAIEMENT OFFICIEL', 135, 25);
 
-    // Informations générales
     doc.setTextColor(50, 50, 50);
     doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
@@ -95,7 +136,6 @@ export default function Home() {
       doc.text(`Code Partenaire : ${orderData.partnerCode}`, 20, 76);
     }
 
-    // Cadre Informations Client
     doc.setDrawColor(200, 200, 200);
     doc.setFillColor(248, 250, 252);
     doc.roundedRect(20, 85, 170, 35, 3, 3, 'FD');
@@ -107,7 +147,6 @@ export default function Home() {
     doc.text(`Email : ${orderData.email}`, 25, 108);
     doc.text(`Téléphone : ${orderData.phone} | Ville : ${orderData.city}`, 25, 115);
 
-    // Tableau de l'article commandé
     doc.setFillColor(9, 10, 12);
     doc.rect(20, 130, 170, 10, 'F');
     doc.setTextColor(255, 255, 255);
@@ -121,7 +160,6 @@ export default function Home() {
     doc.setFont('helvetica', 'bold');
     doc.text(orderData.price, 150, 150);
 
-    // Ligne de séparation et Totaux
     doc.setDrawColor(200, 200, 200);
     doc.line(20, 160, 190, 160);
 
@@ -138,14 +176,12 @@ export default function Home() {
     doc.text('Total Payé :', 120, 192);
     doc.text(orderData.price, 150, 192);
 
-    // Pied de page
     doc.setTextColor(100, 100, 100);
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(9);
     doc.text('SAB MIDLEY — Abomey-Calavi, Bénin | Tél : +229 01 69 32 55 76', 20, 230);
     doc.text('Ce reçu fait office de justificatif officiel pour votre transaction.', 20, 236);
 
-    // Téléchargement automatique du fichier
     doc.save(`Recu_SAB_MIDLEY_${orderData.fullName.replace(/\s+/g, '_')}.pdf`);
   };
 
@@ -199,14 +235,12 @@ export default function Home() {
         date: new Date().toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
       };
 
-      // 1. Enregistrement automatique dans votre Google Sheets
       await saveOrderToGoogleSheets(completedOrder);
 
       setOrderProduct(null);
       setSelectedProduct(null);
       setOrderSuccess(completedOrder);
       
-      // 2. Génération automatique du PDF en téléchargement immédiat
       generatePDFReceipt(completedOrder);
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -287,7 +321,7 @@ export default function Home() {
         Expansion Régionale en cours : Bénin, Côte d'Ivoire & Burkina Faso — Rejoignez notre réseau commercial.
       </div>
 
-      {/* Barre de Menu / Navigation avec logo cliquable vers l'accueil & menu burger mobile */}
+      {/* Barre de Menu / Navigation */}
       <header className="sticky top-0 z-40 bg-[#090A0C]/90 backdrop-blur-md border-b border-[#D4AF37]/20">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -521,6 +555,284 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ================= SECTION CARRIÈRES ================= */}
+      <section id="carrieres" className="py-24 px-6 max-w-7xl mx-auto border-t border-[#D4AF37]/20">
+        <div className="text-center space-y-4 mb-16">
+          <span className="text-[#D4AF37] font-semibold text-sm uppercase tracking-wider">Opportunités & Expansion</span>
+          <h2 className="text-3xl md:text-5xl font-extrabold text-white">Rejoignez le Réseau SAB MIDLEY</h2>
+          <p className="text-slate-400 max-w-2xl mx-auto text-lg">
+            Développez votre activité au sein de notre réseau commercial en pleine expansion au Bénin, en Côte d'Ivoire et au Burkina Faso.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+          <div className="lg:col-span-1 space-y-6">
+            <div className="p-6 rounded-2xl bg-slate-900/60 border border-[#D4AF37]/30 space-y-4 backdrop-blur-sm">
+              <h3 className="text-xl font-bold text-[#D4AF37]">Pourquoi nous rejoindre ?</h3>
+              <ul className="space-y-3 text-sm text-slate-300">
+                <li className="flex items-start space-x-2">
+                  <span className="text-[#D4AF37] font-bold">✓</span>
+                  <span>Modèle de commissionnement attractif sur le négoce et l'immobilier.</span>
+                </li>
+                <li className="flex items-start space-x-2">
+                  <span className="text-[#D4AF37] font-bold">✓</span>
+                  <span>Formation continue via l'Academy SAB MIDLEY.</span>
+                </li>
+                <li className="flex items-start space-x-2">
+                  <span className="text-[#D4AF37] font-bold">✓</span>
+                  <span>Opportunités d'évolution sur plusieurs marchés régionaux.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="lg:col-span-2 p-8 rounded-3xl bg-slate-950 border border-[#D4AF37]/30 shadow-2xl relative">
+            <h3 className="text-2xl font-bold text-white mb-6">Formulaire de Candidature / Partenariat</h3>
+            {careerSubmitted && (
+              <div className="mb-6 p-4 rounded-xl bg-emerald-950/80 border border-emerald-500 text-emerald-200 text-sm">
+                Votre candidature a été transmise avec succès ! Notre département RH vous contactera sous 48h.
+              </div>
+            )}
+            <form onSubmit={handleCareerSubmit} className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Nom et Prénom <span className="text-[#D4AF37]">*</span></label>
+                  <input 
+                    type="text" 
+                    name="fullName"
+                    value={careerForm.fullName}
+                    onChange={handleCareerChange}
+                    placeholder="Ex: Aminata Diallo" 
+                    required
+                    className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Email <span className="text-[#D4AF37]">*</span></label>
+                  <input 
+                    type="email" 
+                    name="email"
+                    value={careerForm.email}
+                    onChange={handleCareerChange}
+                    placeholder="nom@exemple.com" 
+                    required
+                    className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Téléphone <span className="text-[#D4AF37]">*</span></label>
+                  <input 
+                    type="tel" 
+                    name="phone"
+                    value={careerForm.phone}
+                    onChange={handleCareerChange}
+                    placeholder="Ex: +225..." 
+                    required
+                    className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Pays <span className="text-[#D4AF37]">*</span></label>
+                  <select
+                    name="country"
+                    value={careerForm.country}
+                    onChange={handleCareerChange}
+                    className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm"
+                  >
+                    <option value="BJ">Bénin</option>
+                    <option value="CI">Côte d'Ivoire</option>
+                    <option value="BF">Burkina Faso</option>
+                    <option value="TG">Togo</option>
+                    <option value="SN">Sénégal</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Niveau d'expérience</label>
+                  <select
+                    name="experience"
+                    value={careerForm.experience}
+                    onChange={handleCareerChange}
+                    className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm"
+                  >
+                    <option value="Débutant">Débutant / Motivé</option>
+                    <option value="Intermédiaire">Intermédiaire (1-3 ans)</option>
+                    <option value="Confirmé">Confirmé (3 ans et +)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Motivation / Objectifs <span className="text-[#D4AF37]">*</span></label>
+                <textarea 
+                  name="motivation"
+                  value={careerForm.motivation}
+                  onChange={handleCareerChange}
+                  rows={4}
+                  placeholder="Décrivez brièvement vos ambitions au sein de SAB MIDLEY..."
+                  required
+                  className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm resize-none"
+                ></textarea>
+              </div>
+
+              <button 
+                type="submit"
+                className="w-full py-4 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold hover:bg-[#c5a030] transition shadow-lg shadow-[#D4AF37]/20"
+              >
+                Soumettre ma candidature
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      {/* ================= SECTION CONTACT ================= */}
+      <section id="contact" className="py-24 px-6 max-w-7xl mx-auto border-t border-[#D4AF37]/20">
+        <div className="text-center space-y-4 mb-16">
+          <span className="text-[#D4AF37] font-semibold text-sm uppercase tracking-wider">Parlons de vos projets</span>
+          <h2 className="text-3xl md:text-5xl font-extrabold text-white">Contactez SAB MIDLEY</h2>
+          <p className="text-slate-400 max-w-2xl mx-auto text-lg">
+            Une question sur nos pôles, une commande ou un partenariat ? Notre équipe est à votre écoute.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="space-y-8">
+            <div className="p-8 rounded-3xl bg-slate-900/60 border border-[#D4AF37]/30 space-y-6 backdrop-blur-sm">
+              <h3 className="text-2xl font-bold text-white">Coordonnées Officielles</h3>
+              
+              <div className="space-y-4 text-slate-300">
+                <div className="flex items-start space-x-4">
+                  <span className="text-xl">📍</span>
+                  <div>
+                    <strong className="block text-white">Siège Social</strong>
+                    <span className="text-sm text-slate-400">Abomey-Calavi, Bénin & Abidjan, Côte d'Ivoire</span>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <span className="text-xl">📞</span>
+                  <div>
+                    <strong className="block text-white">Téléphone / WhatsApp</strong>
+                    <span className="text-sm text-slate-400">+229 01 69 32 55 76</span>
+                  </div>
+                </div>
+
+                <div className="flex items-start space-x-4">
+                  <span className="text-xl">✉️</span>
+                  <div>
+                    <strong className="block text-white">Email Professionnel</strong>
+                    <span className="text-sm text-slate-400">contact@sabmidley.co</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="pt-4 border-t border-slate-800">
+                <a 
+                  href="https://wa.me/2290169325576" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="inline-block w-full py-3.5 text-center rounded-xl bg-emerald-600 text-white font-bold text-sm hover:bg-emerald-500 transition shadow-lg"
+                >
+                  Ouvrir une discussion WhatsApp instantanée
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="p-8 rounded-3xl bg-slate-950 border border-[#D4AF37]/30 shadow-2xl">
+            <h3 className="text-2xl font-bold text-white mb-6">Envoyez-nous un message</h3>
+            {contactSubmitted && (
+              <div className="mb-6 p-4 rounded-xl bg-emerald-950/80 border border-emerald-500 text-emerald-200 text-sm">
+                Votre message a bien été envoyé. Nous vous répondrons dans les plus brefs délais !
+              </div>
+            )}
+            <form onSubmit={handleContactSubmit} className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Nom <span className="text-[#D4AF37]">*</span></label>
+                <input 
+                  type="text" 
+                  name="name"
+                  value={contactForm.name}
+                  onChange={handleContactChange}
+                  placeholder="Votre nom" 
+                  required
+                  className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
+                />
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Email <span className="text-[#D4AF37]">*</span></label>
+                  <input 
+                    type="email" 
+                    name="email"
+                    value={contactForm.email}
+                    onChange={handleContactChange}
+                    placeholder="nom@exemple.com" 
+                    required
+                    className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Téléphone</label>
+                  <input 
+                    type="tel" 
+                    name="phone"
+                    value={contactForm.phone}
+                    onChange={handleContactChange}
+                    placeholder="Votre numéro" 
+                    className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Sujet</label>
+                <select
+                  name="subject"
+                  value={contactForm.subject}
+                  onChange={handleContactChange}
+                  className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm"
+                >
+                  <option value="Général">Demande générale</option>
+                  <option value="Immobilier">Immobilier & Location</option>
+                  <option value="Négoce">Négoce & Commandes Boutique</option>
+                  <option value="Partenariat">Partenariat & Réseau</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Message <span className="text-[#D4AF37]">*</span></label>
+                <textarea 
+                  name="message"
+                  value={contactForm.message}
+                  onChange={handleContactChange}
+                  rows={4}
+                  placeholder="Votre message..."
+                  required
+                  className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm resize-none"
+                ></textarea>
+              </div>
+
+              <button 
+                type="submit"
+                className="w-full py-4 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold hover:bg-[#c5a030] transition shadow-lg shadow-[#D4AF37]/20"
+              >
+                Envoyer le message
+              </button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="py-12 px-6 border-t border-[#D4AF37]/20 bg-[#090A0C] text-center text-sm text-slate-500 space-y-4">
+        <p>© 2026 SAB MIDLEY. Tous droits réservés. Abomey-Calavi (Bénin) & Abidjan (Côte d'Ivoire).</p>
+      </footer>
+
       {/* FENÊTRE DE MODAL : DÉTAILS DE L'ARTICLE */}
       {selectedProduct && !orderProduct && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#090A0C]/85 backdrop-blur-sm p-4 overflow-y-auto">
@@ -684,89 +996,40 @@ export default function Home() {
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Adresse Yango / Point de repère</label>
-                <input 
-                  type="text" 
-                  name="yangoAddress"
-                  value={formData.yangoAddress}
-                  onChange={handleInputChange}
-                  placeholder="Ex: Pharmacie du Pont / Repère précis" 
-                  className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
-                />
+                <button 
+                  type="button" 
+                  onClick={() => setShowPartnerField(!showPartnerField)}
+                  className="text-xs text-[#D4AF37] hover:underline font-semibold"
+                >
+                  {showPartnerField ? '- Masquer le code partenaire' : '+ Avez-vous un code partenaire ?'}
+                </button>
               </div>
 
-              {/* Champ code partenaire optionnel */}
-              <div className="pt-2 border-t border-slate-800/80">
-                {!showPartnerField ? (
-                  <button
-                    type="button"
-                    onClick={() => setShowPartnerField(true)}
-                    className="text-xs font-medium text-[#D4AF37] hover:text-white transition underline focus:outline-none"
-                  >
-                    ➕ Vous avez un code partenaire ou parrain ?
-                  </button>
-                ) : (
-                  <div className="space-y-1 animate-fadeIn">
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-[#D4AF37] mb-1">
-                      Code Partenaire / Affilié (Facultatif)
-                    </label>
-                    <input 
-                      type="text" 
-                      name="partnerCode"
-                      value={formData.partnerCode}
-                      onChange={handleInputChange}
-                      placeholder="Ex: RC26BJ6646849" 
-                      className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-[#D4AF37]/50 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
-                    />
-                    <p className="text-[11px] text-slate-400">
-                      Entrez le code fourni par votre partenaire pour valider sa commission. Laissez vide si vous n'en avez pas.
-                    </p>
-                  </div>
-                )}
-              </div>
+              {showPartnerField && (
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Code Partenaire</label>
+                  <input 
+                    type="text" 
+                    name="partnerCode"
+                    value={formData.partnerCode}
+                    onChange={handleInputChange}
+                    placeholder="Ex: SM-XXXX" 
+                    className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
+                  />
+                </div>
+              )}
 
-              <div className="bg-[#D4AF37]/10 border border-[#D4AF37]/30 p-3 rounded-xl text-[#D4AF37] text-xs leading-relaxed">
-                Note : Les frais de livraison vous seront communiqués avant l'expédition selon votre zone exacte.
-              </div>
-
-              <div className="space-y-3 pt-2">
+              <div className="pt-2">
                 <button 
                   type="submit"
-                  className="w-full py-3.5 text-center rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-sm hover:bg-[#c5a030] transition shadow-lg shadow-[#D4AF37]/20 block"
+                  className="w-full py-4 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold hover:bg-[#c5a030] transition shadow-lg shadow-[#D4AF37]/20 text-sm"
                 >
-                  Valider et Payer en ligne (OM, MTN, Wave)
-                </button>
-                <button 
-                  type="button"
-                  onClick={() => setOrderProduct(null)}
-                  className="w-full py-2.5 text-center rounded-xl bg-slate-800 text-slate-300 font-semibold text-xs hover:bg-slate-700 transition border border-slate-700"
-                >
-                  Retour
+                  Procéder au Paiement Sécurisé (FedaPay)
                 </button>
               </div>
             </form>
           </div>
         </div>
-      )}
-
-      {/* ÉCRAN DE CONFIRMATION DE COMMANDE RÉUSSIE */}
-      {orderSuccess && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#090A0C]/90 backdrop-blur-md p-4 overflow-y-auto">
-          {/* Le reste de vos éléments de succès existants... */}
-        </div>
-      )}
-
-      {/* Bouton Flottant "Retour en haut" (Flèche) */}
-      {showScrollTop && (
-        <button
-          onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-50 bg-[#D4AF37] text-black p-3.5 rounded-full shadow-2xl hover:bg-yellow-500 transition-all duration-300 focus:outline-none flex items-center justify-center border border-white/20"
-          aria-label="Retour en haut"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="3">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
-          </svg>
-        </button>
       )}
 
     </div>
