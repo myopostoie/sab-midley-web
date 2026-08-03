@@ -1,9 +1,11 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
-import Navbar from './components/Navbar';
 
 export default function Home() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const poles = [
     {
       id: 'immobilier',
@@ -37,10 +39,69 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#090A0C] text-slate-100 font-sans relative">
+      {/* Barre d'alerte haut */}
       <div className="bg-[#D4AF37] text-[#090A0C] text-xs md:text-sm font-bold py-2.5 px-4 text-center tracking-wide">
         Expansion Régionale en cours: Bénin, Côte d'Ivoire & Burkina Faso — Rejoignez notre réseau commercial.
       </div>
-      <Navbar />
+
+      {/* Navbar intégrée directement pour éviter les erreurs de chemin */}
+      <header className="sticky top-0 z-40 bg-[#090A0C]/90 backdrop-blur-md border-b border-[#D4AF37]/20">
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <Link href="/" className="text-xl font-black text-white tracking-wider text-left">
+              SAB <span className="text-[#D4AF37]">MIDLEY</span>
+            </Link>
+          </div>
+
+          <nav className="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
+            <Link href="/" className="hover:text-[#D4AF37] transition">Accueil</Link>
+            <Link href="/poles" className="hover:text-[#D4AF37] transition">Nos Pôles</Link>
+            <Link href="/boutique" className="hover:text-[#D4AF37] transition">Boutique & Négoce</Link>
+            <Link href="/carrieres" className="hover:text-[#D4AF37] transition">Carrières</Link>
+            <Link href="/contact" className="hover:text-[#D4AF37] transition">Contact</Link>
+          </nav>
+
+          <div className="hidden md:flex items-center space-x-4">
+            <Link
+              href="/partenaire"
+              className="px-5 py-2.5 rounded-lg font-bold text-sm transition shadow-md bg-[#D4AF37] text-[#090A0C] hover:bg-[#c5a030] shadow-[#D4AF37]/20"
+            >
+              Portail Partenaire
+            </Link>
+          </div>
+
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden text-white focus:outline-none p-2"
+            aria-label="Menu"
+          >
+            {mobileMenuOpen ? (
+              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
+          </button>
+        </div>
+
+        {mobileMenuOpen && (
+          <div className="md:hidden bg-[#090A0C] border-t border-[#D4AF37]/20 px-6 py-5 space-y-4 shadow-2xl">
+            <Link href="/" onClick={() => setMobileMenuOpen(false)} className="block text-slate-200 hover:text-[#D4AF37] font-medium py-1">Accueil</Link>
+            <Link href="/poles" onClick={() => setMobileMenuOpen(false)} className="block text-slate-200 hover:text-[#D4AF37] font-medium py-1">Nos Pôles</Link>
+            <Link href="/boutique" onClick={() => setMobileMenuOpen(false)} className="block text-slate-200 hover:text-[#D4AF37] font-medium py-1">Boutique & Négoce</Link>
+            <Link href="/carrieres" onClick={() => setMobileMenuOpen(false)} className="block text-slate-200 hover:text-[#D4AF37] font-medium py-1">Carrières</Link>
+            <Link href="/contact" onClick={() => setMobileMenuOpen(false)} className="block text-slate-200 hover:text-[#D4AF37] font-medium py-1">Contact</Link>
+            <div className="pt-2">
+              <Link href="/partenaire" onClick={() => setMobileMenuOpen(false)} className="block text-center w-full px-5 py-3 rounded-lg bg-[#D4AF37] text-[#090A0C] font-bold text-sm">
+                Portail Partenaire
+              </Link>
+            </div>
+          </div>
+        )}
+      </header>
 
       {/* Hero Section */}
       <section className="py-20 px-6 max-w-7xl mx-auto text-center space-y-8">
@@ -66,7 +127,8 @@ export default function Home() {
       {/* Section Aperçu des Pôles */}
       <section className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-900">
         <div className="text-center space-y-3 mb-16">
-          <h2 className="text-3xl font-extrabold text-white">Nos Domaines d'Expertise</h2>
+          <span className="text-xs font-bold px-3 py-1 rounded bg-[#D4AF37]/10 text-[#D4AF37] uppercase tracking-wider inline-block">NOS ACTIVITÉS</span>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-white">Nos Domaines d'Expertise</h2>
           <p className="text-slate-400 text-sm max-w-md mx-auto">Une offre diversifiée pour répondre aux exigences des particuliers et des professionnels.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -83,7 +145,7 @@ export default function Home() {
                   <h3 className="text-lg font-bold text-white">{pole.title}</h3>
                   <p className="text-slate-400 text-xs leading-relaxed">{pole.description}</p>
                 </div>
-                <Link href="/poles" className="text-xs font-bold text-[#D4AF37] hover:underline inline-flex items-center space-x-1">
+                <Link href="/poles" className="text-xs font-bold text-[#D4AF37] hover:underline inline-flex items-center space-x-1 pt-2">
                   <span>En savoir plus</span>
                   <span>→</span>
                 </Link>
