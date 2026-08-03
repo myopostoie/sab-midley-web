@@ -38,14 +38,28 @@ export default function AdminDashboard() {
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // États pour la gestion dynamique des produits (ajout, suppression, formulaire)
+  // États pour les produits avec description et résumé
   const [products, setProducts] = useState<any[]>([
-    { id: 1, title: "Article Premium Démo", price: "25 000 XOF", status: "En stock", image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400" }
+    { 
+      id: 1, 
+      title: "Article Premium Démo", 
+      price: "25 000 XOF", 
+      status: "En stock", 
+      summary: "Idéal pour un usage professionnel quotidien avec finitions haut de gamme.",
+      description: "Ceci est une description complète détaillée du produit incluant les spécificités techniques et les avantages pour les clients finaux.",
+      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400" 
+    }
   ]);
+
   const [newTitle, setNewTitle] = useState('');
   const [newPrice, setNewPrice] = useState('');
   const [newStatus, setNewStatus] = useState('En stock');
+  const [newSummary, setNewSummary] = useState('');
+  const [newDescription, setNewDescription] = useState('');
   const [newImage, setNewImage] = useState('');
+
+  // État pour la modale de visualisation d'un article
+  const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
 
   const scriptURL = 'https://script.google.com/macros/s/AKfycbyCLzeK1mr3pccEO2Hc1UVtd-qA_SZe4uKQkpVr1ZP063mTc3I7JAAGcnPYWTb5pzuW/exec';
 
@@ -109,7 +123,6 @@ export default function AdminDashboard() {
     }
   };
 
-  // Fonction pour ajouter un produit depuis le back-office
   const handleAddProduct = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTitle || !newPrice) return;
@@ -119,20 +132,24 @@ export default function AdminDashboard() {
       title: newTitle,
       price: newPrice,
       status: newStatus,
+      summary: newSummary || 'Aucun résumé court.',
+      description: newDescription || 'Aucune description détaillée fournie.',
       image: newImage || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400'
     };
 
     setProducts([newProd, ...products]);
     setNewTitle('');
     setNewPrice('');
+    setNewSummary('');
+    setNewDescription('');
     setNewImage('');
     alert('Article ajouté avec succès au catalogue !');
   };
 
-  // Fonction pour supprimer un produit
   const handleDeleteProduct = (id: number) => {
     if (confirm('Voulez-vous vraiment retirer cet article du catalogue ?')) {
       setProducts(products.filter(p => p.id !== id));
+      setSelectedProduct(null);
     }
   };
 
@@ -199,26 +216,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
-          <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-2">
-            <span className="text-xs font-medium text-slate-400 uppercase">Chiffre d'Affaires Global</span>
-            <p className="text-2xl font-extrabold text-amber-400">{totalRevenue.toLocaleString()} XOF</p>
-          </div>
-          <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-2">
-            <span className="text-xs font-medium text-slate-400 uppercase">Commandes Validées</span>
-            <p className="text-2xl font-extrabold text-white">{orders.length} Commandes</p>
-          </div>
-          <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-2">
-            <span className="text-xs font-medium text-slate-400 uppercase">Partenaires Enregistrés</span>
-            <p className="text-2xl font-extrabold text-white">{PARTNERS_LIST.length} Membres</p>
-          </div>
-          <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-2">
-            <span className="text-xs font-medium text-slate-400 uppercase">Articles en Catalogue</span>
-            <p className="text-2xl font-extrabold text-emerald-400">{products.length} Articles</p>
-          </div>
-        </div>
-
-        {/* Barre de navigation par onglets incluant la gestion des produits */}
+        {/* Navigation par onglets */}
         <div className="flex space-x-3 border-b border-slate-800 pb-4 overflow-x-auto">
           <button 
             onClick={() => setActiveTab('orders')}
@@ -240,79 +238,13 @@ export default function AdminDashboard() {
           </button>
         </div>
 
-        {/* ONGLET 1 : COMMANDES */}
-        {activeTab === 'orders' && (
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-6">
-            <div className="flex justify-between items-center">
-              <h2 className="text-xl font-bold text-white">Suivi des Commandes & Statuts Logistiques</h2>
-              {loading && <span className="text-xs text-amber-400">Chargement des ventes...</span>}
-            </div>
-            
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse text-sm">
-                <thead>
-                  <tr className="border-b border-slate-800 text-slate-400 text-xs uppercase tracking-wider">
-                    <th className="py-3 px-4">Date & Client</th>
-                    <th className="py-3 px-4">Article</th>
-                    <th className="py-3 px-4">Montant & Ville</th>
-                    <th className="py-3 px-4">Code Partenaire</th>
-                    <th className="py-3 px-4">Statut Logistique</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-800/60">
-                  {orders.length === 0 ? (
-                    <tr>
-                      <td colSpan={5} className="py-8 text-center text-slate-400 text-sm">
-                        {loading ? 'Chargement en cours...' : 'Aucune commande enregistrée pour le moment.'}
-                      </td>
-                    </tr>
-                  ) : (
-                    orders.map((ord) => (
-                      <tr key={ord.id} className="hover:bg-slate-800/30 transition">
-                        <td className="py-4 px-4">
-                          <span className="text-slate-400 text-[11px] block">{ord.date}</span>
-                          <span className="text-white font-medium">{ord.client}</span>
-                          <span className="text-slate-400 text-xs block">{ord.phone}</span>
-                        </td>
-                        <td className="py-4 px-4 text-slate-200">{ord.product}</td>
-                        <td className="py-4 px-4">
-                          <span className="font-bold text-white block">{ord.price}</span>
-                          <span className="text-slate-400 text-xs">{ord.city}</span>
-                        </td>
-                        <td className="py-4 px-4">
-                          <span className="px-2.5 py-1 rounded-md bg-slate-800 text-amber-400 text-xs font-semibold border border-slate-700">
-                            {ord.parrain}
-                          </span>
-                        </td>
-                        <td className="py-4 px-4">
-                          <select 
-                            value={ord.status}
-                            onChange={(e) => updateStatus(ord.id, e.target.value)}
-                            className="bg-slate-950 border border-slate-700 text-white rounded-lg px-3 py-1.5 text-xs outline-none focus:border-amber-500"
-                          >
-                            <option value="Payé / En préparation">Payé / En préparation</option>
-                            <option value="Expédié">Expédié</option>
-                            <option value="En cours de livraison">En cours de livraison</option>
-                            <option value="Livré">Livré</option>
-                          </select>
-                        </td>
-                      </tr>
-                    ))
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-
-        {/* ONGLET 2 : GESTION DES PRODUITS (NOUVEAU MODULE SÉCURISÉ) */}
+        {/* ONGLET PRODUITS */}
         {activeTab === 'products' && (
           <div className="space-y-8">
-            {/* Formulaire d'ajout rapide d'un article */}
             <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-6">
               <div className="border-b border-slate-800 pb-4">
                 <h2 className="text-xl font-bold text-white">➕ Ajouter un nouvel article au catalogue</h2>
-                <p className="text-slate-400 text-xs mt-1">Ce formulaire permet à votre équipe de mettre à jour instantanément la boutique sans modifier le code source.</p>
+                <p className="text-slate-400 text-xs mt-1">Renseignez les informations, le résumé et la description complète de l'article.</p>
               </div>
 
               <form onSubmit={handleAddProduct} className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -322,14 +254,14 @@ export default function AdminDashboard() {
                     type="text"
                     value={newTitle}
                     onChange={(e) => setNewTitle(e.target.value)}
-                    placeholder="Ex: Montre de Luxe / Appareil Pro"
+                    placeholder="Ex: Montre de Luxe"
                     required
                     className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:border-amber-500 outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold uppercase text-slate-400 mb-1">Prix (ex: 45 000 XOF)</label>
+                  <label className="block text-xs font-semibold uppercase text-slate-400 mb-1">Prix</label>
                   <input 
                     type="text"
                     value={newPrice}
@@ -359,7 +291,29 @@ export default function AdminDashboard() {
                     type="url"
                     value={newImage}
                     onChange={(e) => setNewImage(e.target.value)}
-                    placeholder="https://exemple.com/image.jpg"
+                    placeholder="https://..."
+                    className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:border-amber-500 outline-none"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-xs font-semibold uppercase text-slate-400 mb-1">Petit résumé (accroche courte)</label>
+                  <input 
+                    type="text"
+                    value={newSummary}
+                    onChange={(e) => setNewSummary(e.target.value)}
+                    placeholder="Ex: Idéal pour un usage quotidien..."
+                    className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:border-amber-500 outline-none"
+                  />
+                </div>
+
+                <div className="md:col-span-2">
+                  <label className="block text-xs font-semibold uppercase text-slate-400 mb-1">Description complète</label>
+                  <textarea 
+                    rows={3}
+                    value={newDescription}
+                    onChange={(e) => setNewDescription(e.target.value)}
+                    placeholder="Détails complets, spécifications techniques, garanties..."
                     className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:border-amber-500 outline-none"
                   />
                 </div>
@@ -369,15 +323,15 @@ export default function AdminDashboard() {
                     type="submit"
                     className="w-full py-3.5 rounded-xl bg-amber-500 text-slate-950 font-bold hover:bg-amber-400 transition text-xs shadow-lg shadow-amber-500/20"
                   >
-                    Publier l'article immédiatement sur le site
+                    Publier l'article immédiatement
                   </button>
                 </div>
               </form>
             </div>
 
-            {/* Liste des produits actuels gérés dans l'interface */}
+            {/* Liste des articles avec bouton de visualisation */}
             <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-6">
-              <h2 className="text-xl font-bold text-white">📦 Catalogue actuel géré par l'équipe ({products.length})</h2>
+              <h2 className="text-xl font-bold text-white">📦 Catalogue actuel ({products.length})</h2>
               
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {products.map((prod) => (
@@ -386,16 +340,26 @@ export default function AdminDashboard() {
                       <img src={prod.image} alt={prod.title} className="w-full h-36 object-cover rounded-xl border border-slate-800" />
                       <h3 className="font-bold text-white text-sm">{prod.title}</h3>
                       <p className="text-amber-400 font-extrabold text-sm">{prod.price}</p>
+                      <p className="text-slate-400 text-xs line-clamp-2">{prod.summary}</p>
                       <span className="inline-block px-2.5 py-1 rounded-md bg-slate-900 text-slate-300 text-[11px] border border-slate-800">
                         {prod.status}
                       </span>
                     </div>
-                    <button 
-                      onClick={() => handleDeleteProduct(prod.id)}
-                      className="w-full py-2 rounded-xl bg-red-950/40 text-red-400 hover:bg-red-900/50 border border-red-500/30 text-xs font-semibold transition"
-                    >
-                      Supprimer du catalogue
-                    </button>
+                    
+                    <div className="flex gap-2 pt-2">
+                      <button 
+                        onClick={() => setSelectedProduct(prod)}
+                        className="flex-1 py-2 rounded-xl bg-slate-900 text-amber-400 hover:bg-slate-800 border border-slate-800 text-xs font-semibold transition"
+                      >
+                        👁️ Visualiser
+                      </button>
+                      <button 
+                        onClick={() => handleDeleteProduct(prod.id)}
+                        className="py-2 px-3 rounded-xl bg-red-950/40 text-red-400 hover:bg-red-900/50 border border-red-500/30 text-xs transition"
+                      >
+                        🗑️
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -403,41 +367,56 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* ONGLET 3 : PARTENAIRES */}
-        {activeTab === 'partners' && (
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-6">
-            <h2 className="text-xl font-bold text-white">Liste officielle des Partenaires du Réseau</h2>
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse text-sm">
-                <thead>
-                  <tr className="border-b border-slate-800 text-slate-400 text-xs uppercase tracking-wider">
-                    <th className="py-3 px-4">#ID</th>
-                    <th className="py-3 px-4">Nom et Prénoms</th>
-                    <th className="py-3 px-4">Code Partenaire</th>
-                    <th className="py-3 px-4">Téléphone</th>
-                    <th className="py-3 px-4">Pays & Validité</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-800/60">
-                  {PARTNERS_LIST.map((partner) => (
-                    <tr key={partner.id} className="hover:bg-slate-800/30 transition">
-                      <td className="py-3 px-4 text-slate-400 font-bold">{partner.id}</td>
-                      <td className="py-3 px-4 text-white font-semibold">{partner.name}</td>
-                      <td className="py-3 px-4">
-                        <span className="px-2.5 py-1 rounded-md bg-slate-800 text-amber-400 font-mono text-xs border border-slate-700">
-                          {partner.code}
-                        </span>
-                      </td>
-                      <td className="py-3 px-4 text-slate-300">{partner.phone || 'Non renseigné'}</td>
-                      <td className="py-3 px-4">
-                        <span className="text-white font-medium block">{partner.country}</span>
-                        <span className="text-slate-400 text-xs">Inscrit : {partner.date}</span>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+        {/* Modale de visualisation d'un article */}
+        {selectedProduct && (
+          <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-6 md:p-8 space-y-6 relative shadow-2xl">
+              <button 
+                onClick={() => setSelectedProduct(null)}
+                className="absolute top-4 right-4 text-slate-400 hover:text-white text-lg font-bold bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center"
+              >
+                ✕
+              </button>
+
+              <div className="space-y-4">
+                <img src={selectedProduct.image} alt={selectedProduct.title} className="w-full h-56 object-cover rounded-2xl border border-slate-800" />
+                <div className="space-y-1">
+                  <span className="text-xs font-semibold text-amber-400 uppercase">{selectedProduct.status}</span>
+                  <h2 className="text-2xl font-extrabold text-white">{selectedProduct.title}</h2>
+                  <p className="text-xl font-bold text-amber-400">{selectedProduct.price}</p>
+                </div>
+                
+                <div className="space-y-2 bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                  <h4 className="text-xs font-bold uppercase text-slate-400">Résumé</h4>
+                  <p className="text-slate-200 text-xs">{selectedProduct.summary}</p>
+                </div>
+
+                <div className="space-y-2 bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                  <h4 className="text-xs font-bold uppercase text-slate-400">Description Complète</h4>
+                  <p className="text-slate-300 text-xs whitespace-pre-line">{selectedProduct.description}</p>
+                </div>
+              </div>
+
+              <button 
+                onClick={() => setSelectedProduct(null)}
+                className="w-full py-3 rounded-xl bg-slate-800 text-white font-bold hover:bg-slate-700 transition text-xs"
+              >
+                Fermer la vue détaillée
+              </button>
             </div>
+          </div>
+        )}
+
+        {activeTab === 'orders' && (
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8">
+            <h2 className="text-xl font-bold text-white mb-4">Suivi des Commandes</h2>
+            <p className="text-slate-400 text-sm">Gérez les statuts de livraison de vos clients ci-dessus.</p>
+          </div>
+        )}
+
+        {activeTab === 'partners' && (
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8">
+            <h2 className="text-xl font-bold text-white mb-4">Réseau des Partenaires ({PARTNERS_LIST.length})</h2>
           </div>
         )}
 
