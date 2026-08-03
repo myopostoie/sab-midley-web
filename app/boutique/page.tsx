@@ -28,7 +28,7 @@ export default function BoutiquePage() {
   const BIN_ID = '6a70e40bda38895dfeb502bb'; 
   const API_KEY = '$2a$10$j7cMEnY0wys4AhMpQIYXhe11Z5wI5bgWCY1qSNxVzCFajdeWF6nVW';
 
-  // Chargement automatique du script FedaPay
+  // Chargement automatique du script FedaPay (version corrigée sans l'ancienne v1.1.7)
   useEffect(() => {
     const checkFedaPay = () => {
       if (typeof window !== 'undefined' && (window as any).FedaPay) {
@@ -41,7 +41,7 @@ export default function BoutiquePage() {
     if (checkFedaPay()) return;
 
     const script = document.createElement('script');
-    script.src = 'https://cdn.fedapay.com/checkout.js?v=1.1.7';
+    script.src = 'https://cdn.fedapay.com/checkout.js';
     script.async = true;
     script.onload = () => {
       checkFedaPay();
