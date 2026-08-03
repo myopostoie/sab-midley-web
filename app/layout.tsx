@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Navbar from './components/Navbar';
-import { productsList } from './products';
 
 export default function Home() {
   const [showTopBtn, setShowTopBtn] = useState(false);
@@ -55,9 +54,6 @@ export default function Home() {
     }
   ];
 
-  // On prend un aperçu des 3 premiers produits de la boutique
-  const previewProducts = productsList ? productsList.slice(0, 3) : [];
-
   return (
     <div className="min-h-screen bg-[#090A0C] text-slate-100 font-sans relative">
       <div className="bg-[#D4AF37] text-[#090A0C] text-xs md:text-sm font-bold py-2.5 px-4 text-center tracking-wide">
@@ -86,18 +82,11 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Section Aperçu des Pôles */}
+      {/* Section Aperçu des Pôles (Ton design d'origine) */}
       <section className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-900">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
-          <div className="space-y-3">
-            <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider">Nos Pôles</span>
-            <h2 className="text-3xl font-extrabold text-white">Nos Domaines d'Expertise</h2>
-            <p className="text-slate-400 text-sm max-w-md">Une offre diversifiée pour répondre aux exigences des particuliers et des professionnels.</p>
-          </div>
-          <Link href="/poles" className="text-xs font-bold text-[#D4AF37] hover:underline inline-flex items-center space-x-1">
-            <span>Voir tous les pôles</span>
-            <span>→</span>
-          </Link>
+        <div className="text-center space-y-3 mb-16">
+          <h2 className="text-3xl font-extrabold text-white">Nos Domaines d'Expertise</h2>
+          <p className="text-slate-400 text-sm max-w-md mx-auto">Une offre diversifiée pour répondre aux exigences des particuliers et des professionnels.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {poles.map((pole) => (
@@ -123,75 +112,65 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Section Aperçu Boutique & Négoce */}
+      {/* Section Aperçu des autres rubriques du site (Boutique, Partenaire, Carrières) */}
       <section className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-900">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
-          <div className="space-y-3">
-            <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider">Négoce & Distribution</span>
-            <h2 className="text-3xl font-extrabold text-white">Aperçu de la Boutique</h2>
-            <p className="text-slate-400 text-sm max-w-md">Découvrez une sélection de nos équipements et articles disponibles à la commande.</p>
-          </div>
-          <Link href="/boutique" className="text-xs font-bold text-[#D4AF37] hover:underline inline-flex items-center space-x-1">
-            <span>Accéder à toute la boutique</span>
-            <span>→</span>
-          </Link>
+        <div className="text-center space-y-3 mb-16">
+          <h2 className="text-3xl font-extrabold text-white">Nos Autres Espaces & Services</h2>
+          <p className="text-slate-400 text-sm max-w-md mx-auto">Accédez directement à nos catalogues, réseaux et opportunités sans passer par les menus.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {previewProducts.map((product: any) => (
-            <div key={product.id} className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden flex flex-col justify-between hover:border-[#D4AF37]/40 transition">
-              <div className="h-52 overflow-hidden relative">
-                <img src={product.image} alt={product.title} className="w-full h-full object-cover" />
-                <div className="absolute top-4 right-4 bg-[#090A0C]/90 backdrop-blur-md px-3 py-1 rounded-lg text-sm font-bold text-[#D4AF37] border border-[#D4AF37]/30">
-                  {product.price}
-                </div>
-              </div>
-              <div className="p-6 space-y-4 flex-1 flex flex-col justify-between">
-                <div className="space-y-2">
-                  <h3 className="text-lg font-bold text-white">{product.title}</h3>
-                  <p className="text-slate-400 text-xs line-clamp-2">{product.description}</p>
-                </div>
-                <Link href="/boutique" className="text-xs font-bold text-[#D4AF37] hover:underline inline-flex items-center space-x-1">
-                  <span>Commander sur la boutique</span>
-                  <span>→</span>
-                </Link>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Section Aperçu Portail Partenaire & Carrières */}
-      <section className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-900">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 space-y-6 flex flex-col justify-between">
+          
+          {/* Carte Boutique / Négoce */}
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-[#D4AF37]/40 transition group">
             <div className="space-y-3">
-              <span className="text-xs font-bold px-3 py-1 rounded bg-[#D4AF37]/20 text-[#D4AF37] uppercase">Réseau Commercial</span>
-              <h3 className="text-2xl font-bold text-white">Portail Partenaire RC SAB MIDLEY</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
-                Accédez aux ressources exclusives, aux guides partenaires et aux contrats officiels du réseau.
+              <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider">E-Commerce</span>
+              <h3 className="text-xl font-bold text-white">Boutique & Équipements</h3>
+              <p className="text-slate-400 text-xs leading-relaxed">
+                Explorez notre catalogue d'équipements de qualité, mobilier design et articles disponibles à l'achat.
               </p>
             </div>
-            <div>
-              <Link href="/partenaire" className="inline-block px-6 py-3.5 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-sm hover:bg-[#c5a030] transition shadow-lg">
-                Accéder au portail partenaire
+            <div className="pt-6">
+              <Link href="/boutique" className="inline-flex items-center space-x-2 text-xs font-bold text-[#D4AF37] hover:underline">
+                <span>Visiter la boutique</span>
+                <span>→</span>
               </Link>
             </div>
           </div>
 
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 space-y-6 flex flex-col justify-between">
+          {/* Carte Portail Partenaire */}
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-[#D4AF37]/40 transition group">
             <div className="space-y-3">
-              <span className="text-xs font-bold px-3 py-1 rounded bg-slate-800 text-slate-300 uppercase">Opportunités</span>
-              <h3 className="text-2xl font-bold text-white">Carrières & Recrutement</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">
-                Rejoignez une équipe dynamique et participez activement à l'expansion régionale en Afrique de l'Ouest.
+              <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider">Réseau Commercial</span>
+              <h3 className="text-xl font-bold text-white">Portail Partenaire</h3>
+              <p className="text-slate-400 text-xs leading-relaxed">
+                Espace réservé aux membres du réseau pour le suivi, les outils de vente et l'expansion régionale.
               </p>
             </div>
-            <div>
-              <Link href="/carrieres" className="inline-block px-6 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm border border-slate-700 transition">
-                Postuler dès maintenant
+            <div className="pt-6">
+              <Link href="/partenaire" className="inline-flex items-center space-x-2 text-xs font-bold text-[#D4AF37] hover:underline">
+                <span>Accéder au portail</span>
+                <span>→</span>
               </Link>
             </div>
           </div>
+
+          {/* Carte Carrières */}
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-[#D4AF37]/40 transition group">
+            <div className="space-y-3">
+              <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider">Recrutement</span>
+              <h3 className="text-xl font-bold text-white">Carrières</h3>
+              <p className="text-slate-400 text-xs leading-relaxed">
+                Rejoignez nos équipes en Afrique de l'Ouest et participez activement à nos projets de développement.
+              </p>
+            </div>
+            <div className="pt-6">
+              <Link href="/carrieres" className="inline-flex items-center space-x-2 text-xs font-bold text-[#D4AF37] hover:underline">
+                <span>Voir les offres</span>
+                <span>→</span>
+              </Link>
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -200,7 +179,7 @@ export default function Home() {
         <button
           onClick={scrollToTop}
           aria-label="Retour en haut"
-          className="fixed bottom-6 right-6 z-50 p-3.5 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold shadow-xl hover:bg-[#c5a030] transition flex items-center justify-center border border-[#090A0C]/20"
+          className="fixed bottom-6 right-6 z-50 p-3 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold shadow-xl hover:bg-[#c5a030] transition flex items-center justify-center border border-[#090A0C]/20"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
