@@ -16,7 +16,7 @@ export default function GlobalKoffiChat() {
     { question: "Comment passer commande ?", answer: "Vous pouvez commander directement sur le site en ajoutant les articles au panier, ou nous contacter par WhatsApp pour valider votre achat." }
   ];
 
-  const handleSend = (textToSend: string) => {
+  const handleSend = (textToSend) => {
     if (!textToSend.trim()) return;
 
     const newMessages = [...messages, { sender: 'user', text: textToSend }];
