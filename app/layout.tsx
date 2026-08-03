@@ -1,9 +1,28 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Navbar from './components/Navbar';
 
 export default function Home() {
+  const [showTopBtn, setShowTopBtn] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowTopBtn(true);
+      } else {
+        setShowTopBtn(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const poles = [
     {
       id: 'immobilier',
@@ -54,7 +73,7 @@ export default function Home() {
           Implantés à Abomey-Calavi (Bénin) et en expansion sur la Côte d'Ivoire et le Burkina Faso, nous connectons ambition et opportunités à travers nos quatre pôles d'excellence.
         </p>
         <div className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-4">
-          <Link href="/poles" className="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold hover:bg-[#c5a030] transition shadow-lg shadow-[#D4AF37]/20">
+          <Link href="/poles" className="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold hover:bg-[#c5a030] transition shadow-lg shadow-[#D4AF37]/25">
             Découvrir nos Pôles
           </Link>
           <Link href="/boutique" className="w-full sm:w-auto px-8 py-4 rounded-xl bg-slate-900 border border-slate-800 text-white font-bold hover:border-[#D4AF37]/50 transition">
@@ -92,6 +111,78 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* Section Aperçu des Autres Rubriques (Boutique, Partenaire, Carrières) */}
+      <section className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-900">
+        <div className="text-center space-y-3 mb-16">
+          <h2 className="text-3xl font-extrabold text-white">Nos Autres Espaces & Services</h2>
+          <p className="text-slate-400 text-sm max-w-md mx-auto">Accédez directement à l'ensemble de nos services et plateformes en un clic.</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-[#D4AF37]/40 transition group">
+            <div className="space-y-3">
+              <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider">E-Commerce</span>
+              <h3 className="text-xl font-bold text-white">Boutique & Équipements</h3>
+              <p className="text-slate-400 text-xs leading-relaxed">
+                Explorez notre catalogue d'équipements de qualité, mobilier design et articles disponibles à l'achat.
+              </p>
+            </div>
+            <div className="pt-6">
+              <Link href="/boutique" className="inline-flex items-center space-x-2 text-xs font-bold text-[#D4AF37] hover:underline">
+                <span>Visiter la boutique</span>
+                <span>→</span>
+              </Link>
+            </div>
+          </div>
+
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-[#D4AF37]/40 transition group">
+            <div className="space-y-3">
+              <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider">Réseau Commercial</span>
+              <h3 className="text-xl font-bold text-white">Portail Partenaire</h3>
+              <p className="text-slate-400 text-xs leading-relaxed">
+                Espace réservé aux membres du réseau pour le suivi, les outils de vente et l'expansion régionale.
+              </p>
+            </div>
+            <div className="pt-6">
+              <Link href="/partenaire" className="inline-flex items-center space-x-2 text-xs font-bold text-[#D4AF37] hover:underline">
+                <span>Accéder au portail</span>
+                <span>→</span>
+              </Link>
+            </div>
+          </div>
+
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-[#D4AF37]/40 transition group">
+            <div className="space-y-3">
+              <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider">Recrutement</span>
+              <h3 className="text-xl font-bold text-white">Carrières</h3>
+              <p className="text-slate-400 text-xs leading-relaxed">
+                Rejoignez nos équipes en Afrique de l'Ouest et participez activement à nos projets de développement.
+              </p>
+            </div>
+            <div className="pt-6">
+              <Link href="/carrieres" className="inline-flex items-center space-x-2 text-xs font-bold text-[#D4AF37] hover:underline">
+                <span>Voir les offres</span>
+                <span>→</span>
+              </Link>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      {/* Bouton Top Up Flottant */}
+      {showTopBtn && (
+        <button
+          onClick={scrollToTop}
+          aria-label="Retour en haut"
+          className="fixed bottom-6 right-6 z-50 p-3.5 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold shadow-xl hover:bg-[#c5a030] transition flex items-center justify-center border border-[#090A0C]/20"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+          </svg>
+        </button>
+      )}
 
       {/* Footer */}
       <footer className="border-t border-slate-900 bg-[#090A0C] py-12 px-6 text-center text-xs text-slate-500 space-y-4">
