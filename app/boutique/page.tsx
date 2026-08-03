@@ -10,7 +10,7 @@ export default function BoutiquePage() {
   const [orderSuccess, setOrderSuccess] = useState<any>(null);
   const [showPartnerField, setShowPartnerField] = useState(false);
   
-  // État dynamique pour charger les produits depuis le dashboard admin
+  // État initial par défaut
   const [productsList, setProductsList] = useState<any[]>([
     { 
       id: 1, 
@@ -23,7 +23,7 @@ export default function BoutiquePage() {
     }
   ]);
 
-  // Charger les produits synchronisés depuis l'administration au démarrage
+  // CORRECTION : Charger dynamiquement les produits enregistrés par l'admin via localStorage
   useEffect(() => {
     const savedProducts = localStorage.getItem('sabmidley_products');
     if (savedProducts) {
