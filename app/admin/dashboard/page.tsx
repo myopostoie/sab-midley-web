@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const PARTNERS_LIST = [
   { id: 1, name: "AGBO BORIS", code: "RC26BJ6646849", phone: "229 90 70 07 70", country: "BENIN", date: "juillet 2026" },
@@ -33,23 +33,53 @@ const PARTNERS_LIST = [
 
 export default function AdminDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [step, setStep] = useState<'credentials' | 'secret'>('credentials');
+  
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [secretAnswer, setSecretAnswer] = useState('');
+  const [currentUserRole, setCurrentUserRole] = useState('');
+
   const [activeTab, setActiveTab] = useState<'orders' | 'partners' | 'products'>('orders');
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // États pour les produits avec description et résumé
-  const [products, setProducts] = useState<any[]>([
-    { 
-      id: 1, 
-      title: "Article Premium Démo", 
-      price: "25 000 XOF", 
-      status: "En stock", 
-      summary: "Idéal pour un usage professionnel quotidien avec finitions haut de gamme.",
-      description: "Ceci est une description complète détaillée du produit incluant les spécificités techniques et les avantages pour les clients finaux.",
-      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400" 
+  // Gestion des produits avec synchronisation localStorage
+  const [products, setProducts] = useState<any[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem('sabmidley_products');
+    if (saved) {
+      try {
+        setProducts(JSON.parse(saved));
+      } catch (e) {
+        setProducts([{ 
+          id: 1, 
+          title: "Article Premium Démo", 
+          price: "25 000 XOF", 
+          status: "En stock", 
+          summary: "Idéal pour un usage professionnel quotidien avec finitions haut de gamme.",
+          description: "Ceci est une description complète détaillée du produit incluant les spécificités techniques et les avantages pour les clients finaux.",
+          image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400" 
+        }]);
+      }
+    } else {
+      setProducts([{ 
+        id: 1, 
+        title: "Article Premium Démo", 
+        price: "25 000 XOF", 
+        status: "En stock", 
+        summary: "Idéal pour un usage professionnel quotidien avec finitions haut de gamme.",
+        description: "Ceci est une description complète détaillée du produit incluant les spécificités techniques et les avantages pour les clients finaux.",
+        image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400" 
+      }]);
     }
-  ]);
+  }, []);
+
+  const saveProductsToStorage = (newProductsList: any[]) => {
+    setProducts(newProductsList);
+    localStorage.setItem('sabmidley_products', JSON.stringify(newProductsList));
+  };
 
   const [newTitle, setNewTitle] = useState('');
   const [newPrice, setNewPrice] = useState('');
@@ -58,10 +88,9 @@ export default function AdminDashboard() {
   const [newDescription, setNewDescription] = useState('');
   const [newImage, setNewImage] = useState('');
 
-  // État pour la modale de visualisation d'un article
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
 
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbyCLzeK1mr3pccEO2Hc1UVtd-qA_SZe4uKQkpVr1ZP063mTc3I7JAAGcnPYWTb5pzuW/exec';
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbyCLzeK1mr3pccEO2Hc1UVtd-qA_SZe4uKQkpVr1ZP063mTc317JAAGcnPYWTb5pzuW/exec';
 
   const fetchOrdersFromGoogleSheets = async () => {
     setLoading(true);
@@ -91,35 +120,36 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+  // Étape 1 : Vérification Identifiant & Mot de passe
+  const handleCheckCredentials = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === 'SabMidley2026!') {
-      setIsAuthenticated(true);
-      fetchOrdersFromGoogleSheets();
+    const cleanUser = username.trim().toLowerCase();
+    const cleanPass = password.trim();
+
+    if (cleanUser === 'paradize' && cleanPass === 'hongkong') {
+      setCurrentUserRole('admin');
+      setStep('secret');
+    } else if (cleanUser === 'papa' && cleanPass === 'vanice') {
+      setCurrentUserRole('director');
+      setStep('secret');
     } else {
-      alert('Mot de passe administrateur incorrect.');
+      alert('Identifiant ou mot de passe incorrect.');
     }
   };
 
-  const updateStatus = async (id: string, newStatus: string) => {
-    setOrders(orders.map(order => order.id === id ? { ...order, status: newStatus } : order));
+  // Étape 2 : Vérification de la question secrète
+  const handleCheckSecret = (e: React.FormEvent) => {
+    e.preventDefault();
+    const cleanAnswer = secretAnswer.trim().toLowerCase();
 
-    const targetOrder = orders.find(o => o.id === id);
-    if (!targetOrder) return;
-
-    try {
-      await fetch(scriptURL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'updateStatus',
-          rowIndex: targetOrder.rowIndex,
-          status: newStatus
-        })
-      });
-    } catch (error) {
-      console.error('Erreur lors de la synchronisation du statut :', error);
+    if (currentUserRole === 'admin' && cleanAnswer === 'love') {
+      setIsAuthenticated(true);
+      fetchOrdersFromGoogleSheets();
+    } else if (currentUserRole === 'director' && cleanAnswer === 'manhia') {
+      setIsAuthenticated(true);
+      fetchOrdersFromGoogleSheets();
+    } else {
+      alert('Réponse à la question secrète incorrecte.');
     }
   };
 
@@ -137,55 +167,100 @@ export default function AdminDashboard() {
       image: newImage || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400'
     };
 
-    setProducts([newProd, ...products]);
+    saveProductsToStorage([newProd, ...products]);
     setNewTitle('');
     setNewPrice('');
     setNewSummary('');
     setNewDescription('');
     setNewImage('');
-    alert('Article ajouté avec succès au catalogue !');
+    alert('Article ajouté avec succès au catalogue et synchronisé avec la boutique !');
   };
 
   const handleDeleteProduct = (id: number) => {
     if (confirm('Voulez-vous vraiment retirer cet article du catalogue ?')) {
-      setProducts(products.filter(p => p.id !== id));
+      saveProductsToStorage(products.filter(p => p.id !== id));
       setSelectedProduct(null);
     }
   };
-
-  const totalRevenue = orders.reduce((acc, order) => {
-    const cleanNum = parseInt(String(order.price).replace(/[^0-9]/g, ''), 10) || 0;
-    return acc + cleanNum;
-  }, 0);
 
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
         <div className="bg-slate-900 border border-slate-800 p-8 rounded-3xl max-w-md w-full space-y-6 shadow-2xl">
           <div className="text-center space-y-2">
-            <span className="text-xs font-semibold text-amber-400 uppercase tracking-wider">Sécurité Admin</span>
-            <h1 className="text-2xl font-extrabold text-white">SAB MIDLEY Back-office</h1>
-            <p className="text-slate-400 text-xs">Accès restreint aux administrateurs autorisés.</p>
+            <span className="text-xs font-semibold text-amber-400 uppercase tracking-wider">Sécurité SAB MIDLEY</span>
+            <h1 className="text-2xl font-extrabold text-white">Connexion Back-office</h1>
+            <p className="text-slate-400 text-xs">
+              {step === 'credentials' ? 'Veuillez entrer vos identifiants.' : 'Question de sécurité requise.'}
+            </p>
           </div>
-          <form onSubmit={handleLogin} className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Mot de passe</label>
-              <input 
-                type="password" 
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Entrez le mot de passe admin"
-                required
-                className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-amber-500 outline-none text-sm"
-              />
-            </div>
-            <button 
-              type="submit"
-              className="w-full py-3.5 rounded-xl bg-amber-500 text-slate-950 font-bold hover:bg-amber-400 transition text-sm shadow-lg shadow-amber-500/20"
-            >
-              Se connecter au tableau de bord
-            </button>
-          </form>
+
+          {step === 'credentials' ? (
+            <form onSubmit={handleCheckCredentials} className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Nom d'utilisateur</label>
+                <input 
+                  type="text" 
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Ex: paradize ou papa"
+                  required
+                  className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-amber-500 outline-none text-sm"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Mot de passe</label>
+                <input 
+                  type="password" 
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Votre mot de passe"
+                  required
+                  className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-amber-500 outline-none text-sm"
+                />
+              </div>
+              <button 
+                type="submit"
+                className="w-full py-3.5 rounded-xl bg-amber-500 text-slate-950 font-bold hover:bg-amber-400 transition text-sm shadow-lg shadow-amber-500/20"
+              >
+                Suivant
+              </button>
+            </form>
+          ) : (
+            <form onSubmit={handleCheckSecret} className="space-y-4">
+              <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 text-center space-y-1">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-amber-400">Question secrète</span>
+                <p className="text-white font-bold text-sm">why ?</p>
+              </div>
+              <div>
+                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Votre réponse</label>
+                <input 
+                  type="password" 
+                  value={secretAnswer}
+                  onChange={(e) => setSecretAnswer(e.target.value)}
+                  placeholder="Entrez la réponse secrète"
+                  required
+                  autoFocus
+                  className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-amber-500 outline-none text-sm"
+                />
+              </div>
+              <div className="flex gap-2">
+                <button 
+                  type="button"
+                  onClick={() => { setStep('credentials'); setPassword(''); setSecretAnswer(''); }}
+                  className="w-1/3 py-3 rounded-xl bg-slate-800 text-slate-300 font-semibold hover:bg-slate-700 transition text-xs"
+                >
+                  Retour
+                </button>
+                <button 
+                  type="submit"
+                  className="w-2/3 py-3 rounded-xl bg-amber-500 text-slate-950 font-bold hover:bg-amber-400 transition text-xs shadow-lg shadow-amber-500/20"
+                >
+                  Valider l'accès
+                </button>
+              </div>
+            </form>
+          )}
         </div>
       </div>
     );
@@ -197,7 +272,9 @@ export default function AdminDashboard() {
         
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-slate-800 pb-6 gap-4">
           <div>
-            <span className="text-xs font-semibold text-amber-400 uppercase tracking-wider">Administration Générale</span>
+            <span className="text-xs font-semibold text-amber-400 uppercase tracking-wider">
+              Administration Générale ({currentUserRole === 'admin' ? 'Admin: paradize' : 'Directeur: papa'})
+            </span>
             <h1 className="text-3xl font-extrabold text-white mt-1">Tableau de Bord SAB MIDLEY</h1>
           </div>
           <div className="flex items-center gap-3">
@@ -208,7 +285,7 @@ export default function AdminDashboard() {
               🔄 Actualiser les données
             </button>
             <button 
-              onClick={() => setIsAuthenticated(false)}
+              onClick={() => { setIsAuthenticated(false); setStep('credentials'); setPassword(''); setSecretAnswer(''); }}
               className="px-4 py-2 rounded-xl bg-slate-900 text-slate-300 hover:text-white border border-slate-800 text-xs font-semibold transition"
             >
               Se déconnecter
@@ -244,7 +321,7 @@ export default function AdminDashboard() {
             <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-6">
               <div className="border-b border-slate-800 pb-4">
                 <h2 className="text-xl font-bold text-white">➕ Ajouter un nouvel article au catalogue</h2>
-                <p className="text-slate-400 text-xs mt-1">Renseignez les informations, le résumé et la description complète de l'article.</p>
+                <p className="text-slate-400 text-xs mt-1">Renseignez les informations pour mettre à jour instantanément la boutique en ligne.</p>
               </div>
 
               <form onSubmit={handleAddProduct} className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -329,7 +406,7 @@ export default function AdminDashboard() {
               </form>
             </div>
 
-            {/* Liste des articles avec bouton de visualisation */}
+            {/* Liste des articles */}
             <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-6">
               <h2 className="text-xl font-bold text-white">📦 Catalogue actuel ({products.length})</h2>
               
@@ -408,15 +485,45 @@ export default function AdminDashboard() {
         )}
 
         {activeTab === 'orders' && (
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8">
-            <h2 className="text-xl font-bold text-white mb-4">Suivi des Commandes</h2>
-            <p className="text-slate-400 text-sm">Gérez les statuts de livraison de vos clients ci-dessus.</p>
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-6">
+            <h2 className="text-xl font-bold text-white">Suivi des Commandes</h2>
+            {loading ? (
+              <p className="text-slate-400 text-xs">Chargement des commandes depuis Google Sheets...</p>
+            ) : orders.length === 0 ? (
+              <p className="text-slate-400 text-xs">Aucune commande enregistrée pour le moment.</p>
+            ) : (
+              <div className="space-y-3">
+                {orders.map((order, idx) => (
+                  <div key={idx} className="bg-slate-950 border border-slate-800 p-4 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div className="space-y-1">
+                      <span className="text-[10px] font-bold text-amber-400 uppercase">{order.id} - {order.date}</span>
+                      <h4 className="font-bold text-white text-sm">{order.client} ({order.phone})</h4>
+                      <p className="text-slate-300 text-xs">Produit : <strong className="text-white">{order.product}</strong> ({order.price})</p>
+                      <p className="text-slate-400 text-xs">Ville : {order.city} | Parrain : {order.parrain}</p>
+                    </div>
+                    <span className="px-3 py-1 rounded-lg bg-emerald-950/40 text-emerald-400 border border-emerald-500/30 text-xs font-semibold">
+                      {order.status}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
         {activeTab === 'partners' && (
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8">
-            <h2 className="text-xl font-bold text-white mb-4">Réseau des Partenaires ({PARTNERS_LIST.length})</h2>
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-6">
+            <h2 className="text-xl font-bold text-white">Réseau des Partenaires ({PARTNERS_LIST.length})</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+              {PARTNERS_LIST.map((partner) => (
+                <div key={partner.id} className="bg-slate-950 border border-slate-800 p-4 rounded-2xl space-y-2">
+                  <span className="text-[10px] font-bold text-amber-400">{partner.code}</span>
+                  <h4 className="font-bold text-white text-sm">{partner.name}</h4>
+                  <p className="text-slate-400 text-xs">📱 {partner.phone || 'Non renseigné'}</p>
+                  <p className="text-slate-500 text-[11px]">{partner.country} - {partner.date}</p>
+                </div>
+              ))}
+            </div>
           </div>
         )}
 
