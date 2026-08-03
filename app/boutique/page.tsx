@@ -24,42 +24,34 @@ export default function BoutiquePage() {
 
   const [productsList, setProductsList] = useState<any[]>(defaultProducts);
 
-  // Fonction robuste pour charger et écouter les produits (compatible mobile & multi-onglets)
-  const loadProducts = () => {
-    if (typeof window === 'undefined') return;
+  // 🔑 Tes clés JSONBin intégrées pour la lecture en direct
+  const BIN_ID = '6a70e40bda38895dfeb502bb'; 
+  const API_KEY = '$2a$10$j7cMEnY0wys4AhMpQIYXhe11Z5wI5bgWCY1qSNxVzCFajdeWF6nVW';
+
+  // Fonction pour charger les produits directement depuis le Cloud JSONBin
+  const loadProductsFromCloud = async () => {
     try {
-      const savedProducts = localStorage.getItem('sabmidley_products');
-      if (savedProducts) {
-        const parsed = JSON.parse(savedProducts);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setProductsList(parsed);
-          return;
-        }
+      const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+        headers: { 'X-Master-Key': API_KEY },
+        cache: 'no-store'
+      });
+      const data = await response.json();
+      if (data && data.record && Array.isArray(data.record) && data.record.length > 0) {
+        setProductsList(data.record);
       }
-      setProductsList(defaultProducts);
     } catch (e) {
-      console.error("Erreur de chargement des produits locaux", e);
+      console.error("Erreur de chargement cloud des produits", e);
     }
   };
 
   useEffect(() => {
-    loadProducts();
+    // Chargement initial au montage de la page
+    loadProductsFromCloud();
 
-    // Gestionnaires de mise à jour instantanée
-    const handleUpdate = () => {
-      loadProducts();
-    };
-
-    // Écoute de l'événement personnalisé instantané émis par l'Admin et du stockage natif
-    window.addEventListener('sabmidley_products_updated', handleUpdate);
-    window.addEventListener('storage', handleUpdate);
-    
-    // Vérification supplémentaire toutes les 2 secondes pour forcer la synchro sur mobile
-    const interval = setInterval(loadProducts, 2000);
+    // Actualisation automatique toutes les 5 secondes pour une synchro instantanée sur mobile/PC
+    const interval = setInterval(loadProductsFromCloud, 5000);
 
     return () => {
-      window.removeEventListener('sabmidley_products_updated', handleUpdate);
-      window.removeEventListener('storage', handleUpdate);
       clearInterval(interval);
     };
   }, []);
