@@ -108,7 +108,7 @@ export default function SuiviPartenaire() {
                   activeTab === 'conseils' ? 'bg-[#D4AF37] text-[#090A0C]' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
                 }`}
               >
-                Conseils & Astuces Vente
+                Conseils & Histoires de Succès
               </button>
             </div>
 
@@ -164,30 +164,46 @@ export default function SuiviPartenaire() {
               </div>
             )}
 
-            {/* ONGLET 2 : CONSEILS MARKETING (FB MARKETPLACE & TIKTOK) */}
+            {/* ONGLET 2 : CONSEILS MARKETING & HISTOIRES DE PERSÉVÉRANCE */}
             {activeTab === 'conseils' && (
-              <div className="space-y-4 text-xs leading-relaxed">
+              <div className="space-y-4 text-xs leading-relaxed max-h-[400px] overflow-y-auto pr-1">
+                
+                {/* Stratégie Facebook & Marketplace */}
                 <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
-                  <h3 className="font-bold text-[#D4AF37] text-sm">🏪 Astuces pour Facebook Marketplace</h3>
-                  <ul className="list-disc list-inside space-y-1 text-slate-300">
-                    <p>Mettez en avant des photos nettes et lumineuses des produits disponibles.</p>
-                    <p>Utilisez des titres accrocheurs avec la localisation (ex: <em>"Article haut de gamme disponible à Cotonou / Abidjan"</em>).</p>
-                    <p>Répondez rapidement aux messages et mentionnez votre code partenaire pour valider la commission.</p>
+                  <h3 className="font-bold text-[#D4AF37] text-sm">🏪 Stratégie Facebook & Marketplace</h3>
+                  <p className="text-slate-300">Ne publiez pas seulement "à vendre". Créez le besoin :</p>
+                  <ul className="list-disc list-inside space-y-1 text-slate-300 pl-2">
+                    <li>Utilisez des photos lumineuses prises directement des canaux WhatsApp.</li>
+                    <li>Mettez des prix clairs et précisez la zone (ex: <em>Disponible à Cotonou / Abidjan / Ouagadougou</em>).</li>
+                    <li>Renouvelez vos annonces tous les 3 jours pour rester en tête des recherches.</li>
                   </ul>
                 </div>
 
+                {/* Stratégie TikTok & Statuts */}
                 <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
-                  <h3 className="font-bold text-emerald-400 text-sm">🎬 Astuces pour TikTok & Reels</h3>
-                  <ul className="list-disc list-inside space-y-1 text-slate-300">
-                    <p>Faites de courtes vidéos montrant le déballage ou la qualité des produits en stock.</p>
-                    <p>Utilisez des musiques tendances pour augmenter la visibilité naturelle de vos vidéos.</p>
-                    <p>Ajoutez toujours un appel à l'action clair : <em>"Lien dans notre canal WhatsApp ou contactez-nous"</em>.</p>
+                  <h3 className="font-bold text-emerald-400 text-sm">🎬 Puissance des Statuts & TikTok</h3>
+                  <ul className="list-disc list-inside space-y-1 text-slate-300 pl-2">
+                    <li>Postez au moins 3 à 5 produits par jour sur vos statuts WhatsApp avec vos contacts.</li>
+                    <li>Sur TikTok, faites de courtes vidéos rythmées montrant l'utilité du produit.</li>
+                    <li>Rappelez toujours à la fin : <em>"Commandez via mon code RC [Votre Code]"</em>.</li>
                   </ul>
+                </div>
+
+                {/* Histoires et Leçons de Persévérance */}
+                <div className="p-4 rounded-2xl bg-[#D4AF37]/10 border border-[#D4AF37]/30 space-y-2">
+                  <h3 className="font-bold text-[#D4AF37] text-sm">📖 Leçon de Persévérance : L'effet de累積 (La constance)</h3>
+                  <p className="text-slate-200 italic">
+                    "Au début, le plus dur n'est pas de vendre, c'est de se faire connaître. Les plus grands vendeurs de notre réseau ont commencé avec zéro vente la première semaine. Ce qui a fait la différence ? Ils n'ont pas abandonné après 3 refus. Ils ont continué à poster chaque jour, à parler de leurs produits autour d'eux. La chance sourit à ceux qui persévèrent."
+                  </p>
+                  <p className="text-[11px] text-[#D4AF37] font-semibold pt-1">
+                    Règle d'or : Un client qui dit "non aujourd'hui" dira "oui le mois prochain" si vos statuts continuent de lui inspirer confiance.
+                  </p>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-sky-950/30 border border-sky-500/30 text-sky-300 text-[11px] text-center">
-                  💡 <strong>Astuce Pro :</strong> Partagez régulièrement le contenu des canaux WhatsApp sur vos statuts pour maximiser vos commandes !
+                  💡 <strong>Rappel :</strong> La constance bat le talent. Postez régulièrement, restez motivé, et regardez vos commissions grimper !
                 </div>
+
               </div>
             )}
 
