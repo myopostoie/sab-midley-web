@@ -9,17 +9,25 @@ export default function Home() {
   const [orderProduct, setOrderProduct] = useState<any>(null);
   const [orderSuccess, setOrderSuccess] = useState<any>(null);
 
+  // État pour afficher ou masquer le champ du code partenaire
   const [showPartnerField, setShowPartnerField] = useState(false);
+
+  // État pour le menu mobile (burger)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // État pour afficher ou masquer la flèche de retour en haut
   const [showScrollTop, setShowScrollTop] = useState(false);
 
+  // États pour les formulaires de Contact et Carrières
   const [contactSubmitted, setContactSubmitted] = useState(false);
   const [careerSubmitted, setCareerSubmitted] = useState(false);
 
+  // ================= ÉTATS POUR LE PORTAIL PARTENAIRE (MOT DE PASSE UNIVERSEL) =================
   const [activeTab, setActiveTab] = useState<'accueil' | 'partenaire'>('accueil');
   const [partnerLoggedIn, setPartnerLoggedIn] = useState(false);
   const [universalPasswordInput, setUniversalPasswordInput] = useState('');
 
+  // MOT DE PASSE UNIVERSEL UNIQUE POUR TOUS LES PARTENAIRES (modifiable ici)
   const UNIVERSAL_PARTNER_PASSWORD = 'rcsabmidley2026';
 
   useEffect(() => {
@@ -92,6 +100,7 @@ export default function Home() {
     setCareerForm({ fullName: '', email: '', phone: '', country: 'BJ', experience: 'Débutant', motivation: '' });
   };
 
+  // ================= VÉRIFICATION DU MOT DE PASSE UNIVERSEL =================
   const handleUniversalLogin = (e: any) => {
     e.preventDefault();
     if (universalPasswordInput.trim() === UNIVERSAL_PARTNER_PASSWORD) {
@@ -101,6 +110,7 @@ export default function Home() {
     }
   };
 
+  // Fonction pour envoyer la vente vers votre Google Sheets
   const saveOrderToGoogleSheets = async (orderData: any) => {
     const scriptURL = 'https://script.google.com/macros/s/AKfycbyCLzeK1mr3pccEO2Hc1UVtd-qA_SZe4uKQkpVr1ZP063mTc3I7JAAGcnPYWTb5pzuW/exec';
     try {
@@ -118,6 +128,7 @@ export default function Home() {
     }
   };
 
+  // Fonction de génération et téléchargement automatique du reçu PDF
   const generatePDFReceipt = (orderData: any) => {
     const doc = new jsPDF();
 
@@ -230,7 +241,7 @@ export default function Home() {
     const firstname = nameParts[0] ? nameParts[0].trim() : 'Client';
     const lastname = nameParts.slice(1).join(' ').trim() || 'Client';
 
-    const descriptionText = String((orderProduct as any).title || 'Commande SAB MIDLEY').replace(/[^a-zA-Z0-9éèàùêîôâäëïöüç\s-]/g, '');
+    const descriptionText = `Commande : ${(orderProduct as any).title}`.replace(/['"\\\/]/g, '');
 
     const handleSuccessfulPayment = async () => {
       const fedapayContainers = document.querySelectorAll('#fedapay-widget-container, .fedapay-modal, iframe[src*="fedapay"]');
@@ -264,7 +275,7 @@ export default function Home() {
           public_key: 'pk_live_63P5upxQrTGl6nS7aZWlmujt',
           transaction: {
             amount: Number(amount),
-            description: String(descriptionText),
+            description: descriptionText,
             currency: {
               iso: 'XOF'
             }
@@ -328,10 +339,12 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#090A0C] text-slate-100 font-sans relative">
       
+      {/* Top Banner d'actualité */}
       <div className="bg-[#D4AF37] text-[#090A0C] text-xs md:text-sm font-bold py-2.5 px-4 text-center tracking-wide">
         Expansion Régionale en cours : Bénin, Côte d'Ivoire & Burkina Faso — Rejoignez notre réseau commercial.
       </div>
 
+      {/* Barre de Menu / Navigation */}
       <header className="sticky top-0 z-40 bg-[#090A0C]/90 backdrop-blur-md border-b border-[#D4AF37]/20">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -340,6 +353,7 @@ export default function Home() {
             </button>
           </div>
 
+          {/* Menu Desktop */}
           <nav className="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
             <button onClick={() => setActiveTab('accueil')} className={`${activeTab === 'accueil' ? 'text-[#D4AF37]' : 'text-slate-300'} hover:text-white transition`}>Accueil</button>
             <a href="#poles" onClick={() => setActiveTab('accueil')} className="hover:text-[#D4AF37] transition">Nos Pôles</a>
@@ -357,6 +371,7 @@ export default function Home() {
             </button>
           </div>
 
+          {/* Bouton Burger Mobile */}
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden text-white focus:outline-none p-2"
@@ -374,6 +389,7 @@ export default function Home() {
           </button>
         </div>
 
+        {/* Menu Déroulant Mobile */}
         {mobileMenuOpen && (
           <div className="md:hidden bg-[#090A0C] border-t border-[#D4AF37]/20 px-6 py-5 space-y-4 shadow-2xl">
             <button 
@@ -422,6 +438,7 @@ export default function Home() {
         )}
       </header>
 
+      {/* ================= CONTENU CONDITIONNEL : ACCUEIL OU PORTAIL PARTENAIRE ================= */}
       {activeTab === 'partenaire' ? (
         <section className="py-16 px-6 max-w-4xl mx-auto min-h-[75vh] flex flex-col justify-center">
           {!partnerLoggedIn ? (
@@ -458,8 +475,10 @@ export default function Home() {
               </form>
             </div>
           ) : (
+            /* CONTENU DE LA PAGE PARTENAIRE DEMANDÉE (Simple, Professionnel, Sans émojis superflus) */
             <div className="bg-slate-900 border border-[#D4AF37]/40 rounded-3xl p-8 md:p-12 shadow-2xl space-y-12">
               
+              {/* En-tête */}
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-800 pb-6 gap-4">
                 <div className="space-y-2">
                   <span className="text-xs font-bold px-3 py-1 rounded bg-[#D4AF37]/20 text-[#D4AF37] tracking-wider uppercase">Espace Privé Partenaire</span>
@@ -479,6 +498,7 @@ export default function Home() {
                 <p className="text-slate-400">Prenez quelques minutes pour suivre les étapes ci-dessous.</p>
               </div>
 
+              {/* Étape 1 : Contrat */}
               <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-6">
                 <div className="space-y-2">
                   <h3 className="text-xl font-bold text-white">Étape 1 : Lire et signer le contrat</h3>
@@ -486,15 +506,15 @@ export default function Home() {
                 </div>
                 <div>
                   <a 
-                    href="https://uploadnow.io/f/73pzkc3" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
+                    href="#" 
+                    onClick={(e) => { e.preventDefault(); alert('Téléchargement du contrat de partenariat (PDF) bientôt disponible.'); }}
                     className="inline-block px-6 py-3.5 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-sm hover:bg-[#c5a030] transition shadow-lg"
                   >
                     Télécharger le contrat de partenariat
                   </a>
                 </div>
 
+                {/* Signature électronique */}
                 <div className="border-t border-slate-800/80 pt-6 space-y-4">
                   <h4 className="font-bold text-white text-base">Signature électronique</h4>
                   <p className="text-slate-400 text-sm">Vous n’êtes pas obligé d’imprimer le contrat. Vous pouvez le remplir directement sur votre téléphone.</p>
@@ -523,6 +543,7 @@ export default function Home() {
                 </div>
               </div>
 
+              {/* Étape 2 : Envoi */}
               <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-4">
                 <h3 className="text-xl font-bold text-white">Étape 2 : Envoyer le contrat signé</h3>
                 <p className="text-slate-400 text-sm">Une fois signé, envoyez votre contrat par WhatsApp au :</p>
@@ -536,7 +557,8 @@ export default function Home() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
+              {/* Guide et Catalogue */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="bg-slate-950 p-6 rounded-2xl border border-slate-800 space-y-4 flex flex-col justify-between">
                   <div className="space-y-2">
                     <h3 className="text-lg font-bold text-white">Guide du partenaire</h3>
@@ -544,17 +566,33 @@ export default function Home() {
                   </div>
                   <div>
                     <a 
-                      href="https://uploadnow.io/f/2Q1vYW1" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
+                      href="#" 
+                      onClick={(e) => { e.preventDefault(); alert('Téléchargement du Guide Partenaire bientôt disponible.'); }}
                       className="inline-block px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs border border-slate-700 transition"
                     >
                       Télécharger le Guide Partenaire
                     </a>
                   </div>
                 </div>
+
+                <div className="bg-slate-950 p-6 rounded-2xl border border-slate-800 space-y-4 flex flex-col justify-between">
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-bold text-white">Catalogue Partenaire</h3>
+                    <p className="text-slate-400 text-sm">Consultez la liste des produits autorisés à la commercialisation.</p>
+                  </div>
+                  <div>
+                    <a 
+                      href="#boutique" 
+                      onClick={() => setActiveTab('accueil')}
+                      className="inline-block px-5 py-3 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-xs hover:bg-[#c5a030] transition"
+                    >
+                      Ouvrir le catalogue
+                    </a>
+                  </div>
+                </div>
               </div>
 
+              {/* Canaux officiels */}
               <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-6">
                 <h3 className="text-xl font-bold text-white">Nos canaux officiels</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -564,9 +602,8 @@ export default function Home() {
                       <p className="text-xs text-slate-400">Tous les produits actuellement disponibles.</p>
                     </div>
                     <a 
-                      href="https://whatsapp.com/channel/0029Vb8gOUW5EjxzqTnZ713v" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
+                      href="#" 
+                      onClick={(e) => { e.preventDefault(); alert('Lien vers le canal WhatsApp En Stock'); }}
                       className="px-4 py-2 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 text-xs font-semibold text-center transition border border-emerald-500/30"
                     >
                       Rejoindre
@@ -579,9 +616,8 @@ export default function Home() {
                       <p className="text-xs text-slate-400">Découvrez les prochains arrivages avant leur mise en vente.</p>
                     </div>
                     <a 
-                      href="https://whatsapp.com/channel/0029Vb8a9RgAzNc1IBH2Xo2D" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
+                      href="#" 
+                      onClick={(e) => { e.preventDefault(); alert('Lien vers le canal Bientôt en Stock'); }}
                       className="px-4 py-2 rounded-lg bg-amber-600/20 hover:bg-amber-600/30 text-amber-400 text-xs font-semibold text-center transition border border-amber-500/30"
                     >
                       Rejoindre
@@ -594,9 +630,8 @@ export default function Home() {
                       <p className="text-xs text-slate-400">Consultez les articles momentanément indisponibles.</p>
                     </div>
                     <a 
-                      href="https://whatsapp.com/channel/0029VbDsUK6KbYMQEmAgCt3O" 
-                      target="_blank" 
-                      rel="noopener noreferrer"
+                      href="#" 
+                      onClick={(e) => { e.preventDefault(); alert('Lien vers le canal Rupture de Stock'); }}
                       className="px-4 py-2 rounded-lg bg-rose-600/20 hover:bg-rose-600/30 text-rose-400 text-xs font-semibold text-center transition border border-rose-500/30"
                     >
                       Rejoindre
@@ -605,6 +640,7 @@ export default function Home() {
                 </div>
               </div>
 
+              {/* Vos avantages */}
               <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-4">
                 <h3 className="text-xl font-bold text-white">Vos avantages</h3>
                 <p className="text-slate-400 text-sm">En rejoignant RC SAB MIDLEY, vous bénéficiez de :</p>
@@ -633,85 +669,122 @@ export default function Home() {
                     <span className="text-[#D4AF37] font-bold">•</span>
                     <span>Produits sélectionnés</span>
                   </li>
+                  <li className="flex items-center space-x-2 sm:col-span-2">
+                    <span className="text-[#D4AF37] font-bold">•</span>
+                    <span>Local physique pour rassurer les clients</span>
+                  </li>
                 </ul>
               </div>
 
-              <div className="text-center bg-slate-950 p-6 rounded-2xl border border-[#D4AF37]/30 space-y-2">
-                <p className="text-slate-300 text-sm">Pour toutes questions, veuillez contacter l'administration au <strong className="text-[#D4AF37]">+229 01 69 32 55 76</strong> ou l'un des admins du groupe principal.</p>
+              {/* Règles importantes */}
+              <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-4">
+                <h3 className="text-xl font-bold text-white">Règles importantes</h3>
+                <ul className="space-y-2 text-sm text-slate-300">
+                  <li className="flex items-start space-x-2">
+                    <span className="text-[#D4AF37] font-bold">-</span>
+                    <span>Utilisez uniquement les supports officiels fournis.</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <span className="text-[#D4AF37] font-bold">-</span>
+                    <span>Respectez la politique de prix du réseau.</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <span className="text-[#D4AF37] font-bold">-</span>
+                    <span>Maintenez une communication professionnelle avec les clients.</span>
+                  </li>
+                </ul>
               </div>
 
             </div>
           )}
         </section>
       ) : (
-        <main className="space-y-24 pb-20">
-          
-          <section className="relative py-20 px-6 max-w-7xl mx-auto text-center space-y-8">
-            <div className="space-y-4 max-w-3xl mx-auto">
-              <span className="text-xs font-bold px-3 py-1 rounded bg-[#D4AF37]/20 text-[#D4AF37] tracking-wider uppercase">Excellence & Fiabilité</span>
-              <h1 className="text-4xl md:text-6xl font-black tracking-tight text-white leading-tight">
-                SAB <span className="text-[#D4AF37]">MIDLEY</span>
-              </h1>
-              <p className="text-slate-300 text-base md:text-lg leading-relaxed">
-                Votre partenaire de confiance pour le négoce international, le courtage immobilier, la conciergerie et l’approvisionnement de premier choix en Afrique de l'Ouest.
-              </p>
+        /* ================= SECTION ACCUEIL & BOUTIQUE ================= */
+        <>
+          {/* Hero Section */}
+          <section className="py-20 px-6 max-w-7xl mx-auto text-center space-y-8">
+            <div className="inline-block px-4 py-1.5 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-xs font-bold tracking-widest uppercase">
+              Excellence & Fiabilité en Afrique de l'Ouest
             </div>
-            <div className="flex flex-wrap justify-center gap-4">
-              <a href="#boutique" className="px-8 py-4 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold hover:bg-[#c5a030] transition shadow-lg shadow-[#D4AF37]/20 text-sm">
-                Découvrir la Boutique
+            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white max-w-4xl mx-auto leading-tight">
+              Votre Partenaire Stratégique en <span className="text-[#D4AF37]">Négoce et Services</span>
+            </h1>
+            <p className="text-slate-400 text-base md:text-lg max-w-2xl mx-auto">
+              Implantés à Abomey-Calavi (Bénin) et en expansion sur la Côte d'Ivoire et le Burkina Faso, nous connectons ambition et opportunités à travers nos quatre pôles d'excellence.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-4">
+              <a href="#poles" className="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold hover:bg-[#c5a030] transition shadow-lg shadow-[#D4AF37]/20">
+                Découvrir nos Pôles
               </a>
-              <button onClick={() => setActiveTab('partenaire')} className="px-8 py-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold border border-slate-700 transition text-sm">
-                Portail Partenaire
-              </button>
+              <a href="#boutique" className="w-full sm:w-auto px-8 py-4 rounded-xl bg-slate-900 border border-slate-800 text-white font-bold hover:border-[#D4AF37]/50 transition">
+                Visiter la Boutique
+              </a>
             </div>
           </section>
 
-          <section id="poles" className="max-w-7xl mx-auto px-6 space-y-12">
-            <div className="text-center space-y-3">
-              <h2 className="text-3xl font-extrabold text-white">Nos Pôles d'Expertise</h2>
-              <p className="text-slate-400 text-sm max-w-xl mx-auto">Une organisation rigoureuse articulée autour de quatre grands secteurs d'activités stratégiques.</p>
+          {/* Section Nos Pôles */}
+          <section id="poles" className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-900">
+            <div className="text-center space-y-3 mb-16">
+              <h2 className="text-3xl font-extrabold text-white">Nos Domaines d'Expertise</h2>
+              <p className="text-slate-400 text-sm max-w-md mx-auto">Une offre diversifiée pour répondre aux exigences des particuliers et des professionnels.</p>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {poles.map((pole) => (
-                <div key={pole.id} className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden flex flex-col justify-between group hover:border-[#D4AF37]/50 transition shadow-xl">
+                <div key={pole.id} className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden flex flex-col justify-between hover:border-[#D4AF37]/40 transition group">
                   <div className="h-48 overflow-hidden relative">
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent z-10"></div>
                     <img src={pole.image} alt={pole.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
-                    <span className="absolute top-3 left-3 z-20 text-[10px] font-bold px-2.5 py-1 rounded bg-[#090A0C]/80 backdrop-blur-md text-[#D4AF37] border border-[#D4AF37]/30">
+                    <div className="absolute top-4 left-4 bg-[#090A0C]/80 backdrop-blur-md px-3 py-1 rounded-md text-xs font-bold text-[#D4AF37] border border-[#D4AF37]/30">
                       {pole.badge}
-                    </span>
+                    </div>
                   </div>
-                  <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                  <div className="p-6 space-y-4 flex-1 flex flex-col justify-between">
                     <div className="space-y-2">
                       <h3 className="text-lg font-bold text-white">{pole.title}</h3>
                       <p className="text-slate-400 text-xs leading-relaxed">{pole.description}</p>
                     </div>
+                    <a href="#contact" className="text-xs font-bold text-[#D4AF37] hover:underline inline-flex items-center space-x-1">
+                      <span>En savoir plus</span>
+                      <span>→</span>
+                    </a>
                   </div>
                 </div>
               ))}
             </div>
           </section>
 
-          <section id="boutique" className="max-w-7xl mx-auto px-6 space-y-12">
-            <div className="text-center space-y-3">
-              <h2 className="text-3xl font-extrabold text-white">Boutique & Négoce</h2>
-              <p className="text-slate-400 text-sm max-w-xl mx-auto">Explorez notre sélection d'articles haut de gamme disponibles immédiatement à la commande.</p>
+          {/* Section Boutique & Négoce */}
+          <section id="boutique" className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-900">
+            <div className="text-center space-y-3 mb-16">
+              <span className="text-xs font-bold px-3 py-1 rounded bg-[#D4AF37]/20 text-[#D4AF37] tracking-wider uppercase">Négoce & Distribution</span>
+              <h2 className="text-3xl font-extrabold text-white">Notre Catalogue de Produits</h2>
+              <p className="text-slate-400 text-sm max-w-md mx-auto">Sélection d'équipements, de mobilier et d'articles de qualité supérieure disponibles immédiatement.</p>
             </div>
 
+            {orderSuccess && (
+              <div className="bg-emerald-950/40 border border-emerald-500/40 p-6 rounded-2xl max-w-2xl mx-auto mb-12 text-center space-y-3">
+                <h3 className="text-emerald-400 font-bold text-lg">Commande validée avec succès !</h3>
+                <p className="text-slate-300 text-sm">Merci, {orderSuccess.fullName}. Votre reçu officiel a été généré et téléchargé.</p>
+                <button onClick={() => setOrderSuccess(null)} className="px-4 py-2 bg-emerald-600 text-white rounded-lg text-xs font-bold">
+                  Fermer
+                </button>
+              </div>
+            )}
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {productsList.map((product) => (
-                <div key={product.id} className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden flex flex-col justify-between group hover:border-[#D4AF37]/50 transition shadow-xl">
-                  <div className="h-64 overflow-hidden relative bg-slate-950">
-                    <img src={product.image} alt={product.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+              {productsList.map((product: any) => (
+                <div key={product.id} className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden flex flex-col justify-between hover:border-[#D4AF37]/40 transition">
+                  <div className="h-60 overflow-hidden relative">
+                    <img src={product.image} alt={product.title} className="w-full h-full object-cover" />
+                    <div className="absolute top-4 right-4 bg-[#090A0C]/90 backdrop-blur-md px-3 py-1 rounded-lg text-sm font-bold text-[#D4AF37] border border-[#D4AF37]/30">
+                      {product.price}
+                    </div>
                   </div>
                   <div className="p-6 space-y-4 flex-1 flex flex-col justify-between">
                     <div className="space-y-2">
                       <h3 className="text-lg font-bold text-white">{product.title}</h3>
-                      <p className="text-[#D4AF37] font-extrabold text-lg">{product.price}</p>
                       <p className="text-slate-400 text-xs line-clamp-2">{product.description}</p>
                     </div>
-                    <div className="pt-2 flex gap-3">
+                    <div className="flex items-center space-x-3 pt-2">
                       <button 
                         onClick={() => setSelectedProduct(product)}
                         className="flex-1 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs border border-slate-700 transition"
@@ -720,7 +793,7 @@ export default function Home() {
                       </button>
                       <button 
                         onClick={() => setOrderProduct(product)}
-                        className="flex-1 py-3 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-xs hover:bg-[#c5a030] transition"
+                        className="flex-1 py-3 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-xs hover:bg-[#c5a030] transition shadow-md"
                       >
                         Commander
                       </button>
@@ -731,17 +804,18 @@ export default function Home() {
             </div>
           </section>
 
-          <section id="carrieres" className="max-w-4xl mx-auto px-6 space-y-8">
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 md:p-12 shadow-2xl space-y-8">
+          {/* Section Carrières */}
+          <section id="carrieres" className="py-20 px-6 max-w-4xl mx-auto border-t border-slate-900">
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 md:p-12 shadow-xl space-y-8">
               <div className="text-center space-y-3">
-                <span className="text-xs font-bold px-3 py-1 rounded bg-[#D4AF37]/20 text-[#D4AF37] tracking-wider uppercase">Rejoignez l'Équipe</span>
+                <span className="text-xs font-bold px-3 py-1 rounded bg-[#D4AF37]/20 text-[#D4AF37] tracking-wider uppercase">Rejoignez l'équipe</span>
                 <h2 className="text-3xl font-extrabold text-white">Carrières & Opportunités</h2>
-                <p className="text-slate-400 text-sm max-w-md mx-auto">Vous souhaitez bâtir une carrière stimulante au sein d'une entreprise en pleine expansion ? Postulez dès maintenant.</p>
+                <p className="text-slate-400 text-sm max-w-md mx-auto">Vous souhaitez contribuer au développement d'un acteur majeur du négoce en Afrique ? Postulez dès maintenant.</p>
               </div>
 
               {careerSubmitted ? (
-                <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-6 text-center text-emerald-400 text-sm font-semibold">
-                  Votre candidature a bien été transmise à notre service RH. Nous vous contacterons prochainement.
+                <div className="p-6 bg-emerald-950/40 border border-emerald-500/40 rounded-xl text-center text-emerald-400 text-sm font-semibold">
+                  Votre candidature a bien été transmise. Notre équipe des ressources humaines vous contactera prochainement.
                 </div>
               ) : (
                 <form onSubmit={handleCareerSubmit} className="space-y-6">
@@ -750,69 +824,67 @@ export default function Home() {
                       <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Nom complet</label>
                       <input 
                         type="text" 
-                        name="fullName"
-                        value={careerForm.fullName}
-                        onChange={handleCareerChange}
-                        placeholder="Votre nom complet" 
-                        required
+                        name="fullName" 
+                        value={careerForm.fullName} 
+                        onChange={handleCareerChange} 
+                        placeholder="Ex: Jean Dupont" 
+                        required 
                         className="w-full px-4 py-3.5 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
                       />
                     </div>
                     <div>
                       <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Email</label>
                       <input 
-                        type="email" 
-                        name="email"
-                        value={careerForm.email}
-                        onChange={handleCareerChange}
-                        placeholder="votre@email.com" 
-                        required
+                        type="email5" 
+                        name="email" 
+                        value={careerForm.email} 
+                        onChange={handleCareerChange} 
+                        placeholder="jean@example.com" 
+                        required 
                         className="w-full px-4 py-3.5 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
                       />
                     </div>
                   </div>
-
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Téléphone</label>
                       <input 
-                        type="tel" 
-                        name="phone"
-                        value={careerForm.phone}
-                        onChange={handleCareerChange}
-                        placeholder="+229..." 
-                        required
+                        type="text" 
+                        name="phone" 
+                        value={careerForm.phone} 
+                        onChange={handleCareerChange} 
+                        placeholder="+229 01..." 
+                        required 
                         className="w-full px-4 py-3.5 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Niveau d'expérience</label>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Pays</label>
                       <select 
-                        name="experience"
-                        value={careerForm.experience}
-                        onChange={handleCareerChange}
+                        name="country" 
+                        value={careerForm.country} 
+                        onChange={handleCareerChange} 
                         className="w-full px-4 py-3.5 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm"
                       >
-                        <option value="Débutant">Débutant</option>
-                        <option value="Intermédiaire">Intermédiaire (1 à 3 ans)</option>
-                        <option value="Expérimenté">Expérimenté (3 ans et plus)</option>
+                        <option value="BJ">Bénin</option>
+                        <option value="CI">Côte d'Ivoire</option>
+                        <option value="BF">Burkina Faso</option>
+                        <option value="TG">Togo</option>
                       </select>
                     </div>
                   </div>
-
                   <div>
                     <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Motivation / Profil</label>
                     <textarea 
-                      name="motivation"
-                      rows={4}
-                      value={careerForm.motivation}
-                      onChange={handleCareerChange}
-                      placeholder="Parlez-nous de vous et de vos atouts..." 
-                      required
+                      name="motivation" 
+                      rows={4} 
+                      value={careerForm.motivation} 
+                      onChange={handleCareerChange} 
+                      placeholder="Décrivez brièvement votre parcours et vos motivations..." 
+                      required 
                       className="w-full px-4 py-3.5 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm"
                     ></textarea>
                   </div>
-
                   <button type="submit" className="w-full py-4 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold hover:bg-[#c5a030] transition shadow-lg shadow-[#D4AF37]/20">
                     Envoyer ma candidature
                   </button>
@@ -821,30 +893,31 @@ export default function Home() {
             </div>
           </section>
 
-          <section id="contact" className="max-w-4xl mx-auto px-6 space-y-8">
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 md:p-12 shadow-2xl space-y-8">
+          {/* Section Contact */}
+          <section id="contact" className="py-20 px-6 max-w-4xl mx-auto border-t border-slate-900">
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 md:p-12 shadow-xl space-y-8">
               <div className="text-center space-y-3">
-                <span className="text-xs font-bold px-3 py-1 rounded bg-[#D4AF37]/20 text-[#D4AF37] tracking-wider uppercase">Restons en Contact</span>
-                <h2 className="text-3xl font-extrabold text-white">Contactez SAB MIDLEY</h2>
-                <p className="text-slate-400 text-sm max-w-md mx-auto">Une question, un projet ou une demande d'information ? Notre équipe vous répond dans les plus brefs délais.</p>
+                <span className="text-xs font-bold px-3 py-1 rounded bg-[#D4AF37]/20 text-[#D4AF37] tracking-wider uppercase">Restons en contact</span>
+                <h2 className="text-3xl font-extrabold text-white">Contactez-nous</h2>
+                <p className="text-slate-400 text-sm max-w-md mx-auto">Une question sur nos services, une commande ou un partenariat ? Écrivez-nous.</p>
               </div>
 
               {contactSubmitted ? (
-                <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-6 text-center text-emerald-400 text-sm font-semibold">
-                  Votre message a bien été envoyé. Merci de nous avoir contactés.
+                <div className="p-6 bg-emerald-950/40 border border-emerald-500/40 rounded-xl text-center text-emerald-400 text-sm font-semibold">
+                  Votre message a bien été envoyé. Nous vous répondrons dans les plus brefs délais.
                 </div>
               ) : (
                 <form onSubmit={handleContactSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Nom complet</label>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Nom</label>
                       <input 
                         type="text" 
-                        name="name"
-                        value={contactForm.name}
-                        onChange={handleContactChange}
+                        name="name" 
+                        value={contactForm.name} 
+                        onChange={handleContactChange} 
                         placeholder="Votre nom" 
-                        required
+                        required 
                         className="w-full px-4 py-3.5 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
                       />
                     </div>
@@ -852,58 +925,55 @@ export default function Home() {
                       <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Email</label>
                       <input 
                         type="email" 
-                        name="email"
-                        value={contactForm.email}
-                        onChange={handleContactChange}
+                        name="email" 
+                        value={contactForm.email} 
+                        onChange={handleContactChange} 
                         placeholder="votre@email.com" 
-                        required
+                        required 
                         className="w-full px-4 py-3.5 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
                       />
                     </div>
                   </div>
-
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Téléphone</label>
                       <input 
-                        type="tel" 
-                        name="phone"
-                        value={contactForm.phone}
-                        onChange={handleContactChange}
+                        type="text" 
+                        name="phone" 
+                        value={contactForm.phone} 
+                        onChange={handleContactChange} 
                         placeholder="+229..." 
-                        required
+                        required 
                         className="w-full px-4 py-3.5 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
                       />
                     </div>
                     <div>
                       <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Sujet</label>
                       <select 
-                        name="subject"
-                        value={contactForm.subject}
-                        onChange={handleContactChange}
+                        name="subject" 
+                        value={contactForm.subject} 
+                        onChange={handleContactChange} 
                         className="w-full px-4 py-3.5 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm"
                       >
                         <option value="Général">Question générale</option>
                         <option value="Immobilier">Immobilier & Courtage</option>
-                        <option value="Négoce">Négoce & Commerce</option>
+                        <option value="Négoce">Négoce & Commandes</option>
                         <option value="Partenariat">Réseau Partenaire</option>
                       </select>
                     </div>
                   </div>
-
                   <div>
                     <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Message</label>
                     <textarea 
-                      name="message"
-                      rows={4}
-                      value={contactForm.message}
-                      onChange={handleContactChange}
+                      name="message" 
+                      rows={4} 
+                      value={contactForm.message} 
+                      onChange={handleContactChange} 
                       placeholder="Votre message..." 
-                      required
+                      required 
                       className="w-full px-4 py-3.5 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm"
                     ></textarea>
                   </div>
-
                   <button type="submit" className="w-full py-4 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold hover:bg-[#c5a030] transition shadow-lg shadow-[#D4AF37]/20">
                     Envoyer le message
                   </button>
@@ -912,206 +982,164 @@ export default function Home() {
             </div>
           </section>
 
-        </main>
-      )}
-
-      {selectedProduct && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl relative space-y-6">
-            <div className="h-64 relative bg-slate-950">
-              <img src={selectedProduct.image} alt={selectedProduct.title} className="w-full h-full object-cover" />
-              <button 
-                onClick={() => setSelectedProduct(null)}
-                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-slate-900/80 text-white flex items-center justify-center font-bold hover:bg-slate-900 transition"
-              >
-                ✕
-              </button>
-            </div>
-            <div className="p-6 pt-0 space-y-4">
-              <div className="space-y-1">
-                <h3 className="text-xl font-extrabold text-white">{selectedProduct.title}</h3>
-                <p className="text-[#D4AF37] font-extrabold text-lg">{selectedProduct.price}</p>
-              </div>
-              <p className="text-slate-300 text-sm leading-relaxed">{selectedProduct.description}</p>
-              <button 
-                onClick={() => {
-                  const prod = selectedProduct;
-                  setSelectedProduct(null);
-                  setOrderProduct(prod);
-                }}
-                className="w-full py-4 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold hover:bg-[#c5a030] transition"
-              >
-                Commander ce produit
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {orderProduct && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl relative space-y-6 my-8 p-6 md:p-8">
-            <div className="flex justify-between items-center border-b border-slate-800 pb-4">
-              <div>
-                <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider">Finalisation de commande</span>
-                <h3 className="text-xl font-bold text-white">{orderProduct.title}</h3>
-              </div>
-              <button 
-                onClick={() => setOrderProduct(null)}
-                className="w-10 h-10 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold hover:bg-slate-700 transition"
-              >
-                ✕
-              </button>
-            </div>
-
-            <form onSubmit={handleOrderSubmit} className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Nom complet</label>
-                <input 
-                  type="text" 
-                  name="fullName"
-                  value={formData.fullName}
-                  onChange={handleInputChange}
-                  placeholder="Votre nom complet" 
-                  required
-                  className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
-                />
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Email (optionnel)</label>
-                <input 
-                  type="email" 
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  placeholder="votre@email.com" 
-                  className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Pays</label>
-                  <select 
-                    name="country"
-                    value={formData.country}
-                    onChange={handleInputChange}
-                    className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm"
-                  >
-                    <option value="BJ">Bénin</option>
-                    <option value="CI">Côte d'Ivoire</option>
-                    <option value="BF">Burkina Faso</option>
-                    <option value="TG">Togo</option>
-                    <option value="NE">Niger</option>
-                    <option value="ML">Mali</option>
-                  </select>
+          {/* Modal Détails Produit */}
+          {selectedProduct && (
+            <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+              <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl space-y-6 p-6 relative">
+                <button onClick={() => setSelectedProduct(null)} className="absolute top-4 right-4 text-slate-400 hover:text-white text-xl font-bold">✕</button>
+                <div className="h-56 rounded-2xl overflow-hidden">
+                  <img src={selectedProduct.image} alt={selectedProduct.title} className="w-full h-full object-cover" />
                 </div>
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Ville</label>
-                  <input 
-                    type="text" 
-                    name="city"
-                    value={formData.city}
-                    onChange={handleInputChange}
-                    placeholder="Ex: Cotonou" 
-                    required
-                    className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
-                  />
+                <div className="space-y-2">
+                  <span className="text-[#D4AF37] font-bold text-lg">{selectedProduct.price}</span>
+                  <h3 className="text-xl font-extrabold text-white">{selectedProduct.title}</h3>
+                  <p className="text-slate-300 text-sm leading-relaxed">{selectedProduct.description}</p>
                 </div>
-              </div>
-
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1.5">Téléphone (Mobile Money)</label>
-                <input 
-                  type="tel" 
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  placeholder="+229..." 
-                  required
-                  className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
-                />
-              </div>
-
-              <div className="pt-1">
-                {!showPartnerField ? (
+                <div className="flex space-x-4 pt-2">
                   <button 
-                    type="button" 
-                    onClick={() => setShowPartnerField(true)}
-                    className="text-xs text-[#D4AF37] hover:underline font-semibold"
+                    onClick={() => { const prod = selectedProduct; setSelectedProduct(null); setOrderProduct(prod); }}
+                    className="w-full py-3.5 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-sm hover:bg-[#c5a030] transition shadow-md"
                   >
-                    + J'ai un code partenaire
+                    Commander ce produit
                   </button>
-                ) : (
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Modal Commande */}
+          {orderProduct && (
+            <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+              <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl space-y-6 p-6 relative max-h-[90vh] overflow-y-auto">
+                <button onClick={() => setOrderProduct(null)} className="absolute top-4 right-4 text-slate-400 hover:text-white text-xl font-bold">✕</button>
+                <div className="space-y-1">
+                  <span className="text-xs font-bold text-[#D4AF37] uppercase">Finaliser la commande</span>
+                  <h3 className="text-xl font-extrabold text-white">{orderProduct.title}</h3>
+                  <p className="text-[#D4AF37] font-bold">{orderProduct.price}</p>
+                </div>
+
+                <form onSubmit={handleOrderSubmit} className="space-y-4">
                   <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-[#D4AF37] mb-1.5">Code Partenaire</label>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Nom complet</label>
                     <input 
                       type="text" 
-                      name="partnerCode"
-                      value={formData.partnerCode}
-                      onChange={handleInputChange}
-                      placeholder="Entrez le code de votre partenaire" 
-                      className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-[#D4AF37]/50 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
+                      name="fullName" 
+                      value={formData.fullName} 
+                      onChange={handleInputChange} 
+                      placeholder="Votre nom complet" 
+                      required 
+                      className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
                     />
                   </div>
-                )}
-              </div>
 
-              <div className="pt-2">
-                <button type="submit" className="w-full py-4 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold hover:bg-[#c5a030] transition shadow-lg shadow-[#D4AF37]/20">
-                  Payer {orderProduct.price}
-                </button>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Pays</label>
+                      <select 
+                        name="country" 
+                        value={formData.country} 
+                        onChange={handleInputChange} 
+                        className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm"
+                      >
+                        <option value="BJ">Bénin</option>
+                        <option value="CI">Côte d'Ivoire</option>
+                        <option value="BF">Burkina Faso</option>
+                        <option value="TG">Togo</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Ville</label>
+                      <input 
+                        type="text" 
+                        name="city" 
+                        value={formData.city} 
+                        onChange={handleInputChange} 
+                        placeholder="Ex: Abomey-Calavi" 
+                        required 
+                        className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Téléphone (Mobile Money)</label>
+                    <input 
+                      type="text" 
+                      name="phone" 
+                      value={formData.phone} 
+                      onChange={handleInputChange} 
+                      placeholder="+229..." 
+                      required 
+                      className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Email (Optionnel)</label>
+                    <input 
+                      type="email" 
+                      name="email" 
+                      value={formData.email} 
+                      onChange={handleInputChange} 
+                      placeholder="votre@email.com" 
+                      className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
+                    />
+                  </div>
+
+                  <div>
+                    {!showPartnerField ? (
+                      <button 
+                        type="button" 
+                        onClick={() => setShowPartnerField(true)}
+                        className="text-xs text-[#D4AF37] hover:underline font-semibold"
+                      >
+                        + Avez-vous un code partenaire ?
+                      </button>
+                    ) : (
+                      <div>
+                        <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Code partenaire</label>
+                        <input 
+                          type="text" 
+                          name="partnerCode" 
+                          value={formData.partnerCode} 
+                          onChange={handleInputChange} 
+                          placeholder="Entrez le code partenaire" 
+                          className="w-full px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  <button 
+                    type="submit"
+                    className="w-full py-4 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold hover:bg-[#c5a030] transition shadow-lg shadow-[#D4AF37]/20"
+                  >
+                    Procéder au Paiement Sécurisé (FedaPay)
+                  </button>
+                </form>
               </div>
-            </form>
-          </div>
-        </div>
+            </div>
+          )}
+        </>
       )}
 
-      {orderSuccess && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-emerald-500/40 rounded-3xl max-w-md w-full p-8 text-center space-y-6 shadow-2xl">
-            <div className="w-16 h-16 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto text-3xl font-bold">
-              ✓
-            </div>
-            <div className="space-y-2">
-              <h3 className="text-2xl font-bold text-white">Paiement Validé !</h3>
-              <p className="text-slate-300 text-sm">Votre commande pour <strong className="text-white">{orderSuccess.productTitle}</strong> a été enregistrée avec succès.</p>
-              <p className="text-slate-400 text-xs">Votre reçu de paiement officiel au format PDF a été téléchargé automatiquement sur votre appareil.</p>
-            </div>
-            <button 
-              onClick={() => {
-                generatePDFReceipt(orderSuccess);
-              }}
-              className="w-full py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs border border-slate-700 transition"
-            >
-              Télécharger à nouveau le reçu PDF
-            </button>
-            <button 
-              onClick={() => setOrderSuccess(null)}
-              className="w-full py-3.5 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-xs hover:bg-[#c5a030] transition"
-            >
-              Fermer
-            </button>
-          </div>
-        </div>
-      )}
+      {/* Footer */}
+      <footer className="border-t border-slate-900 bg-[#090A0C] py-12 px-6 text-center text-xs text-slate-500 space-y-4">
+        <p className="font-bold text-slate-300 text-sm">SAB MIDLEY — Abomey-Calavi, Bénin</p>
+        <p>Contacts : Bénin: +229 01 69 32 55 76 | Côte d'Ivoire: +225 07 104 106 04 | Burkina Faso: +226 04 26 18 02</p>
+        <p>© 2026 SAB MIDLEY. Tous droits réservés.</p>
+      </footer>
 
+      {/* Bouton Scroll Top */}
       {showScrollTop && (
         <button 
           onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-30 w-12 h-12 rounded-full bg-[#D4AF37] text-[#090A0C] flex items-center justify-center font-bold shadow-xl hover:bg-[#c5a030] transition"
+          className="fixed bottom-6 right-6 z-40 p-3 rounded-full bg-[#D4AF37] text-[#090A0C] shadow-lg hover:bg-[#c5a030] transition"
           aria-label="Retour en haut"
         >
           ↑
         </button>
       )}
-
-      <footer className="border-t border-slate-800 bg-[#090A0C] py-12 px-6 text-center text-slate-500 text-xs space-y-3">
-        <p>© 2026 SAB MIDLEY. Tous droits réservés. Abomey-Calavi, Bénin.</p>
-        <p>Contacts officiels : Bénin: +229 01 69 32 55 76 | Côte d'Ivoire: +225 07 104 106 04 | Burkina Faso: +226 04 26 18 02 | Togo: +228 92 04 66 86</p>
-      </footer>
-
     </div>
   );
 }
