@@ -1,11 +1,3 @@
-Voici ton code mis à jour pour la page partenaire.
-
-J'ai structuré l'ensemble avec les améliorations demandées :
-
-1. **Double option (Voir + Télécharger) :** Chaque document (le Contrat et le Guide) dispose désormais de deux boutons distincts ouverts dans un nouvel onglet (`target="_blank"`), permettant soit de consulter un aperçu/lire en ligne, soit de télécharger directement.
-2. **Harmonisation et consignes :** Les blocs sont organisés proprement, avec les étapes de validation et les liens vers tes canaux WhatsApp officiels bien intégrés.
-
-```tsx
 'use client';
 
 import { useState } from 'react';
@@ -100,7 +92,6 @@ export default function PartenairePage() {
                   href="https://raw.githubusercontent.com/myopostoie/sab-midley-files/main/RC-CONTRAT%20DE%20PARTENARIAT.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
-                  download
                   className="px-6 py-3.5 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-xs hover:bg-[#c5a030] transition shadow-lg inline-flex items-center space-x-2"
                 >
                   <span>📥 Télécharger le contrat (PDF)</span>
@@ -136,7 +127,6 @@ export default function PartenairePage() {
                   href="https://raw.githubusercontent.com/myopostoie/sab-midley-files/main/Guide%20MAJ%20RC%20SAB%20MIDLEY%202026.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
-                  download
                   className="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs border border-slate-700 transition inline-flex items-center space-x-2"
                 >
                   <span>📥 Télécharger le Guide</span>
@@ -182,5 +172,3 @@ export default function PartenairePage() {
     </div>
   );
 }
-
-```
