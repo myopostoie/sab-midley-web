@@ -9,45 +9,39 @@ export default function Home() {
   const [orderProduct, setOrderProduct] = useState<any>(null);
   const [orderSuccess, setOrderSuccess] = useState<any>(null);
   
-  const [showPartnerField, setShowPartnerField] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<any>(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   
-  const [contactSubmitted, setContactSubmitted] = useState(false);
-  const [careerSubmitted, setCareerSubmitted] = useState(false);
-
-  // FedaPay script load state
   const [fedapayLoaded, setFedapayLoaded] = useState(false);
-
-  // Mode Édition / Admin rapide pour les articles
   const [editingProduct, setEditingProduct] = useState<any>(null);
 
-  // ======= ÉTATS POUR LE PORTAIL PARTENAIRE =====
   const [activeTab, setActiveTab] = useState<'accueil' | 'partenaire'>('accueil');
   const [partnerLoggedIn, setPartnerLoggedIn] = useState(false);
   const [universalPasswordInput, setUniversalPasswordInput] = useState('');
   
   const UNIVERSAL_PARTNER_PASSWORD = 'rcsabmidley2026';
 
-  // Charger dynamiquement le script FedaPay pour éviter l'erreur de chargement
+  // Chargement sécurisé du script FedaPay
   useEffect(() => {
-    if (document.getElementById('fedapay-script')) {
-      setFedapayLoaded(true);
-      return;
+    if (typeof window !== 'undefined') {
+      if ((window as any).FedaPay) {
+        setFedapayLoaded(true);
+        return;
+      }
+      if (document.getElementById('fedapay-script')) {
+        setFedapayLoaded(true);
+        return;
+      }
+      const script = document.createElement('script');
+      script.id = 'fedapay-script';
+      script.src = 'https://cdn.fedapay.com/checkout.js?v=1.1.7';
+      script.async = true;
+      script.onload = () => setFedapayLoaded(true);
+      document.body.appendChild(script);
     }
-    const script = document.createElement('script');
-    script.id = 'fedapay-script';
-    script.src = 'https://cdn.fedapay.com/checkout.js?v=1.1.7';
-    script.async = true;
-    script.onload = () => setFedapayLoaded(true);
-    document.body.appendChild(script);
 
     const handleScroll = () => {
-      if (window.scrollY > 300) {
-        setShowScrollTop(true);
-      } else {
-        setShowScrollTop(false);
-      }
+      setShowScrollTop(window.scrollY > 300);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -59,53 +53,14 @@ export default function Home() {
     country: 'BJ',
     city: '',
     address: '',
-    district: '',        // Quartier
-    indications: '',     // Indication / Repère
+    district: '',
+    indications: '',
     phone: '',
     partnerCode: '',
   });
 
-  const [contactForm, setContactForm] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    subject: 'Général',
-    message: '',
-  });
-
-  const [careerForm, setCareerForm] = useState({
-    fullName: '',
-    email: '',
-    phone: '',
-    country: 'BJ',
-    experience: 'Débutant',
-    motivation: '',
-  });
-
   const handleInputChange = (e: any) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleContactChange = (e: any) => {
-    setContactForm({ ...contactForm, [e.target.name]: e.target.value });
-  };
-
-  const handleCareerChange = (e: any) => {
-    setCareerForm({ ...careerForm, [e.target.name]: e.target.value });
-  };
-
-  const handleContactSubmit = (e: any) => {
-    e.preventDefault();
-    setContactSubmitted(true);
-    setTimeout(() => setContactSubmitted(false), 5000);
-    setContactForm({ name: '', email: '', phone: '', subject: 'Général', message: '' });
-  };
-
-  const handleCareerSubmit = (e: any) => {
-    e.preventDefault();
-    setCareerSubmitted(true);
-    setTimeout(() => setCareerSubmitted(false), 5000);
-    setCareerForm({ fullName: '', email: '', phone: '', country: 'BJ', experience: 'Débutant', motivation: '' });
   };
 
   const handleUniversalLogin = (e: any) => {
@@ -113,7 +68,7 @@ export default function Home() {
     if (universalPasswordInput.trim() === UNIVERSAL_PARTNER_PASSWORD) {
       setPartnerLoggedIn(true);
     } else {
-      alert("Mot de passe incorrect. Veuillez vérifier le code d'accès fourni par le réseau.");
+      alert("Mot de passe incorrect. Veuillez vérifier le code d'accès.");
     }
   };
 
@@ -149,10 +104,6 @@ export default function Home() {
     doc.text(`Référence: #SM-${Math.floor(100000 + Math.random() * 900000)}`, 20, 55);
     doc.text(`Date: ${orderData.date}`, 20, 62);
     doc.text(`Moyen de paiement: FedaPay (Mobile Money / Carte)`, 20, 69);
-    
-    if (orderData.partnerCode && orderData.partnerCode !== 'Aucun') {
-      doc.text(`Code Partenaire: ${orderData.partnerCode}`, 20, 76);
-    }
 
     doc.setDrawColor(200, 200, 200);
     doc.setFillColor(248, 250, 252);
@@ -163,7 +114,7 @@ export default function Home() {
     doc.text(`Nom: ${orderData.fullName}`, 25, 101);
     doc.text(`Email: ${orderData.email} | Tel : ${orderData.phone}`, 25, 108);
     doc.text(`Adresse: ${orderData.address} - Quartier: ${orderData.district}`, 25, 115);
-    doc.text(`Ville/Pays: ${orderData.city} (${orderData.country}) | Indications: ${orderData.indications || 'Aucune'}`, 25, 122);
+    doc.text(`Ville/Pays: ${orderData.city} (${orderData.country})`, 25, 122);
 
     doc.setFillColor(9, 10, 12);
     doc.rect(20, 138, 170, 10, 'F');
@@ -183,8 +134,6 @@ export default function Home() {
     doc.setFont('helvetica', 'normal');
     doc.text('Sous-total:', 120, 178);
     doc.text(orderData.price, 150, 178);
-    doc.text('Frais de livraison:', 120, 186);
-    doc.text('Confirmés avant expédition', 135, 186);
 
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(12);
@@ -192,18 +141,13 @@ export default function Home() {
     doc.text('Total Payé :', 120, 198);
     doc.text(orderData.price, 150, 198);
 
-    doc.setTextColor(80, 80, 80);
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(8);
-    doc.text("Contacts officiels: Bénin: +229 01 69 32 55 76 | Côte d'Ivoire: +225 07 104 106 04", 20, 220);
-    
     doc.save(`Recu_SAB_MIDLEY_${orderData.fullName.replace(/\s+/g, '_')}.pdf`);
   };
 
   const handleOrderSubmit = (e: any) => {
     e.preventDefault();
     if (!formData.fullName || !formData.city || !formData.phone || !formData.country || !formData.address || !formData.district) {
-      alert('Veuillez remplir tous les champs obligatoires (Nom, Ville, Téléphone, Adresse, Quartier).');
+      alert('Veuillez remplir tous les champs obligatoires.');
       return;
     }
     if (!orderProduct || !orderProduct.price) {
@@ -252,9 +196,11 @@ export default function Home() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    if (typeof window !== 'undefined' && (window as any).FedaPay) {
+    // Vérification sécurisée de l'objet FedaPay
+    const FedaPayObj = (window as any).FedaPay;
+    if (FedaPayObj && typeof FedaPayObj.init === 'function') {
       try {
-        const widget = (window as any).FedaPay.init({
+        const widget = FedaPayObj.init({
           public_key: 'pk_live_63P5upxQrTGI6nS7aZWlmujt',
           transaction: {
             amount: Number(amount),
@@ -276,15 +222,14 @@ export default function Home() {
         });
         widget.open();
       } catch (err) {
-        console.error("Erreur FedaPay:", err);
-        alert("Erreur lors du lancement du paiement.");
+        console.error("Erreur d'initialisation FedaPay:", err);
+        alert("Une erreur est survenue lors de l'ouverture du module de paiement.");
       }
     } else {
-      alert("Le module de paiement FedaPay est en cours de chargement, veuillez patienter une seconde.");
+      alert("Le module FedaPay charge encore. Veuillez patienter quelques secondes et réessayer.");
     }
   };
 
-  // Gestion de l'importation de 2-3 images en local (Base64) pour la création / modification
   const handleImageUpload = (e: any, setImagesList: (imgs: string[]) => void, currentList: string[]) => {
     const files = Array.from(e.target.files) as File[];
     if (files.length === 0) return;
@@ -302,7 +247,6 @@ export default function Home() {
     });
   };
 
-  // Sauvegarde des modifications d'un article déjà publié
   const handleSaveEditedProduct = (e: any) => {
     e.preventDefault();
     setProductsList(productsList.map(p => p.id === editingProduct.id ? editingProduct : p));
@@ -310,22 +254,12 @@ export default function Home() {
     alert('Article mis à jour avec succès !');
   };
 
-  const poles = [
-    { id: 'immobilier', title: 'Courtage & Immobilier International', description: "Location d'appartements d'exception, courtage automobile haut de gamme.", badge: 'Pôle 01', image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80' },
-    { id: 'negoce', title: 'Négoce & Commerce Général', description: 'Import-export premium, approvisionnement mondial en équipements et mobilier.', badge: 'Pôle 02', image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&w=800&q=80' },
-    { id: 'conciergerie', title: 'Assistance Administrative & Mobilité', description: 'Accompagnement sur-mesure pour vos procédures de visa et conciergerie.', badge: 'Pôle 03', image: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80' },
-    { id: 'academy', title: 'Digital & Formation (Academy)', description: 'Programmes de pointe en e-commerce, conception web et stratégie.', badge: 'Pôle 04', image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80' }
-  ];
-
   return (
     <div className="min-h-screen bg-[#090A0C] text-slate-100 font-sans relative">
-      
-      {/* Top Banner d'actualité */}
       <div className="bg-[#D4AF37] text-[#090A0C] text-xs md:text-sm font-bold py-2.5 px-4 text-center tracking-wide">
-        Expansion Régionale en cours: Bénin, Côte d'Ivoire & Burkina Faso — Rejoignez notre réseau commercial.
+        Expansion Régionale en cours: Bénin, Côte d'Ivoire & Burkina Faso
       </div>
 
-      {/* Navigation */}
       <header className="sticky top-0 z-40 bg-[#090A0C]/90 backdrop-blur-md border-b border-[#D4AF37]/20">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <button onClick={() => setActiveTab('accueil')} className="text-xl font-black text-white tracking-wider text-left">
@@ -334,10 +268,7 @@ export default function Home() {
 
           <nav className="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
             <button onClick={() => setActiveTab('accueil')} className={`${activeTab === 'accueil' ? 'text-[#D4AF37]' : 'text-slate-300'} hover:text-white transition`}>Accueil</button>
-            <a href="#poles" onClick={() => setActiveTab('accueil')} className="hover:text-[#D4AF37] transition">Nos Pôles</a>
             <a href="#boutique" onClick={() => setActiveTab('accueil')} className="hover:text-[#D4AF37] transition">Boutique & Négoce</a>
-            <a href="#carrieres" onClick={() => setActiveTab('accueil')} className="hover:text-[#D4AF37] transition">Carrières</a>
-            <a href="#contact" onClick={() => setActiveTab('accueil')} className="hover:text-[#D4AF37] transition">Contact</a>
           </nav>
 
           <div className="hidden md:flex items-center space-x-4">
@@ -345,23 +276,9 @@ export default function Home() {
               Portail Partenaire
             </button>
           </div>
-
-          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden text-white focus:outline-none p-2">
-            <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={mobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
-            </svg>
-          </button>
         </div>
-
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-[#090A0C] border-t border-[#D4AF37]/20 px-6 py-5 space-y-4 shadow-2xl">
-            <button onClick={() => { setActiveTab('accueil'); setMobileMenuOpen(false); }} className="block text-slate-200 hover:text-[#D4AF37] font-medium py-1 w-full text-left">Accueil</button>
-            <button onClick={() => { setActiveTab('partenaire'); setMobileMenuOpen(false); }} className="block text-center w-full px-5 py-3 rounded-lg bg-[#D4AF37] text-[#090A0C] font-bold text-sm">Portail Partenaire</button>
-          </div>
-        )}
       </header>
 
-      {/* CONTENU CONDITIONNEL : PORTAIL / ACCUEIL */}
       {activeTab === 'partenaire' ? (
         <section className="py-16 px-6 max-w-4xl mx-auto min-h-[75vh] flex flex-col justify-center">
           {!partnerLoggedIn ? (
@@ -396,25 +313,19 @@ export default function Home() {
         </section>
       ) : (
         <>
-          {/* MODALE DE SUCCÈS COMMANDE / TÉLÉCHARGEMENT REÇU */}
           {orderSuccess && (
             <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
               <div className="bg-slate-900 border border-emerald-500/50 rounded-3xl p-8 max-w-lg w-full text-center space-y-6 shadow-2xl">
                 <div className="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto text-3xl font-bold">✓</div>
                 <div className="space-y-2">
                   <h3 className="text-2xl font-bold text-white">Paiement validé avec succès !</h3>
-                  <p className="text-slate-400 text-sm">Merci {orderSuccess.fullName}, votre commande a bien été enregistrée et transmise à notre service logistique.</p>
-                </div>
-                <div className="bg-slate-950 p-4 rounded-xl text-left space-y-1 text-xs text-slate-300">
-                  <p><b>Article :</b> {orderSuccess.productTitle}</p>
-                  <p><b>Montant :</b> {orderSuccess.price}</p>
-                  <p><b>Livraison :</b> {orderSuccess.address}, {orderSuccess.district} ({orderSuccess.city})</p>
+                  <p className="text-slate-400 text-sm">Merci {orderSuccess.fullName}, votre commande a bien été enregistrée.</p>
                 </div>
                 <div className="flex space-x-3">
                   <button onClick={() => generatePDFReceipt(orderSuccess)} className="flex-1 py-3 bg-[#D4AF37] text-[#090A0C] font-bold rounded-xl text-xs hover:bg-[#c5a030] transition">
-                    Télécharger à nouveau le reçu PDF
+                    Télécharger le reçu PDF
                   </button>
-                  <button onClick={() => setOrderSuccess(null)} className="px-5 py-3 bg-slate-800 text-white font-semibold rounded-xl text-xs hover:bg-slate-700 transition">
+                  <button onClick={() => setOrderSuccess(null)} className="px-5 py-3 bg-slate-800 text-white font-semibold rounded-xl text-xs">
                     Fermer
                   </button>
                 </div>
@@ -422,7 +333,6 @@ export default function Home() {
             </div>
           )}
 
-          {/* MODALE DÉTAILS PRODUIT AVEC BOUTON DE FERMETURE */}
           {selectedProduct && (
             <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
               <div className="bg-slate-900 border border-[#D4AF37]/40 rounded-3xl p-6 md:p-8 max-w-2xl w-full relative space-y-6">
@@ -449,12 +359,11 @@ export default function Home() {
             </div>
           )}
 
-          {/* MODALE FORMULAIRE DE COMMANDE AVEC ADRESSE & QUARTIER + BOUTON FERMER */}
           {orderProduct && (
             <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
               <div className="bg-slate-900 border border-[#D4AF37]/40 rounded-3xl p-6 md:p-8 max-w-xl w-full relative space-y-6">
                 <button onClick={() => setOrderProduct(null)} className="absolute top-4 right-4 bg-slate-800 hover:bg-slate-700 text-white p-2 rounded-full text-xs font-bold transition">
-                  ✕ Fermer & Revenir
+                  ✕ Fermer
                 </button>
                 <div className="space-y-1">
                   <span className="text-xs text-[#D4AF37] font-bold">Finaliser l'achat</span>
@@ -494,16 +403,12 @@ export default function Home() {
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block font-semibold uppercase text-slate-400 mb-1">Adresse exacte *</label>
-                      <input type="text" name="address" value={formData.address} onChange={handleInputChange} placeholder="Ex: Maison bleue face pavé" required className="w-full px-3.5 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none" />
+                      <input type="text" name="address" value={formData.address} onChange={handleInputChange} placeholder="Ex: Maison bleue" required className="w-full px-3.5 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none" />
                     </div>
                     <div>
                       <label className="block font-semibold uppercase text-slate-400 mb-1">Quartier *</label>
                       <input type="text" name="district" value={formData.district} onChange={handleInputChange} placeholder="Ex: Cocody / Akogbato" required className="w-full px-3.5 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none" />
                     </div>
-                  </div>
-                  <div>
-                    <label className="block font-semibold uppercase text-slate-400 mb-1">Indications / Repère (optionnel)</label>
-                    <input type="text" name="indications" value={formData.indications} onChange={handleInputChange} placeholder="Ex: Derrière la station Total" className="w-full px-3.5 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none" />
                   </div>
 
                   <div className="pt-2 flex space-x-3">
@@ -519,15 +424,14 @@ export default function Home() {
             </div>
           )}
 
-          {/* MODALE D'ÉDITION D'UN ARTICLE DÉJÀ PUBLIÉ */}
           {editingProduct && (
             <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
               <div className="bg-slate-900 border border-[#D4AF37]/40 rounded-3xl p-6 md:p-8 max-w-xl w-full relative space-y-6">
                 <button onClick={() => setEditingProduct(null)} className="absolute top-4 right-4 bg-slate-800 text-white p-2 rounded-full text-xs">✕ Fermer</button>
-                <h3 className="text-xl font-bold text-white">Modifier l'article publié</h3>
+                <h3 className="text-xl font-bold text-white">Modifier l'article</h3>
                 <form onSubmit={handleSaveEditedProduct} className="space-y-4 text-xs">
                   <div>
-                    <label className="block uppercase text-slate-400 mb-1">Titre de l'article</label>
+                    <label className="block uppercase text-slate-400 mb-1">Titre</label>
                     <input type="text" value={editingProduct.title} onChange={(e) => setEditingProduct({...editingProduct, title: e.target.value})} className="w-full px-3 py-2.5 rounded-xl bg-[#090A0C] border border-slate-800 text-white" required />
                   </div>
                   <div>
@@ -539,42 +443,25 @@ export default function Home() {
                     <textarea value={editingProduct.description} onChange={(e) => setEditingProduct({...editingProduct, description: e.target.value})} className="w-full px-3 py-2.5 rounded-xl bg-[#090A0C] border border-slate-800 text-white h-24" required />
                   </div>
                   <div>
-                    <label className="block uppercase text-slate-400 mb-1">Importer 2-3 nouvelles images (Fichiers locaux)</label>
-                    <input type="file" multiple accept="image/*" onChange={(e) => handleImageUpload(e, (imgs) => setEditingProduct({...editingProduct, image: imgs[0], images: imgs}), editingProduct.images || [editingProduct.image])} className="w-full text-slate-400 text-xs file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#D4AF37] file:text-[#090A0C]" />
+                    <label className="block uppercase text-slate-400 mb-1">Changer l'image (Fichier local)</label>
+                    <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, (imgs) => setEditingProduct({...editingProduct, image: imgs[0]}), [editingProduct.image])} className="w-full text-slate-400 text-xs" />
                   </div>
-                  <button type="submit" className="w-full py-3 bg-[#D4AF37] text-[#090A0C] font-bold rounded-xl">Enregistrer les modifications</button>
+                  <button type="submit" className="w-full py-3 bg-[#D4AF37] text-[#090A0C] font-bold rounded-xl">Enregistrer</button>
                 </form>
               </div>
             </div>
           )}
 
-          {/* Hero Section */}
           <section className="py-20 px-6 max-w-7xl mx-auto text-center space-y-8">
-            <div className="inline-block px-4 py-1.5 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-xs font-bold tracking-widest uppercase">
-              Excellence & Fiabilité en Afrique de l'Ouest
-            </div>
             <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white max-w-4xl mx-auto leading-tight">
               Votre Partenaire Stratégique en <span className="text-[#D4AF37]">Négoce et Services</span>
             </h1>
-            <p className="text-slate-400 text-base md:text-lg max-w-2xl mx-auto">
-              Implantés à Abomey-Calavi (Bénin) et en expansion sur la Côte d'Ivoire et le Burkina Faso.
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-4 pt-4">
-              <a href="#poles" className="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold hover:bg-[#c5a030] transition shadow-lg shadow-[#D4AF37]/20">
-                Découvrir nos Pôles
-              </a>
-              <a href="#boutique" className="w-full sm:w-auto px-8 py-4 rounded-xl bg-slate-900 border border-slate-800 text-white font-bold hover:border-[#D4AF37]/50 transition">
-                Visiter la Boutique
-              </a>
-            </div>
           </section>
 
-          {/* Section Boutique & Négoce */}
           <section id="boutique" className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-900">
             <div className="text-center space-y-3 mb-16">
               <span className="text-xs font-bold px-3 py-1 rounded bg-[#D4AF37]/20 text-[#D4AF37] tracking-wider uppercase">Négoce & Distribution</span>
               <h2 className="text-3xl font-extrabold text-white">Notre Catalogue de Produits</h2>
-              <p className="text-slate-400 text-sm max-w-md mx-auto">Sélection d'équipements et d'articles disponibles immédiatement.</p>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -592,10 +479,10 @@ export default function Home() {
                       <p className="text-slate-400 text-xs line-clamp-2">{product.description}</p>
                     </div>
                     <div className="grid grid-cols-3 gap-2 pt-2">
-                      <button onClick={() => setSelectedProduct(product)} className="py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs border border-slate-700 transition">
+                      <button onClick={() => setSelectedProduct(product)} className="py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition">
                         Détails
                       </button>
-                      <button onClick={() => setOrderProduct(product)} className="py-2.5 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-xs hover:bg-[#c5a030] transition shadow-md">
+                      <button onClick={() => setOrderProduct(product)} className="py-2.5 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-xs hover:bg-[#c5a030] transition">
                         Commander
                       </button>
                       <button onClick={() => setEditingProduct(product)} className="py-2.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-200 font-bold text-xs transition">
