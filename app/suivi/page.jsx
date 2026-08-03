@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { partenairesList } from '../partenairesData';
 
-default function SuiviPartenaire() {
+export default function SuiviPartenaire() {
   const [inputID, setInputID] = useState('');
   const [inputCode, setInputCode] = useState('');
   const [partenaireConnecte, setPartenaireConnecte] = useState(null);
@@ -13,7 +13,6 @@ default function SuiviPartenaire() {
     e.preventDefault();
     setErreur('');
 
-    // Recherche du partenaire
     const trouve = partenairesList.find(
       (p) => p.identifiant === inputID.trim() && p.codeRc === inputCode.trim()
     );
@@ -30,7 +29,6 @@ default function SuiviPartenaire() {
       <div className="max-w-xl w-full bg-slate-900 border border-[#D4AF37]/40 rounded-3xl p-8 shadow-2xl">
         
         {!partenaireConnecte ? (
-          /* FORMULAIRE DE CONNEXION */
           <div className="space-y-6">
             <div className="text-center space-y-2">
               <span className="text-xs font-bold px-3 py-1 rounded bg-[#D4AF37]/20 text-[#D4AF37] uppercase">Espace Partenaire</span>
@@ -73,12 +71,11 @@ default function SuiviPartenaire() {
                 type="submit"
                 className="w-full py-3.5 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-xs hover:bg-[#c5a030] transition shadow-lg"
               >
-              Accéder à mon espace
+                Accéder à mon espace
               </button>
             </form>
           </div>
         ) : (
-          /* TABLEAU DE BORD DU PARTENAIRE */
           <div className="space-y-6">
             <div className="flex justify-between items-center border-b border-slate-800 pb-4">
               <div>
@@ -93,12 +90,10 @@ default function SuiviPartenaire() {
               </button>
             </div>
 
-            {/* Message de motivation */}
             <div className="p-4 rounded-2xl bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-xs leading-relaxed">
               <strong>Mot de l'équipe :</strong> {partenaireConnecte.motivation}
             </div>
 
-            {/* Statistiques */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
               <div className="bg-slate-950 p-4 rounded-xl border border-slate-800">
                 <p className="text-[10px] text-slate-400 uppercase">Ventes Réalisées</p>
