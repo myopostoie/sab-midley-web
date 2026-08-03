@@ -77,25 +77,24 @@ export default function PartenairePage() {
             {/* Étape 1: Contrat */}
             <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-6">
               <div className="space-y-2">
-                <h3 className="text-xl font-bold text-white">✅ Étape 1 : Lire et signer le contrat</h3>
+                <h3 className="text-xl font-bold text-white">Étape 1 : Lire et signer le contrat</h3>
                 <p className="text-slate-400 text-sm">Le contrat de partenariat est obligatoire. Il vous permet d’intégrer officiellement le réseau RC SAB MIDLEY.</p>
               </div>
               <div className="flex flex-wrap gap-4">
                 <a
-                  href="https://raw.githubusercontent.com/myopostoie/sab-midley-files/main/RC-CONTRAT%20DE%20PARTENARIAT.pdf"
+                  href="https://raw.githubusercontent.com/myopostoie/sab-midley-files/main/RC-CONTRAT%20DE%20PARTENARIAT.pdf#toolbar=0"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-6 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs border border-slate-700 transition inline-flex items-center space-x-2"
                 >
-                  <span>👁️ Lire le contrat (Aperçu)</span>
+                  <span>Aperçu du contrat</span>
                 </a>
                 <a
                   href="https://raw.githubusercontent.com/myopostoie/sab-midley-files/main/RC-CONTRAT%20DE%20PARTENARIAT.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  download
                   className="px-6 py-3.5 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-xs hover:bg-[#c5a030] transition shadow-lg inline-flex items-center space-x-2"
                 >
-                  <span>📥 Télécharger le contrat</span>
+                  <span>Télécharger le contrat</span>
                 </a>
               </div>
             </div>
@@ -103,12 +102,12 @@ export default function PartenairePage() {
             {/* Signature électronique */}
             <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-6">
               <div className="space-y-2">
-                <h3 className="text-xl font-bold text-white">✍️ Signature électronique</h3>
+                <h3 className="text-xl font-bold text-white">Signature électronique</h3>
                 <p className="text-slate-400 text-sm">Vous n’êtes pas obligé d’imprimer le contrat. Vous pouvez le remplir directement sur votre téléphone.</p>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
                 <div className="bg-slate-900 p-5 rounded-xl border border-slate-800 space-y-3">
-                  <h4 className="font-bold text-[#D4AF37] text-sm">📱 iPhone</h4>
+                  <h4 className="font-bold text-[#D4AF37] text-sm">iPhone</h4>
                   <ul className="list-disc list-inside space-y-1.5 text-xs text-slate-300">
                     <li>Ouvrez le PDF avec <strong>Fichiers</strong> ou <strong>Adobe Acrobat Reader</strong></li>
                     <li>Sélectionnez <strong>Remplir et signer</strong></li>
@@ -117,7 +116,7 @@ export default function PartenairePage() {
                   </ul>
                 </div>
                 <div className="bg-slate-900 p-5 rounded-xl border border-slate-800 space-y-3">
-                  <h4 className="font-bold text-[#D4AF37] text-sm">🤖 Android</h4>
+                  <h4 className="font-bold text-[#D4AF37] text-sm">Android</h4>
                   <ul className="list-disc list-inside space-y-1.5 text-xs text-slate-300">
                     <li>Installez <strong>Adobe Acrobat Reader</strong></li>
                     <li>Ouvrez le contrat</li>
@@ -131,7 +130,7 @@ export default function PartenairePage() {
 
             {/* Étape 2: Envoi */}
             <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-4">
-              <h3 className="text-xl font-bold text-white">📤 Étape 2 : Envoyer le contrat signé</h3>
+              <h3 className="text-xl font-bold text-white">Étape 2 : Envoyer le contrat signé</h3>
               <p className="text-slate-400 text-sm">Une fois signé, envoyez votre contrat par WhatsApp au :</p>
               <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 inline-block">
                 <p className="text-[#D4AF37] font-bold text-base">+229 01 69 32 55 76</p>
@@ -139,7 +138,7 @@ export default function PartenairePage() {
               <div className="pt-2 space-y-2 text-xs text-slate-300">
                 <p>Après validation, vous recevrez votre :</p>
                 <div className="p-3 rounded-lg bg-[#D4AF37]/10 border border-[#D4AF37]/20 text-[#D4AF37] font-bold inline-block">
-                  🪪 Code Partenaire Officiel
+                  Code Partenaire Officiel
                 </div>
                 <p className="text-slate-400 pt-1">Ce code est indispensable pour :</p>
                 <ul className="list-disc list-inside text-slate-300 space-y-1 pl-2">
@@ -152,7 +151,7 @@ export default function PartenairePage() {
             {/* Guide du partenaire */}
             <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-6">
               <div className="space-y-2">
-                <h3 className="text-xl font-bold text-white">📘 Guide du partenaire</h3>
+                <h3 className="text-xl font-bold text-white">Guide du partenaire</h3>
                 <p className="text-slate-400 text-sm">Découvrez le fonctionnement du réseau. Vous y trouverez :</p>
                 <ul className="list-disc list-inside text-xs text-slate-300 space-y-1 pl-2">
                   <li>Comment vendre</li>
@@ -164,101 +163,82 @@ export default function PartenairePage() {
               </div>
               <div className="flex flex-wrap gap-4">
                 <a
-                  href="https://raw.githubusercontent.com/myopostoie/sab-midley-files/main/Guide%20MAJ%20RC%20SAB%20MIDLEY%202026.pdf"
+                  href="https://raw.githubusercontent.com/myopostoie/sab-midley-files/main/Guide%20MAJ%20RC%20SAB%20MIDLEY%202026.pdf#toolbar=0"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs border border-slate-700 transition inline-flex items-center space-x-2"
                 >
-                  <span>👁️ Lire le Guide (Aperçu)</span>
+                  <span>Aperçu du Guide</span>
                 </a>
                 <a
                   href="https://raw.githubusercontent.com/myopostoie/sab-midley-files/main/Guide%20MAJ%20RC%20SAB%20MIDLEY%202026.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  download
                   className="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs border border-slate-700 transition inline-flex items-center space-x-2"
                 >
-                  <span>📥 Télécharger le Guide</span>
-                </a>
-              </div>
-            </div>
-
-            {/* Catalogue Partenaire */}
-            <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-4">
-              <div className="space-y-2">
-                <h3 className="text-xl font-bold text-white">📦 Catalogue Partenaire</h3>
-                <p className="text-slate-400 text-sm">Consultez la liste des produits autorisés à la commercialisation.</p>
-              </div>
-              <div>
-                <a
-                  href="https://raw.githubusercontent.com/myopostoie/sab-midley-files/main/Guide%20MAJ%20RC%20SAB%20MIDLEY%202026.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-6 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs border border-slate-700 transition inline-flex items-center space-x-2"
-                >
-                  <span>🛍 Ouvrir le catalogue</span>
+                  <span>Télécharger le Guide</span>
                 </a>
               </div>
             </div>
 
             {/* Canaux officiels */}
             <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-6">
-              <h3 className="text-xl font-bold text-white">📢 Nos canaux officiels</h3>
+              <h3 className="text-xl font-bold text-white">Nos canaux officiels</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="bg-slate-900 p-5 rounded-xl border border-slate-800 space-y-4 flex flex-col justify-between">
                   <div>
-                    <p className="font-bold text-emerald-400 text-sm mb-1">🟢 EN STOCK</p>
-                    <p className="text-xs text-slate-300 leading-relaxed">Tous les produits actuellement disponibles.</p>
+                    <p className="font-bold text-emerald-400 text-sm mb-1">EN STOCK</p>
+                    <p className="text-xs text-slate-300 leading-relaxed">Canal dédié aux produits actuellement disponibles en stock, prêts pour la commande immédiate et la livraison rapide selon les zones couvertes.</p>
                   </div>
-                  <a href="https://whatsapp.com/channel/0029Vb8gOUW5EjxzqTnZ713v" target="_blank" rel="noopener noreferrer" className="px-4 py-2.5 rounded-lg bg-emerald-600/25 text-emerald-400 text-xs font-semibold text-center border border-emerald-500/30 hover:bg-emerald-600/40 transition">Rejoindre</a>
+                  <a href="https://whatsapp.com/channel/0029Vb8gOUW5EjxzqTnZ713v" target="_blank" rel="noopener noreferrer" className="px-4 py-2.5 rounded-lg bg-emerald-600/25 text-emerald-400 text-xs font-semibold text-center border border-emerald-500/30 hover:bg-emerald-600/40 transition">Rejoindre le canal</a>
                 </div>
                 <div className="bg-slate-900 p-5 rounded-xl border border-slate-800 space-y-4 flex flex-col justify-between">
                   <div>
-                    <p className="font-bold text-amber-400 text-sm mb-1">🟠 BIENTÔT EN STOCK</p>
-                    <p className="text-xs text-slate-300 leading-relaxed">Découvrez les prochains arrivages avant leur mise en vente.</p>
+                    <p className="font-bold text-amber-400 text-sm mb-1">BIENTÔT EN STOCK</p>
+                    <p className="text-xs text-slate-300 leading-relaxed">Canal d'anticipation permettant de découvrir les prochains arrivages, les nouveautés en cours d'acheminement et de préparer vos ventes en amont.</p>
                   </div>
-                  <a href="https://whatsapp.com/channel/0029Vb8a9RgAzNc1IBH2X02D" target="_blank" rel="noopener noreferrer" className="px-4 py-2.5 rounded-lg bg-amber-600/25 text-amber-400 text-xs font-semibold text-center border border-amber-500/30 hover:bg-amber-600/40 transition">Rejoindre</a>
+                  <a href="https://whatsapp.com/channel/0029Vb8a9RgAzNc1IBH2X02D" target="_blank" rel="noopener noreferrer" className="px-4 py-2.5 rounded-lg bg-amber-600/25 text-amber-400 text-xs font-semibold text-center border border-amber-500/30 hover:bg-amber-600/40 transition">Rejoindre le canal</a>
                 </div>
                 <div className="bg-slate-900 p-5 rounded-xl border border-slate-800 space-y-4 flex flex-col justify-between">
                   <div>
-                    <p className="font-bold text-rose-400 text-sm mb-1">🔴 RUPTURE DE STOCK</p>
-                    <p className="text-xs text-slate-300 leading-relaxed">Consultez les articles momentanément indisponibles.</p>
+                    <p className="font-bold text-rose-400 text-sm mb-1">RUPTURE DE STOCK</p>
+                    <p className="text-xs text-slate-300 leading-relaxed">Canal d'information répertoriant les articles momentanément indisponibles pour éviter de prendre des commandes sur des produits en rupture.</p>
                   </div>
-                  <a href="https://whatsapp.com/channel/0029VbDsUK6KbYMQEmAgCt30" target="_blank" rel="noopener noreferrer" className="px-4 py-2.5 rounded-lg bg-rose-600/25 text-rose-400 text-xs font-semibold text-center border border-rose-500/30 hover:bg-rose-600/40 transition">Rejoindre</a>
+                  <a href="https://whatsapp.com/channel/0029VbDsUK6KbYMQEmAgCt30" target="_blank" rel="noopener noreferrer" className="px-4 py-2.5 rounded-lg bg-rose-600/25 text-rose-400 text-xs font-semibold text-center border border-rose-500/30 hover:bg-rose-600/40 transition">Rejoindre le canal</a>
                 </div>
               </div>
             </div>
 
             {/* Vos avantages */}
             <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-4">
-              <h3 className="text-xl font-bold text-white">💰 Vos avantages</h3>
+              <h3 className="text-xl font-bold text-white">Vos avantages</h3>
               <p className="text-slate-400 text-sm">En rejoignant RC SAB MIDLEY, vous bénéficiez de :</p>
               <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-slate-300 pt-2">
                 <li className="flex items-center space-x-2 bg-slate-900 p-3 rounded-xl border border-slate-800">
-                  <span className="text-emerald-400">✅</span>
+                  <span className="text-emerald-400 font-bold">•</span>
                   <span>Jusqu’à 20 % de commission</span>
                 </li>
                 <li className="flex items-center space-x-2 bg-slate-900 p-3 rounded-xl border border-slate-800">
-                  <span className="text-emerald-400">✅</span>
+                  <span className="text-emerald-400 font-bold">•</span>
                   <span>Aucun investissement</span>
                 </li>
                 <li className="flex items-center space-x-2 bg-slate-900 p-3 rounded-xl border border-slate-800">
-                  <span className="text-emerald-400">✅</span>
+                  <span className="text-emerald-400 font-bold">•</span>
                   <span>Aucun stock à gérer</span>
                 </li>
                 <li className="flex items-center space-x-2 bg-slate-900 p-3 rounded-xl border border-slate-800">
-                  <span className="text-emerald-400">✅</span>
+                  <span className="text-emerald-400 font-bold">•</span>
                   <span>Livraison assurée</span>
                 </li>
                 <li className="flex items-center space-x-2 bg-slate-900 p-3 rounded-xl border border-slate-800">
-                  <span className="text-emerald-400">✅</span>
+                  <span className="text-emerald-400 font-bold">•</span>
                   <span>Service après-vente assuré</span>
                 </li>
                 <li className="flex items-center space-x-2 bg-slate-900 p-3 rounded-xl border border-slate-800">
-                  <span className="text-emerald-400">✅</span>
+                  <span className="text-emerald-400 font-bold">•</span>
                   <span>Produits sélectionnés</span>
                 </li>
                 <li className="flex items-center space-x-2 bg-slate-900 p-3 rounded-xl border border-slate-800 md:col-span-2">
-                  <span className="text-emerald-400">✅</span>
+                  <span className="text-emerald-400 font-bold">•</span>
                   <span>Local physique pour rassurer les clients</span>
                 </li>
               </ul>
@@ -266,22 +246,22 @@ export default function PartenairePage() {
 
             {/* Règles importantes */}
             <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-4">
-              <h3 className="text-xl font-bold text-white">📋 Règles importantes</h3>
+              <h3 className="text-xl font-bold text-white">Règles importantes</h3>
               <ul className="space-y-2.5 text-xs text-slate-300">
                 <li className="flex items-start space-x-2">
-                  <span className="text-[#D4AF37] font-bold">✔</span>
+                  <span className="text-[#D4AF37] font-bold">-</span>
                   <span>Respectez les prix communiqués.</span>
                 </li>
                 <li className="flex items-start space-x-2">
-                  <span className="text-[#D4AF37] font-bold">✔</span>
+                  <span className="text-[#D4AF37] font-bold">-</span>
                   <span>Le Code Partenaire est obligatoire pour recevoir vos commissions.</span>
                 </li>
                 <li className="flex items-start space-x-2">
-                  <span className="text-[#D4AF37] font-bold">✔</span>
+                  <span className="text-[#D4AF37] font-bold">-</span>
                   <span>Les canaux partenaires sont strictement réservés aux partenaires.</span>
                 </li>
                 <li className="flex items-start space-x-2">
-                  <span className="text-[#D4AF37] font-bold">✔</span>
+                  <span className="text-[#D4AF37] font-bold">-</span>
                   <span>Merci de ne jamais partager les liens d’accès des canaux afin de préserver les avantages du réseau.</span>
                 </li>
               </ul>
@@ -289,7 +269,7 @@ export default function PartenairePage() {
 
             {/* Questions fréquentes */}
             <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-6">
-              <h3 className="text-xl font-bold text-white">❓ Questions fréquentes</h3>
+              <h3 className="text-xl font-bold text-white">Questions fréquentes</h3>
               <div className="space-y-4 text-xs">
                 <div className="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-1">
                   <p className="font-bold text-white">Quand suis-je payé ?</p>
@@ -298,6 +278,10 @@ export default function PartenairePage() {
                 <div className="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-1">
                   <p className="font-bold text-white">Ai-je besoin d’acheter un stock ?</p>
                   <p className="text-slate-400">Non.</p>
+                </div>
+                <div className="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-1">
+                  <p className="font-bold text-white">Quelles sont les conditions pour le paiement à la livraison ?</p>
+                  <p className="text-slate-400">Le paiement à la livraison est accepté uniquement à Cotonou, Abomey-Calavi, Abidjan et Ouagadougou, et uniquement pour les articles de moins de 50 000 FCFA. Pour le reste, les conditions exigent un paiement avant livraison ou que le client se rende directement sur place dans notre local.</p>
                 </div>
                 <div className="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-1">
                   <p className="font-bold text-white">Qui effectue les livraisons ?</p>
@@ -316,11 +300,11 @@ export default function PartenairePage() {
 
             {/* Besoin d'aide */}
             <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-3 text-center">
-              <h3 className="text-lg font-bold text-white">📞 Besoin d’aide ?</h3>
+              <h3 className="text-lg font-bold text-white">Besoin d’aide ?</h3>
               <p className="text-slate-400 text-xs">Notre équipe est disponible sur WhatsApp.</p>
               <div className="pt-2">
                 <a href="https://wa.me/2290169325576" target="_blank" rel="noopener noreferrer" className="inline-block px-6 py-3 rounded-xl bg-emerald-600/20 text-emerald-400 font-bold text-xs border border-emerald-500/30 hover:bg-emerald-600/30 transition">
-                  📱 +229 01 69 32 55 76
+                  +229 01 69 32 55 76
                 </a>
               </div>
             </div>
