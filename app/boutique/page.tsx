@@ -1,13 +1,13 @@
 'use client';
+
 import { useState, useEffect } from 'react';
 import { productsList as initialProducts } from './products';
-import jsPDF from 'jspdf';
 
 export default function Home() {
   const [productsList, setProductsList] = useState<any[]>(
     initialProducts.map(p => ({
       ...p,
-      images: p.images || [p.image] // Rétrocompatibilité avec l'ancienne structure
+      images: p.images || [p.image]
     }))
   );
   
@@ -82,7 +82,11 @@ export default function Home() {
     }
   };
 
-  const generatePDFReceipt = (orderData: any) => {
+  // Import dynamique de jsPDF pour éviter les erreurs SSR (Server-Side Rendering)
+  const generatePDFReceipt = async (orderData: any) => {
+    if (typeof window === 'undefined') return;
+    const { default: jsPDF } = await import('jspdf');
+
     const doc = new jsPDF();
     doc.setFillColor(9, 10, 12);
     doc.rect(0, 0, 210, 40, 'F');
@@ -189,7 +193,7 @@ export default function Home() {
       setOrderProduct(null);
       setSelectedProduct(null);
       setOrderSuccess(completedOrder);
-      generatePDFReceipt(completedOrder);
+      await generatePDFReceipt(completedOrder);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
@@ -226,14 +230,13 @@ export default function Home() {
     }
   };
 
-  // Gestion de l'upload de multiples images locales (jusqu'à 3)
   const handleMultipleImageUpload = (e: any, setImagesList: (imgs: string[]) => void, currentList: string[]) => {
     const files = Array.from(e.target.files) as File[];
     if (files.length === 0) return;
 
     let newImages: string[] = [...currentList];
     files.forEach((file) => {
-      if (newImages.length >= 3) return; // Limite à 3 images max
+      if (newImages.length >= 3) return;
       const reader = new FileReader();
       reader.onload = (uploadEvent) => {
         if (uploadEvent.target?.result) {
@@ -311,7 +314,6 @@ export default function Home() {
         </section>
       ) : (
         <>
-          {/* Modal Succès Commande & Téléchargement Reçu */}
           {orderSuccess && (
             <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
               <div className="bg-slate-900 border border-emerald-500/50 rounded-3xl p-8 max-w-lg w-full text-center space-y-6 shadow-2xl relative">
@@ -335,7 +337,6 @@ export default function Home() {
             </div>
           )}
 
-          {/* Modal Détails Article (avec galerie multi-images et bouton fermeture clair) */}
           {selectedProduct && (
             <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
               <div className="bg-slate-900 border border-[#D4AF37]/40 rounded-3xl p-6 md:p-8 max-w-2xl w-full relative space-y-6 my-8">
@@ -343,7 +344,6 @@ export default function Home() {
                   ✕ Fermer
                 </button>
                 
-                {/* Galerie d'images */}
                 <div className="space-y-3">
                   <div className="h-72 rounded-2xl overflow-hidden bg-slate-950 border border-slate-800">
                     <img 
@@ -385,7 +385,6 @@ export default function Home() {
             </div>
           )}
 
-          {/* Modal Formulaire de Commande (avec Adresse, Quartier, Indications) */}
           {orderProduct && (
             <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
               <div className="bg-slate-900 border border-[#D4AF37]/40 rounded-3xl p-6 md:p-8 max-w-xl w-full relative space-y-6 my-8">
@@ -455,7 +454,6 @@ export default function Home() {
             </div>
           )}
 
-          {/* Modal Modification Article (avec support de 2 à 3 images locales) */}
           {editingProduct && (
             <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
               <div className="bg-slate-900 border border-[#D4AF37]/40 rounded-3xl p-6 md:p-8 max-w-xl w-full relative space-y-6 my-8">
@@ -508,7 +506,7 @@ export default function Home() {
             </h1>
           </section>
 
-          <section id="boutique" className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-900">
+          <section id="boutique" className="py-20 px-6 max-w-7xl mx-auto border-t border-t-slate-900">
             <div className="text-center space-y-3 mb-16">
               <span className="text-xs font-bold px-3 py-1 rounded bg-[#D4AF37]/20 text-[#D4AF37] tracking-wider uppercase">Négoce & Distribution</span>
               <h2 className="text-3xl font-extrabold text-white">Notre Catalogue de Produits</h2>
