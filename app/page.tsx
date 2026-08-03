@@ -18,16 +18,17 @@ export default function Home() {
   // État pour afficher ou masquer la flèche de retour en haut
   const [showScrollTop, setShowScrollTop] = useState(false);
 
-  // États pour les formulaires de Contact et Carrières ajoutés
+  // États pour les formulaires de Contact et Carrières
   const [contactSubmitted, setContactSubmitted] = useState(false);
   const [careerSubmitted, setCareerSubmitted] = useState(false);
 
-  // ================= NOUVEAUX ÉTATS POUR LE PORTAIL PARTENAIRE =================
+  // ================= ÉTATS POUR LE PORTAIL PARTENAIRE (MOT DE PASSE UNIVERSEL) =================
   const [activeTab, setActiveTab] = useState<'accueil' | 'partenaire'>('accueil');
   const [partnerLoggedIn, setPartnerLoggedIn] = useState(false);
-  const [partnerCodeInput, setPartnerCodeInput] = useState('');
-  const [partnerPasswordInput, setPartnerPasswordInput] = useState('');
-  const [partnerData, setPartnerData] = useState<any>(null);
+  const [universalPasswordInput, setUniversalPasswordInput] = useState('');
+
+  // MOT DE PASSE UNIVERSEL UNIQUE POUR TOUS LES PARTENAIRES (modifiable ici)
+  const UNIVERSAL_PARTNER_PASSWORD = 'rcsabmidley2026';
 
   useEffect(() => {
     const handleScroll = () => {
@@ -99,22 +100,13 @@ export default function Home() {
     setCareerForm({ fullName: '', email: '', phone: '', country: 'BJ', experience: 'Débutant', motivation: '' });
   };
 
-  // ================= CONNEXION AU PORTAIL PARTENAIRE =================
-  const handlePartnerLogin = (e: any) => {
+  // ================= VÉRIFICATION DU MOT DE PASSE UNIVERSEL =================
+  const handleUniversalLogin = (e: any) => {
     e.preventDefault();
-    // Simulation d'une base de données de partenaires sécurisée
-    const mockPartners: Record<string, any> = {
-      'SM-8821': { name: 'Kossi Marc', code: 'SM-8821', country: 'Bénin', balance: '45 000 F CFA', salesCount: 12, level: 'Senior' },
-      'SM-4390': { name: 'Aminata Diallo', code: 'SM-4390', country: 'Côte d\'Ivoire', balance: '78 500 F CFA', salesCount: 21, level: 'Manager' },
-      'SM-9912': { name: 'Issouf Ouédraogo', code: 'SM-9912', country: 'Burkina Faso', balance: '22 000 F CFA', salesCount: 6, level: 'Junior' },
-    };
-
-    const partner = mockPartners[partnerCodeInput.trim().toUpperCase()];
-    if (partner) {
-      setPartnerData(partner);
+    if (universalPasswordInput.trim() === UNIVERSAL_PARTNER_PASSWORD) {
       setPartnerLoggedIn(true);
     } else {
-      alert('Code partenaire ou mot de passe incorrect. Veuillez vérifier vos accès.');
+      alert('Mot de passe incorrect. Veuillez vérifier le code d\'accès fourni par le réseau.');
     }
   };
 
@@ -452,32 +444,21 @@ export default function Home() {
           {!partnerLoggedIn ? (
             <div className="bg-slate-900 border border-[#D4AF37]/40 rounded-3xl p-8 md:p-12 shadow-2xl space-y-8">
               <div className="text-center space-y-3">
-                <span className="text-xs font-bold px-3 py-1 rounded bg-[#D4AF37]/20 text-[#D4AF37] tracking-wider uppercase">Accès Sécurisé Indépendants</span>
+                <span className="text-xs font-bold px-3 py-1 rounded bg-[#D4AF37]/20 text-[#D4AF37] tracking-wider uppercase">Accès Réservé Partenaires</span>
                 <h2 className="text-3xl font-extrabold text-white">Portail Partenaire RC SAB MIDLEY</h2>
                 <p className="text-slate-400 text-sm max-w-md mx-auto">
-                  Entrez votre code partenaire et votre mot de passe pour suivre vos commissions, vos ventes et l'expansion de votre réseau en temps réel.
+                  Veuillez entrer le mot de passe universel du réseau pour accéder aux informations, guides et ressources de partenariat.
                 </p>
               </div>
 
-              <form onSubmit={handlePartnerLogin} className="space-y-6 max-w-md mx-auto w-full">
+              <form onSubmit={handleUniversalLogin} className="space-y-6 max-w-md mx-auto w-full">
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Code Partenaire</label>
-                  <input 
-                    type="text" 
-                    value={partnerCodeInput}
-                    onChange={(e) => setPartnerCodeInput(e.target.value)}
-                    placeholder="Ex: SM-8821" 
-                    required
-                    className="w-full px-4 py-3.5 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Mot de passe secret</label>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Mot de passe unique</label>
                   <input 
                     type="password" 
-                    value={partnerPasswordInput}
-                    onChange={(e) => setPartnerPasswordInput(e.target.value)}
-                    placeholder="••••••••" 
+                    value={universalPasswordInput}
+                    onChange={(e) => setUniversalPasswordInput(e.target.value)}
+                    placeholder="Entrez le mot de passe du réseau" 
                     required
                     className="w-full px-4 py-3.5 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm" 
                   />
@@ -486,72 +467,286 @@ export default function Home() {
                   type="submit"
                   className="w-full py-4 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold hover:bg-[#c5a030] transition shadow-lg shadow-[#D4AF37]/20"
                 >
-                  Accéder à mon tableau de bord
+                  Entrer sur le portail
                 </button>
                 <div className="text-center">
-                  <p className="text-xs text-slate-500">Astuce test (comptes démo) : code <strong className="text-[#D4AF37]">SM-8821</strong>, <strong className="text-[#D4AF37]">SM-4390</strong> ou <strong className="text-[#D4AF37]">SM-9912</strong> avec n'importe quel mot de passe.</p>
+                  <p className="text-xs text-slate-500">Mot de passe de test fourni : <strong className="text-[#D4AF37]">rcsabmidley2026</strong></p>
                 </div>
               </form>
             </div>
           ) : (
-            <div className="bg-slate-900 border border-[#D4AF37]/50 rounded-3xl p-8 md:p-10 shadow-2xl space-y-8">
-              <div className="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-800 pb-6 gap-4">
-                <div>
-                  <span className="text-xs text-[#D4AF37] font-bold tracking-widest uppercase">Espace Membre Vérifié</span>
-                  <h2 className="text-3xl font-extrabold text-white mt-1">Bienvenue, {partnerData.name}</h2>
-                  <p className="text-slate-400 text-sm">Zone d'opération : {partnerData.country} | Code : <strong className="text-white">{partnerData.code}</strong></p>
+            /* CONTENU DE LA PAGE PARTENAIRE DEMANDÉE (Simple, Professionnel, Sans émojis superflus) */
+            <div className="bg-slate-900 border border-[#D4AF37]/40 rounded-3xl p-8 md:p-12 shadow-2xl space-y-12">
+              
+              {/* En-tête */}
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-800 pb-6 gap-4">
+                <div className="space-y-2">
+                  <span className="text-xs font-bold px-3 py-1 rounded bg-[#D4AF37]/20 text-[#D4AF37] tracking-wider uppercase">Espace Privé Partenaire</span>
+                  <h2 className="text-3xl font-extrabold text-white">Bienvenue sur le Portail Partenaire RC SAB MIDLEY</h2>
                 </div>
                 <button 
-                  onClick={() => { setPartnerLoggedIn(false); setPartnerCodeInput(''); setPartnerPasswordInput(''); }}
+                  onClick={() => { setPartnerLoggedIn(false); setUniversalPasswordInput(''); }}
                   className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-slate-700 transition"
                 >
-                  Se déconnecter
+                  Fermer la session
                 </button>
               </div>
 
-              {/* Indicateurs clés */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                <div className="bg-slate-950 p-6 rounded-2xl border border-slate-800/80 space-y-2">
-                  <p className="text-xs text-slate-400 uppercase font-semibold">Solde de Commissions</p>
-                  <p className="text-3xl font-black text-[#D4AF37]">{partnerData.balance}</p>
-                  <p className="text-xs text-slate-500">Disponible pour retrait instantané</p>
-                </div>
-                <div className="bg-slate-950 p-6 rounded-2xl border border-slate-800/80 space-y-2">
-                  <p className="text-xs text-slate-400 uppercase font-semibold">Ventes Réalisées</p>
-                  <p className="text-3xl font-black text-white">{partnerData.salesCount} articles</p>
-                  <p className="text-xs text-emerald-400">+15% ce mois-ci</p>
-                </div>
-                <div className="bg-slate-950 p-6 rounded-2xl border border-slate-800/80 space-y-2">
-                  <p className="text-xs text-slate-400 uppercase font-semibold">Niveau Réseau</p>
-                  <p className="text-3xl font-black text-white">{partnerData.level}</p>
-                  <p className="text-xs text-[#D4AF37]">Réseau International Actif</p>
-                </div>
+              <div className="space-y-4 text-slate-300 leading-relaxed text-sm">
+                <p className="text-base font-semibold text-white">Bienvenue dans le Réseau Commercial RC SAB MIDLEY.</p>
+                <p>Cette page regroupe toutes les informations et ressources nécessaires pour démarrer votre activité de partenaire dans les meilleures conditions.</p>
+                <p className="text-slate-400">Prenez quelques minutes pour suivre les étapes ci-dessous.</p>
               </div>
 
-              {/* Outils et Liens de parrainage */}
-              <div className="bg-slate-950 p-6 rounded-2xl border border-slate-800 space-y-4">
-                <h3 className="text-white font-bold text-sm">Votre Lien de Parrainage Exclusif :</h3>
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <input 
-                    type="text" 
-                    readOnly 
-                    value={`https://sabmidley.co/?ref=${partnerData.code}`} 
-                    className="flex-1 px-4 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-slate-300 text-sm select-all"
-                  />
-                  <button 
-                    onClick={() => {
-                      navigator.clipboard.writeText(`https://sabmidley.co/?ref=${partnerData.code}`);
-                      alert('Lien copié dans le presse-papier !');
-                    }}
-                    className="py-3 px-6 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-sm hover:bg-[#c5a030] transition"
+              {/* Étape 1 : Contrat */}
+              <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-6">
+                <div className="space-y-2">
+                  <h3 className="text-xl font-bold text-white">Étape 1 : Lire et signer le contrat</h3>
+                  <p className="text-slate-400 text-sm">Le contrat de partenariat est obligatoire. Il vous permet d’intégrer officiellement le réseau RC SAB MIDLEY.</p>
+                </div>
+                <div>
+                  <a 
+                    href="#" 
+                    onClick={(e) => { e.preventDefault(); alert('Téléchargement du contrat de partenariat (PDF) bientôt disponible.'); }}
+                    className="inline-block px-6 py-3.5 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-sm hover:bg-[#c5a030] transition shadow-lg"
                   >
-                    Copier le lien
-                  </button>
+                    Télécharger le contrat de partenariat
+                  </a>
                 </div>
-                <p className="text-xs text-slate-400">Partagez ce lien sur vos réseaux ou envoyez votre code <strong className="text-white">{partnerData.code}</strong> lors de vos ventes pour créditer automatiquement vos commissions.</p>
+
+                {/* Signature électronique */}
+                <div className="border-t border-slate-800/80 pt-6 space-y-4">
+                  <h4 className="font-bold text-white text-base">Signature électronique</h4>
+                  <p className="text-slate-400 text-sm">Vous n’êtes pas obligé d’imprimer le contrat. Vous pouvez le remplir directement sur votre téléphone.</p>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                    <div className="bg-slate-900 p-5 rounded-xl border border-slate-800 space-y-2">
+                      <p className="font-bold text-[#D4AF37] text-sm">iPhone</p>
+                      <ul className="text-slate-300 text-xs space-y-1.5 list-disc list-inside">
+                        <li>Ouvrez le PDF avec Fichiers ou Adobe Acrobat Reader</li>
+                        <li>Sélectionnez Remplir et signer</li>
+                        <li>Complétez les informations</li>
+                        <li>Ajoutez votre signature</li>
+                      </ul>
+                    </div>
+                    <div className="bg-slate-900 p-5 rounded-xl border border-slate-800 space-y-2">
+                      <p className="font-bold text-[#D4AF37] text-sm">Android</p>
+                      <ul className="text-slate-300 text-xs space-y-1.5 list-disc list-inside">
+                        <li>Installez Adobe Acrobat Reader</li>
+                        <li>Ouvrez le contrat</li>
+                        <li>Utilisez Remplir et signer</li>
+                        <li>Complétez les informations</li>
+                        <li>Ajoutez votre signature</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <div className="text-center pt-2">
+              {/* Étape 2 : Envoi */}
+              <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-4">
+                <h3 className="text-xl font-bold text-white">Étape 2 : Envoyer le contrat signé</h3>
+                <p className="text-slate-400 text-sm">Une fois signé, envoyez votre contrat par WhatsApp au :</p>
+                <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 inline-block">
+                  <p className="text-[#D4AF37] font-bold text-base">+229 01 69 32 55 76</p>
+                </div>
+                <div className="space-y-2 pt-2 text-slate-300 text-sm">
+                  <p>Après validation, vous recevrez votre :</p>
+                  <p className="font-bold text-white text-base">Code Partenaire Officiel</p>
+                  <p className="text-slate-400">Ce code est indispensable pour identifier vos ventes et recevoir vos commissions.</p>
+                </div>
+              </div>
+
+              {/* Guide et Catalogue */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-slate-950 p-6 rounded-2xl border border-slate-800 space-y-4 flex flex-col justify-between">
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-bold text-white">Guide du partenaire</h3>
+                    <p className="text-slate-400 text-sm">Découvrez le fonctionnement du réseau : comment vendre, les règles du partenariat, les commissions, les procédures et les bonnes pratiques.</p>
+                  </div>
+                  <div>
+                    <a 
+                      href="#" 
+                      onClick={(e) => { e.preventDefault(); alert('Téléchargement du Guide Partenaire bientôt disponible.'); }}
+                      className="inline-block px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs border border-slate-700 transition"
+                    >
+                      Télécharger le Guide Partenaire
+                    </a>
+                  </div>
+                </div>
+
+                <div className="bg-slate-950 p-6 rounded-2xl border border-slate-800 space-y-4 flex flex-col justify-between">
+                  <div className="space-y-2">
+                    <h3 className="text-lg font-bold text-white">Catalogue Partenaire</h3>
+                    <p className="text-slate-400 text-sm">Consultez la liste des produits autorisés à la commercialisation.</p>
+                  </div>
+                  <div>
+                    <a 
+                      href="#boutique" 
+                      onClick={() => setActiveTab('accueil')}
+                      className="inline-block px-5 py-3 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-xs hover:bg-[#c5a030] transition"
+                    >
+                      Ouvrir le catalogue
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Canaux officiels */}
+              <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-6">
+                <h3 className="text-xl font-bold text-white">Nos canaux officiels</h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="bg-slate-900 p-5 rounded-xl border border-slate-800 space-y-3 flex flex-col justify-between">
+                    <div className="space-y-1">
+                      <p className="font-bold text-emerald-400 text-sm">EN STOCK</p>
+                      <p className="text-xs text-slate-400">Tous les produits actuellement disponibles.</p>
+                    </div>
+                    <a 
+                      href="#" 
+                      onClick={(e) => { e.preventDefault(); alert('Lien vers le canal WhatsApp En Stock'); }}
+                      className="px-4 py-2 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 text-xs font-semibold text-center transition border border-emerald-500/30"
+                    >
+                      Rejoindre
+                    </a>
+                  </div>
+
+                  <div className="bg-slate-900 p-5 rounded-xl border border-slate-800 space-y-3 flex flex-col justify-between">
+                    <div className="space-y-1">
+                      <p className="font-bold text-amber-400 text-sm">BIENTÔT EN STOCK</p>
+                      <p className="text-xs text-slate-400">Découvrez les prochains arrivages avant leur mise en vente.</p>
+                    </div>
+                    <a 
+                      href="#" 
+                      onClick={(e) => { e.preventDefault(); alert('Lien vers le canal Bientôt en Stock'); }}
+                      className="px-4 py-2 rounded-lg bg-amber-600/20 hover:bg-amber-600/30 text-amber-400 text-xs font-semibold text-center transition border border-amber-500/30"
+                    >
+                      Rejoindre
+                    </a>
+                  </div>
+
+                  <div className="bg-slate-900 p-5 rounded-xl border border-slate-800 space-y-3 flex flex-col justify-between">
+                    <div className="space-y-1">
+                      <p className="font-bold text-rose-400 text-sm">RUPTURE DE STOCK</p>
+                      <p className="text-xs text-slate-400">Consultez les articles momentanément indisponibles.</p>
+                    </div>
+                    <a 
+                      href="#" 
+                      onClick={(e) => { e.preventDefault(); alert('Lien vers le canal Rupture de Stock'); }}
+                      className="px-4 py-2 rounded-lg bg-rose-600/20 hover:bg-rose-600/30 text-rose-400 text-xs font-semibold text-center transition border border-rose-500/30"
+                    >
+                      Rejoindre
+                    </a>
+                  </div>
+                </div>
+              </div>
+
+              {/* Vos avantages */}
+              <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-4">
+                <h3 className="text-xl font-bold text-white">Vos avantages</h3>
+                <p className="text-slate-400 text-sm">En rejoignant RC SAB MIDLEY, vous bénéficiez de :</p>
+                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm text-slate-300">
+                  <li className="flex items-center space-x-2">
+                    <span className="text-[#D4AF37] font-bold">•</span>
+                    <span>Jusqu’à 20 % de commission</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <span className="text-[#D4AF37] font-bold">•</span>
+                    <span>Aucun investissement</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <span className="text-[#D4AF37] font-bold">•</span>
+                    <span>Aucun stock à gérer</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <span className="text-[#D4AF37] font-bold">•</span>
+                    <span>Livraison assurée</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <span className="text-[#D4AF37] font-bold">•</span>
+                    <span>Service après-vente assuré</span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <span className="text-[#D4AF37] font-bold">•</span>
+                    <span>Produits sélectionnés</span>
+                  </li>
+                  <li className="flex items-center space-x-2 sm:col-span-2">
+                    <span className="text-[#D4AF37] font-bold">•</span>
+                    <span>Local physique pour rassurer les clients</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Règles importantes */}
+              <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-4">
+                <h3 className="text-xl font-bold text-white">Règles importantes</h3>
+                <ul className="space-y-2 text-sm text-slate-300">
+                  <li className="flex items-start space-x-2">
+                    <span className="text-[#D4AF37] font-bold">-</span>
+                    <span>Utilisez uniquement les supports officiels fournis.</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <span className="text-[#D4AF37] font-bold">-</span>
+                    <span>Respectez les prix communiqués.</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <span className="text-[#D4AF37] font-bold">-</span>
+                    <span>Le Code Partenaire est obligatoire pour recevoir vos commissions.</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <span className="text-[#D4AF37] font-bold">-</span>
+                    <span>Les canaux partenaires sont strictement réservés aux partenaires.</span>
+                  </li>
+                  <li className="flex items-start space-x-2">
+                    <span className="text-[#D4AF37] font-bold">-</span>
+                    <span>Merci de ne jamais partager les liens d’accès des canaux afin de préserver les avantages du réseau.</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Questions fréquentes (FAQ) */}
+              <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-6">
+                <h3 className="text-xl font-bold text-white">Questions fréquentes</h3>
+                <div className="space-y-4 text-sm">
+                  <div className="space-y-1">
+                    <p className="font-semibold text-white">Quand suis-je payé ?</p>
+                    <p className="text-slate-400">Sous 24 heures après confirmation de la livraison.</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="font-semibold text-white">Ai-je besoin d’acheter un stock ?</p>
+                    <p className="text-slate-400">Non.</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="font-semibold text-white">Qui effectue les livraisons ?</p>
+                    <p className="text-slate-400">RC SAB MIDLEY.</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="font-semibold text-white">Qui gère le service après-vente ?</p>
+                    <p className="text-slate-400">RC SAB MIDLEY.</p>
+                  </div>
+                  <div className="space-y-1">
+                    <p className="font-semibold text-white">Puis-je vendre depuis n’importe quelle ville ?</p>
+                    <p className="text-slate-400">Oui, selon les zones couvertes.</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Besoin d'aide */}
+              <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-4 text-center">
+                <h3 className="text-xl font-bold text-white">Besoin d’aide ?</h3>
+                <p className="text-slate-400 text-sm">Notre équipe est disponible.</p>
+                <div>
+                  <a 
+                    href="https://wa.me/2290169325576" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="inline-block px-6 py-3.5 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-sm hover:bg-[#c5a030] transition shadow-lg"
+                  >
+                    WhatsApp : +229 01 69 32 55 76
+                  </a>
+                </div>
+              </div>
+
+              <div className="text-center pt-4">
                 <button 
                   onClick={() => setActiveTab('accueil')}
                   className="text-sm text-[#D4AF37] hover:underline font-semibold"
@@ -559,6 +754,7 @@ export default function Home() {
                   ← Retour au site principal
                 </button>
               </div>
+
             </div>
           )}
         </section>
@@ -1055,8 +1251,8 @@ export default function Home() {
                 </div>
 
                 <div className="p-6 bg-slate-900 border border-[#D4AF37]/30 rounded-2xl space-y-2">
-                  <h4 className="text-[#D4AF37] font-bold text-sm">Rappel : Accès Espace Partenaire</h4>
-                  <p className="text-xs text-slate-400">Si vous êtes membre de notre réseau commercial indépendant, vous pouvez vous connecter directement en haut de page pour suivre vos commissions.</p>
+                  <h4 className="text-[#D4AF37] font-bold text-sm">Rappel : Accès Portail Partenaire</h4>
+                  <p className="text-xs text-slate-400">Si vous intégrez le réseau commercial, accédez au portail sécurisé pour télécharger le contrat et consulter le guide.</p>
                   <button onClick={() => setActiveTab('partenaire')} className="mt-2 text-xs font-bold text-[#D4AF37] hover:underline block">
                     Accéder au Portail Partenaire →
                   </button>
