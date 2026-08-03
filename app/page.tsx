@@ -39,12 +39,10 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#090A0C] text-slate-100 font-sans relative">
-      {/* Barre d'alerte haut */}
       <div className="bg-[#D4AF37] text-[#090A0C] text-xs md:text-sm font-bold py-2.5 px-4 text-center tracking-wide">
         Expansion Régionale en cours: Bénin, Côte d'Ivoire & Burkina Faso — Rejoignez notre réseau commercial.
       </div>
 
-      {/* Navbar intégrée directement pour éviter les erreurs de chemin */}
       <header className="sticky top-0 z-40 bg-[#090A0C]/90 backdrop-blur-md border-b border-[#D4AF37]/20">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -103,7 +101,6 @@ export default function Home() {
         )}
       </header>
 
-      {/* Hero Section */}
       <section className="py-20 px-6 max-w-7xl mx-auto text-center space-y-8">
         <div className="inline-block px-4 py-1.5 rounded-full bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-xs font-bold tracking-widest uppercase">
           Excellence & Fiabilité en Afrique de l'Ouest
@@ -124,7 +121,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Section Aperçu des Pôles */}
       <section className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-900">
         <div className="text-center space-y-3 mb-16">
           <span className="text-xs font-bold px-3 py-1 rounded bg-[#D4AF37]/10 text-[#D4AF37] uppercase tracking-wider inline-block">NOS ACTIVITÉS</span>
@@ -155,7 +151,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="border-t border-slate-900 bg-[#090A0C] py-12 px-6 text-center text-xs text-slate-500 space-y-4">
         <p className="font-bold text-slate-300 text-sm">SAB MIDLEY - Abomey-Calavi, Bénin</p>
         <p>Contacts: Bénin: +229 01 69 32 55 76 | Côte d'Ivoire: +225 07 104 106 04 | Burkina Faso: +226 04 26 18 02</p>
