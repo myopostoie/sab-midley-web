@@ -1,7 +1,6 @@
 'use client';
 
-import { useState } from 'react';
-import { productsList } from '../products'; // Assurez-vous que le fichier products.ts est accessible
+import { useState, useEffect } from 'react';
 import jsPDF from 'jspdf';
 import Navbar from '../components/Navbar';
 
@@ -10,6 +9,34 @@ export default function BoutiquePage() {
   const [orderProduct, setOrderProduct] = useState<any>(null);
   const [orderSuccess, setOrderSuccess] = useState<any>(null);
   const [showPartnerField, setShowPartnerField] = useState(false);
+  
+  // État dynamique pour charger les produits depuis le dashboard admin
+  const [productsList, setProductsList] = useState<any[]>([
+    { 
+      id: 1, 
+      title: "Article Premium Démo", 
+      price: "25 000 XOF", 
+      status: "En stock", 
+      summary: "Idéal pour un usage professionnel quotidien avec finitions haut de gamme.",
+      description: "Ceci est une description complète détaillée du produit incluant les spécificités techniques et les avantages pour les clients finaux.",
+      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400" 
+    }
+  ]);
+
+  // Charger les produits synchronisés depuis l'administration au démarrage
+  useEffect(() => {
+    const savedProducts = localStorage.getItem('sabmidley_products');
+    if (savedProducts) {
+      try {
+        const parsed = JSON.parse(savedProducts);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          setProductsList(parsed);
+        }
+      } catch (e) {
+        console.error("Erreur de chargement des produits locaux", e);
+      }
+    }
+  }, []);
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -221,7 +248,7 @@ export default function BoutiquePage() {
               <div className="p-6 space-y-4 flex-1 flex flex-col justify-between">
                 <div className="space-y-2">
                   <h3 className="text-lg font-bold text-white">{product.title}</h3>
-                  <p className="text-slate-400 text-xs line-clamp-2">{product.description}</p>
+                  <p className="text-slate-400 text-xs line-clamp-2">{product.summary || product.description}</p>
                 </div>
                 <div className="flex items-center space-x-3 pt-2">
                   <button
@@ -251,10 +278,13 @@ export default function BoutiquePage() {
             <div className="h-56 rounded-2xl overflow-hidden">
               <img src={selectedProduct.image} alt={selectedProduct.title} className="w-full h-full object-cover" />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-3">
               <span className="text-[#D4AF37] font-bold text-lg">{selectedProduct.price}</span>
               <h3 className="text-xl font-extrabold text-white">{selectedProduct.title}</h3>
-              <p className="text-slate-300 text-sm leading-relaxed">{selectedProduct.description}</p>
+              {selectedProduct.summary && (
+                <p className="text-amber-400/90 text-xs font-semibold">{selectedProduct.summary}</p>
+              )}
+              <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-line">{selectedProduct.description}</p>
             </div>
             <div className="flex space-x-4 pt-2">
               <button
