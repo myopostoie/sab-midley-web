@@ -9,6 +9,7 @@ export default function BoutiquePage() {
   const [orderProduct, setOrderProduct] = useState<any>(null);
   const [orderSuccess, setOrderSuccess] = useState<any>(null);
   const [showPartnerField, setShowPartnerField] = useState(false);
+  const [isFedaPayReady, setIsFedaPayReady] = useState(false);
   
   const defaultProducts = [
     { 
@@ -28,6 +29,35 @@ export default function BoutiquePage() {
   const BIN_ID = '6a70e40bda38895dfeb502bb'; 
   const API_KEY = '$2a$10$j7cMEnY0wys4AhMpQIYXhe11Z5wI5bgWCY1qSNxVzCFajdeWF6nVW';
 
+  // Chargement automatique du script FedaPay s'il n'est pas déjà présent dans le DOM
+  useEffect(() => {
+    const checkFedaPay = () => {
+      if (typeof window !== 'undefined' && (window as any).FedaPay) {
+        setIsFedaPayReady(true);
+        return true;
+      }
+      return false;
+    };
+
+    if (checkFedaPay()) return;
+
+    const script = document.createElement('script');
+    script.src = 'https://cdn.fedapay.com/checkout.js?v=1.1.7';
+    script.async = true;
+    script.onload = () => {
+      if (checkFedaPay());
+    };
+    document.body.appendChild(script);
+
+    const timer = setInterval(() => {
+      if (checkFedaPay()) {
+        clearInterval(timer);
+      }
+    }, 500);
+
+    return () => clearInterval(timer);
+  }, []);
+
   // Fonction pour charger les produits directement depuis le Cloud JSONBin
   const loadProductsFromCloud = async () => {
     try {
@@ -45,12 +75,8 @@ export default function BoutiquePage() {
   };
 
   useEffect(() => {
-    // Chargement initial au montage de la page
     loadProductsFromCloud();
-
-    // Actualisation automatique toutes les 5 secondes pour une synchro instantanée sur mobile/PC
     const interval = setInterval(loadProductsFromCloud, 5000);
-
     return () => {
       clearInterval(interval);
     };
@@ -415,9 +441,14 @@ export default function BoutiquePage() {
               </div>
               <button
                 type="submit"
-                className="w-full py-4 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold hover:bg-[#c5a030] transition shadow-lg shadow-[#D4AF37]/20"
+                disabled={!isFedaPayReady}
+                className={`w-full py-4 rounded-xl font-bold transition shadow-lg ${
+                  isFedaPayReady 
+                    ? 'bg-[#D4AF37] text-[#090A0C] hover:bg-[#c5a030] shadow-[#D4AF37]/20 cursor-pointer' 
+                    : 'bg-slate-700 text-slate-400 cursor-wait'
+                }`}
               >
-                Procéder au Paiement Sécurisé (FedaPay)
+                {isFedaPayReady ? "Procéder au Paiement Sécurisé (FedaPay)" : "Chargement du module de paiement..."}
               </button>
             </form>
           </div>
