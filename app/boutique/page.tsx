@@ -24,7 +24,7 @@ export default function BoutiquePage() {
 
   const [productsList, setProductsList] = useState<any[]>(defaultProducts);
 
-  // 🔑 Tes clés JSONBin intégrées pour la lecture en direct
+  // 🔑 Clés JSONBin intégrées
   const BIN_ID = '6a70e40bda38895dfeb502bb'; 
   const API_KEY = '$2a$10$j7cMEnY0wys4AhMpQIYXhe11Z5wI5bgWCY1qSNxVzCFajdeWF6nVW';
 
@@ -48,8 +48,8 @@ export default function BoutiquePage() {
     // Chargement initial au montage de la page
     loadProductsFromCloud();
 
-    // Actualisation automatique toutes les 5 secondes pour une synchro instantanée sur mobile/PC
-    const interval = setInterval(loadProductsFromCloud, 5000);
+    // Actualisation automatique toutes les 60 secondes pour préserver les performances mobiles et le rate-limiting
+    const interval = setInterval(loadProductsFromCloud, 60000);
 
     return () => {
       clearInterval(interval);
@@ -145,6 +145,7 @@ export default function BoutiquePage() {
     doc.setFontSize(9);
     doc.text('SAB MIDLEY - Abomey-Calavi, Bénin', 20, 232);
     doc.text('Ce reçu fait office de justificatif officiel pour votre transaction.', 20, 238);
+    doc.text('✓ Service VIP & Assistance logistique activés.', 20, 244);
     doc.save(`Recu_SAB_MIDLEY_${orderData.fullName.replace(/\s+/g, '_')}.pdf`);
   };
 
@@ -288,10 +289,10 @@ export default function BoutiquePage() {
         </div>
       </section>
 
-      {/* Modal Détails Produit */}
+      {/* Modal Détails Produit Améliorée (Standard VIP) */}
       {selectedProduct && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl space-y-6 p-6 relative">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl space-y-6 p-6 relative max-h-[90vh] overflow-y-auto">
             <button onClick={() => setSelectedProduct(null)} className="absolute top-4 right-4 text-slate-400 hover:text-white text-xl font-bold">X</button>
             <div className="h-56 rounded-2xl overflow-hidden">
               <img src={selectedProduct.image} alt={selectedProduct.title} className="w-full h-full object-cover" />
@@ -299,10 +300,27 @@ export default function BoutiquePage() {
             <div className="space-y-3">
               <span className="text-[#D4AF37] font-bold text-lg">{selectedProduct.price}</span>
               <h3 className="text-xl font-extrabold text-white">{selectedProduct.title}</h3>
+              
+              {/* Badges de certification et de service */}
+              <div className="flex flex-wrap gap-2 py-1">
+                 <span className="text-[10px] uppercase font-bold px-2 py-1 bg-slate-800 text-emerald-400 rounded-md">✓ Composants Certifiés</span>
+                 <span className="text-[10px] uppercase font-bold px-2 py-1 bg-slate-800 text-[#D4AF37] rounded-md">⭐ Service VIP Inclus</span>
+              </div>
+
               {selectedProduct.summary && (
-                <p className="text-amber-400/90 text-xs font-semibold">{selectedProduct.summary}</p>
+                <p className="text-amber-400/90 text-sm italic font-semibold border-l-2 border-[#D4AF37] pl-3 py-1">
+                  {selectedProduct.summary}
+                </p>
               )}
-              <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-line">{selectedProduct.description}</p>
+              
+              <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-line pt-2">{selectedProduct.description}</p>
+              
+              {/* Mention packaging premium */}
+              <div className="bg-[#090A0C] p-3 rounded-lg border border-slate-800 mt-2">
+                <p className="text-xs text-slate-400">
+                  <strong className="text-white">📦 Packaging & Logistique :</strong> Conditionnement sécurisé haute résistance prévu pour le transport régional.
+                </p>
+              </div>
             </div>
             <div className="flex space-x-4 pt-2">
               <button
