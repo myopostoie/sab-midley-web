@@ -1,3 +1,11 @@
+Voici ton code mis à jour pour la page partenaire.
+
+J'ai structuré l'ensemble avec les améliorations demandées :
+
+1. **Double option (Voir + Télécharger) :** Chaque document (le Contrat et le Guide) dispose désormais de deux boutons distincts ouverts dans un nouvel onglet (`target="_blank"`), permettant soit de consulter un aperçu/lire en ligne, soit de télécharger directement.
+2. **Harmonisation et consignes :** Les blocs sont organisés proprement, avec les étapes de validation et les liens vers tes canaux WhatsApp officiels bien intégrés.
+
+```tsx
 'use client';
 
 import { useState } from 'react';
@@ -77,16 +85,25 @@ export default function PartenairePage() {
             <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-6">
               <div className="space-y-2">
                 <h3 className="text-xl font-bold text-white">Étape 1: Lire et signer le contrat</h3>
-                <p className="text-slate-400 text-sm">Le contrat de partenariat est obligatoire pour intégrer officiellement le réseau.</p>
+                <p className="text-slate-400 text-sm">Le contrat de partenariat est obligatoire pour intégrer officiellement le réseau. Prenez le temps de le lire avant de le signer.</p>
               </div>
-              <div>
+              <div className="flex flex-wrap gap-4">
                 <a
                   href="https://raw.githubusercontent.com/myopostoie/sab-midley-files/main/RC-CONTRAT%20DE%20PARTENARIAT.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-block px-6 py-3.5 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-sm hover:bg-[#c5a030] transition shadow-lg"
+                  className="px-6 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs border border-slate-700 transition inline-flex items-center space-x-2"
                 >
-                  Télécharger le contrat de partenariat (PDF)
+                  <span>👁️ Voir le contrat</span>
+                </a>
+                <a
+                  href="https://raw.githubusercontent.com/myopostoie/sab-midley-files/main/RC-CONTRAT%20DE%20PARTENARIAT.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download
+                  className="px-6 py-3.5 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-xs hover:bg-[#c5a030] transition shadow-lg inline-flex items-center space-x-2"
+                >
+                  <span>📥 Télécharger le contrat (PDF)</span>
                 </a>
               </div>
             </div>
@@ -94,7 +111,7 @@ export default function PartenairePage() {
             {/* Étape 2: Envoi */}
             <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-4">
               <h3 className="text-xl font-bold text-white">Étape 2: Envoyer le contrat signé</h3>
-              <p className="text-slate-400 text-sm">Une fois signé, envoyez votre contrat par WhatsApp au :</p>
+              <p className="text-slate-400 text-sm">Une fois signé, envoyez votre contrat par WhatsApp au numéro officiel du réseau :</p>
               <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 inline-block">
                 <p className="text-[#D4AF37] font-bold text-base">+229 01 69 32 55 76</p>
               </div>
@@ -102,15 +119,29 @@ export default function PartenairePage() {
 
             {/* Guide et Catalogue */}
             <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-4">
-              <h3 className="text-lg font-bold text-white">Guide du partenaire (PDF)</h3>
-              <a
-                href="https://raw.githubusercontent.com/myopostoie/sab-midley-files/main/Guide%20MAJ%20RC%20SAB%20MIDLEY%202026.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs border border-slate-700 transition"
-              >
-                Télécharger le Guide Partenaire
-              </a>
+              <div className="space-y-1">
+                <h3 className="text-lg font-bold text-white">Guide du partenaire (PDF)</h3>
+                <p className="text-slate-400 text-sm">Consultez les directives et méthodes de vente du réseau.</p>
+              </div>
+              <div className="flex flex-wrap gap-4">
+                <a
+                  href="https://raw.githubusercontent.com/myopostoie/sab-midley-files/main/Guide%20MAJ%20RC%20SAB%20MIDLEY%202026.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs border border-slate-700 transition inline-flex items-center space-x-2"
+                >
+                  <span>👁️ Voir le Guide</span>
+                </a>
+                <a
+                  href="https://raw.githubusercontent.com/myopostoie/sab-midley-files/main/Guide%20MAJ%20RC%20SAB%20MIDLEY%202026.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  download
+                  className="px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs border border-slate-700 transition inline-flex items-center space-x-2"
+                >
+                  <span>📥 Télécharger le Guide</span>
+                </a>
+              </div>
             </div>
 
             {/* Canaux officiels */}
@@ -151,3 +182,5 @@ export default function PartenairePage() {
     </div>
   );
 }
+
+```
