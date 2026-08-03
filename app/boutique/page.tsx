@@ -24,7 +24,7 @@ export default function BoutiquePage() {
 
   const [productsList, setProductsList] = useState<any[]>(defaultProducts);
 
-  // Fonction robuste pour charger et écouter les produits (compatible mobile)
+  // Fonction robuste pour charger et écouter les produits (compatible mobile & multi-onglets)
   const loadProducts = () => {
     if (typeof window === 'undefined') return;
     try {
@@ -45,19 +45,21 @@ export default function BoutiquePage() {
   useEffect(() => {
     loadProducts();
 
-    // Écouter les changements de localStorage en temps réel (utile si l'admin est ouvert dans un autre onglet/fenêtre)
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'sabmidley_products') {
-        loadProducts();
-      }
+    // Gestionnaires de mise à jour instantanée
+    const handleUpdate = () => {
+      loadProducts();
     };
 
-    window.addEventListener('storage', handleStorageChange);
-    // Vérification supplémentaire toutes les 2 secondes pour forcer la synchro sur mobile si le stockage est mis à jour
+    // Écoute de l'événement personnalisé instantané émis par l'Admin et du stockage natif
+    window.addEventListener('sabmidley_products_updated', handleUpdate);
+    window.addEventListener('storage', handleUpdate);
+    
+    // Vérification supplémentaire toutes les 2 secondes pour forcer la synchro sur mobile
     const interval = setInterval(loadProducts, 2000);
 
     return () => {
-      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('sabmidley_products_updated', handleUpdate);
+      window.removeEventListener('storage', handleUpdate);
       clearInterval(interval);
     };
   }, []);
