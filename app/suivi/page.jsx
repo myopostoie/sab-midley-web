@@ -181,7 +181,6 @@ export default function SuiviPartenaire() {
                     <p>🔥 <strong>Créez l'urgence :</strong> Signalez à vos clients que les stocks sont limités pour déclencher l'achat immédiat.</p>
                     <p>📸 <strong>Misez sur le visuel :</strong> Récupérez les photos nettes des canaux WhatsApp et postez-les partout (Statuts, Groupes, Facebook Marketplace).</p>
                     <p>💬 <strong>La règle du premier contact :</strong> Soyez toujours chaleureux, réactif et posez des questions pour comprendre le vrai besoin du client.</p>
-                    <p>🏷️ <strong>N'oubliez jamais votre code :</strong> Rappelez à vos clients de mentionner votre code RC lors de leur commande pour sécuriser votre commission.</p>
                   </div>
                 </div>
 
