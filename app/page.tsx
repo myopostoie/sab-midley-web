@@ -1,9 +1,28 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Navbar from './components/Navbar';
 
 export default function Home() {
+  const [showTopBtn, setShowTopBtn] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 300) {
+        setShowTopBtn(true);
+      } else {
+        setShowTopBtn(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const poles = [
     {
       id: 'immobilier',
@@ -66,7 +85,8 @@ export default function Home() {
       {/* Section Aperçu des Pôles */}
       <section className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-900">
         <div className="text-center space-y-3 mb-16">
-          <h2 className="text-3xl font-extrabold text-white">Nos Domaines d'Expertise</h2>
+          <span className="text-xs font-bold px-3 py-1 rounded bg-[#D4AF37]/10 text-[#D4AF37] uppercase tracking-wider inline-block">Nos Activités</span>
+          <h2 className="text-3xl md:text-4xl font-extrabold text-white">Nos Domaines d'Expertise</h2>
           <p className="text-slate-400 text-sm max-w-md mx-auto">Une offre diversifiée pour répondre aux exigences des particuliers et des professionnels.</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -83,7 +103,7 @@ export default function Home() {
                   <h3 className="text-lg font-bold text-white">{pole.title}</h3>
                   <p className="text-slate-400 text-xs leading-relaxed">{pole.description}</p>
                 </div>
-                <Link href="/poles" className="text-xs font-bold text-[#D4AF37] hover:underline inline-flex items-center space-x-1">
+                <Link href="/poles" className="text-xs font-bold text-[#D4AF37] hover:underline inline-flex items-center space-x-1 pt-2">
                   <span>En savoir plus</span>
                   <span>→</span>
                 </Link>
@@ -92,6 +112,19 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* Bouton Top Up Flottant */}
+      {showTopBtn && (
+        <button
+          onClick={scrollToTop}
+          aria-label="Retour en haut"
+          className="fixed bottom-6 right-6 z-50 p-3.5 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold shadow-xl hover:bg-[#c5a030] transition flex items-center justify-center border border-[#090A0C]/20"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+          </svg>
+        </button>
+      )}
 
       {/* Footer */}
       <footer className="border-t border-slate-900 bg-[#090A0C] py-12 px-6 text-center text-xs text-slate-500 space-y-4">
@@ -102,4 +135,3 @@ export default function Home() {
     </div>
   );
 }
-
