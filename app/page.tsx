@@ -1,3 +1,4 @@
+```tsx
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -599,7 +600,7 @@ export default function Home() {
                       <p className="text-xs text-slate-400">Tous les produits actuellement disponibles.</p>
                     </div>
                     <a 
-                      href="https://whatsapp.com" 
+                      href="https://whatsapp.com/channel/0029Vb8gOUW5EjxzqTnZ713v" 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="px-4 py-2 rounded-lg bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-400 text-xs font-semibold text-center transition border border-emerald-500/30"
@@ -614,7 +615,7 @@ export default function Home() {
                       <p className="text-xs text-slate-400">Découvrez les prochains arrivages avant leur mise en vente.</p>
                     </div>
                     <a 
-                      href="https://whatsapp.com" 
+                      href="https://whatsapp.com/channel/0029Vb8a9RgAzNc1IBH2Xo2D" 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="px-4 py-2 rounded-lg bg-amber-600/20 hover:bg-amber-600/30 text-amber-400 text-xs font-semibold text-center transition border border-amber-500/30"
@@ -629,7 +630,7 @@ export default function Home() {
                       <p className="text-xs text-slate-400">Consultez les articles momentanément indisponibles.</p>
                     </div>
                     <a 
-                      href="https://whatsapp.com" 
+                      href="https://whatsapp.com/channel/0029VbDsUK6KbYMQEmAgCt3O" 
                       target="_blank" 
                       rel="noopener noreferrer"
                       className="px-4 py-2 rounded-lg bg-rose-600/20 hover:bg-rose-600/30 text-rose-400 text-xs font-semibold text-center transition border border-rose-500/30"
@@ -676,52 +677,65 @@ export default function Home() {
                 </ul>
               </div>
 
-              {/* Règles importantes */}
-              <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-4">
-                <h3 className="text-xl font-bold text-white">Règles importantes</h3>
-                <ul className="space-y-2 text-sm text-slate-300">
-                  <li className="flex items-start space-x-2">
-                    <span className="text-[#D4AF37] font-bold">-</span>
-                    <span>Utilisez toujours votre code partenaire lors de la transmission des commandes.</span>
-                  </li>
-                  <li className="flex items-start space-x-2">
-                    <span className="text-[#D4AF37] font-bold">-</span>
-                    <span>Respectez les prix officiels fixés sur les catalogues.</span>
-                  </li>
-                  <li className="flex items-start space-x-2">
-                    <span className="text-[#D4AF37] font-bold">-</span>
-                    <span>Maintenez une communication claire et professionnelle avec vos clients.</span>
-                  </li>
-                </ul>
+              {/* Section contact administration / questions */}
+              <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-[#D4AF37]/30 space-y-3 text-center">
+                <h3 className="text-lg font-bold text-white">Une question ? Un besoin d'assistance ?</h3>
+                <p className="text-sm text-slate-300">
+                  Pour toutes questions, veuillez contacter l'administration au <span className="text-[#D4AF37] font-bold">+229 01 69 32 55 76</span> ou l'un des admins du groupe principal.
+                </p>
               </div>
 
             </div>
           )}
         </section>
       ) : (
-        /* ACCUEIL CLASSIQUE */
-        <main>
-          <section className="py-24 px-6 max-w-7xl mx-auto text-center space-y-8">
-            <h1 className="text-4xl md:text-6xl font-black text-white tracking-tight">
-              L'Excellence au service du <span className="text-[#D4AF37]">Commerce International</span>
-            </h1>
-            <p className="text-slate-400 text-lg max-w-2xl mx-auto">
-              SAB MIDLEY déploie son expertise à travers ses pôles d'excellence : Immobilier, Négoce, Assistance et Academy.
-            </p>
+        /* ACCUEIL STANDARD (Préservé) */
+        <div className="space-y-20 pb-20">
+          
+          {/* Hero Section */}
+          <section className="relative pt-20 pb-32 px-6 max-w-7xl mx-auto text-center space-y-8">
+            <div className="space-y-4 max-w-3xl mx-auto">
+              <span className="text-xs font-bold px-3 py-1.5 rounded-full bg-[#D4AF37]/10 text-[#D4AF37] border border-[#D4AF37]/30 tracking-widest uppercase">
+                Holding Internationale & Négoce Global
+              </span>
+              <h1 className="text-4xl md:text-6xl font-black text-white tracking-tight leading-tight">
+                L'Excellence au service du <span className="text-[#D4AF37]">Commerce</span> et des Investissements
+              </h1>
+              <p className="text-slate-400 text-base md:text-lg">
+                SAB MIDLEY déploie son expertise à travers l'Afrique de l'Ouest et à l'international à travers des pôles d'excellence structurés.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap justify-center gap-4">
+              <a href="#boutique" className="px-8 py-4 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-sm hover:bg-[#c5a030] transition shadow-lg shadow-[#D4AF37]/20">
+                Explorer la Boutique & Négoce
+              </a>
+              <a href="#poles" className="px-8 py-4 rounded-xl bg-slate-800 text-white font-bold text-sm hover:bg-slate-700 transition border border-slate-700">
+                Découvrir nos Pôles
+              </a>
+            </div>
           </section>
 
           {/* Section Pôles */}
-          <section id="poles" className="py-16 px-6 max-w-7xl mx-auto">
-            <h2 className="text-2xl font-bold text-white mb-8 border-l-4 border-[#D4AF37] pl-4">Nos Pôles d'Activités</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <section id="poles" className="max-w-7xl mx-auto px-6 space-y-12">
+            <div className="text-center space-y-3">
+              <h2 className="text-3xl font-extrabold text-white">Nos Pôles d'Activités</h2>
+              <p className="text-slate-400 text-sm max-w-xl mx-auto">Une structure diversifiée pour répondre aux exigences des particuliers et des professionnels.</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {poles.map((pole) => (
-                <div key={pole.id} className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-xl flex flex-col justify-between">
-                  <div>
-                    <img src={pole.image} alt={pole.title} className="w-full h-48 object-cover" />
-                    <div className="p-6 space-y-3">
-                      <span className="text-xs font-bold px-2.5 py-1 rounded bg-[#D4AF37]/20 text-[#D4AF37]">{pole.badge}</span>
-                      <h3 className="text-xl font-bold text-white">{pole.title}</h3>
-                      <p className="text-slate-400 text-sm">{pole.description}</p>
+                <div key={pole.id} className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden flex flex-col justify-between group hover:border-[#D4AF37]/50 transition shadow-xl">
+                  <div className="h-48 overflow-hidden relative">
+                    <img src={pole.image} alt={pole.title} className="w-full h-full object-cover group-hover:scale-105 transition duration-500" />
+                    <span className="absolute top-3 left-3 bg-[#090A0C]/80 backdrop-blur-md text-[#D4AF37] text-xs font-bold px-2.5 py-1 rounded-md border border-[#D4AF37]/20">
+                      {pole.badge}
+                    </span>
+                  </div>
+                  <div className="p-6 space-y-3 flex-1 flex flex-col justify-between">
+                    <div className="space-y-2">
+                      <h3 className="text-lg font-bold text-white">{pole.title}</h3>
+                      <p className="text-slate-400 text-xs leading-relaxed">{pole.description}</p>
                     </div>
                   </div>
                 </div>
@@ -729,43 +743,330 @@ export default function Home() {
             </div>
           </section>
 
-          {/* Section Boutique */}
-          <section id="boutique" className="py-16 px-6 max-w-7xl mx-auto">
-            <h2 className="text-2xl font-bold text-white mb-8 border-l-4 border-[#D4AF37] pl-4">Boutique & Négoce</h2>
+          {/* Section Boutique & Produits */}
+          <section id="boutique" className="max-w-7xl mx-auto px-6 space-y-12">
+            <div className="text-center space-y-3">
+              <span className="text-xs font-bold px-3 py-1 rounded bg-[#D4AF37]/20 text-[#D4AF37] tracking-wider uppercase">Négoce & Distribution</span>
+              <h2 className="text-3xl font-extrabold text-white">Notre Boutique en Ligne</h2>
+              <p className="text-slate-400 text-sm max-w-xl mx-auto">Commandez directement vos articles avec paiement sécurisé FedaPay et livraison rapide.</p>
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {productsList.map((product: any) => (
-                <div key={product.id} className="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4 flex flex-col justify-between">
-                  <div>
-                    <img src={product.image} alt={product.title} className="w-full h-48 object-cover rounded-xl mb-4" />
-                    <h3 className="font-bold text-white text-base">{product.title}</h3>
-                    <p className="text-[#D4AF37] font-extrabold text-lg mt-2">{product.price}</p>
+              {productsList.map((product) => (
+                <div key={product.id} className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden flex flex-col justify-between hover:border-[#D4AF37]/40 transition">
+                  <div className="h-60 overflow-hidden relative">
+                    <img src={product.image} alt={product.title} className="w-full h-full object-cover" />
                   </div>
-                  <button 
-                    onClick={() => { setSelectedProduct(product); setOrderProduct(product); }}
-                    className="w-full py-3 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-sm hover:bg-[#c5a030] transition"
-                  >
-                    Commander
-                  </button>
+                  <div className="p-6 space-y-4 flex-1 flex flex-col justify-between">
+                    <div className="space-y-2">
+                      <h3 className="font-bold text-white text-base">{product.title}</h3>
+                      <p className="text-slate-400 text-xs line-clamp-2">{product.description}</p>
+                    </div>
+                    <div className="flex items-center justify-between pt-4 border-t border-slate-800">
+                      <span className="text-[#D4AF37] font-extrabold text-lg">{product.price}</span>
+                      <button 
+                        onClick={() => { setOrderProduct(product); }}
+                        className="px-4 py-2.5 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-xs hover:bg-[#c5a030] transition shadow"
+                      >
+                        Commander
+                      </button>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
           </section>
-        </main>
+
+          {/* Formulaire de Commande Modal / Section */}
+          {orderProduct && (
+            <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+              <div className="bg-slate-900 border border-[#D4AF37]/40 rounded-3xl p-6 md:p-8 max-w-lg w-full max-h-[90vh] overflow-y-auto space-y-6 shadow-2xl relative">
+                <button 
+                  onClick={() => setOrderProduct(null)} 
+                  className="absolute top-4 right-4 text-slate-400 hover:text-white font-bold text-xl"
+                >
+                  ✕
+                </button>
+                <div className="space-y-2">
+                  <span className="text-xs font-bold text-[#D4AF37] uppercase tracking-wider">Validation de commande</span>
+                  <h3 className="text-2xl font-extrabold text-white">{orderProduct.title}</h3>
+                  <p className="text-[#D4AF37] font-bold text-lg">{orderProduct.price}</p>
+                </div>
+
+                <form onSubmit={handleOrderSubmit} className="space-y-4 text-sm">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-300 mb-1">Nom complet *</label>
+                    <input 
+                      type="text" 
+                      name="fullName" 
+                      value={formData.fullName} 
+                      onChange={handleInputChange} 
+                      required 
+                      placeholder="Ex: Jean Dupont" 
+                      className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-[#D4AF37] outline-none" 
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-300 mb-1">Email</label>
+                    <input 
+                      type="email" 
+                      name="email" 
+                      value={formData.email} 
+                      onChange={handleInputChange} 
+                      placeholder="Ex: jean@example.com" 
+                      className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-[#D4AF37] outline-none" 
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-300 mb-1">Pays *</label>
+                      <select 
+                        name="country" 
+                        value={formData.country} 
+                        onChange={handleInputChange} 
+                        className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-[#D4AF37] outline-none"
+                      >
+                        <option value="BJ">Bénin</option>
+                        <option value="CI">Côte d'Ivoire</option>
+                        <option value="BF">Burkina Faso</option>
+                        <option value="TG">Togo</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-300 mb-1">Ville *</label>
+                      <input 
+                        type="text" 
+                        name="city" 
+                        value={formData.city} 
+                        onChange={handleInputChange} 
+                        required 
+                        placeholder="Ex: Abomey-Calavi" 
+                        className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-[#D4AF37] outline-none" 
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-300 mb-1">Téléphone / WhatsApp *</label>
+                    <input 
+                      type="text" 
+                      name="phone" 
+                      value={formData.phone} 
+                      onChange={handleInputChange} 
+                      required 
+                      placeholder="+229..." 
+                      className="w-full p-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-[#D4AF37] outline-none" 
+                    />
+                  </div>
+                  <div>
+                    <button 
+                      type="button" 
+                      onClick={() => setShowPartnerField(!showPartnerField)}
+                      className="text-xs text-[#D4AF37] font-semibold underline hover:text-amber-300"
+                    >
+                      {showPartnerField ? "Masquer le code partenaire" : "Avez-vous un code partenaire ?"}
+                    </button>
+                    {showPartnerField && (
+                      <input 
+                        type="text" 
+                        name="partnerCode" 
+                        value={formData.partnerCode} 
+                        onChange={handleInputChange} 
+                        placeholder="Entrez le code partenaire" 
+                        className="w-full mt-2 p-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-[#D4AF37] outline-none text-xs" 
+                      />
+                    )}
+                  </div>
+                  <button 
+                    type="submit" 
+                    className="w-full py-4 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold hover:bg-[#c5a030] transition shadow-lg shadow-[#D4AF37]/20"
+                  >
+                    Procéder au paiement sécurisé
+                  </button>
+                </form>
+              </div>
+            </div>
+          )}
+
+          {/* Succès de commande */}
+          {orderSuccess && (
+            <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+              <div className="bg-slate-900 border border-[#D4AF37]/40 rounded-3xl p-8 max-w-md w-full text-center space-y-6 shadow-2xl">
+                <div className="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto text-2xl font-bold">✓</div>
+                <div className="space-y-2">
+                  <h3 className="text-2xl font-extrabold text-white">Paiement Réussi !</h3>
+                  <p className="text-slate-400 text-sm">Votre commande a été enregistrée avec succès. Votre reçu PDF a été téléchargé automatiquement.</p>
+                </div>
+                <button 
+                  onClick={() => setOrderSuccess(null)} 
+                  className="w-full py-3.5 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-sm hover:bg-[#c5a030] transition"
+                >
+                  Fermer
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Section Carrières */}
+          <section id="carrieres" className="max-w-4xl mx-auto px-6 space-y-8">
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 md:p-12 space-y-8 shadow-2xl">
+              <div className="text-center space-y-3">
+                <span className="text-xs font-bold px-3 py-1 rounded bg-[#D4AF37]/20 text-[#D4AF37] tracking-wider uppercase">Rejoignez l'équipe</span>
+                <h2 className="text-3xl font-extrabold text-white">Espace Carrières</h2>
+                <p className="text-slate-400 text-sm max-w-md mx-auto">Postulez pour intégrer nos équipes opérationnelles ou administratives au Bénin et à l'international.</p>
+              </div>
+
+              {careerSubmitted ? (
+                <div className="p-6 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl text-center text-emerald-400 font-semibold text-sm">
+                  Votre candidature a été envoyée avec succès. Nous vous contacterons prochainement.
+                </div>
+              ) : (
+                <form onSubmit={handleCareerSubmit} className="space-y-4 text-sm">
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-300 mb-1">Nom complet *</label>
+                    <input 
+                      type="text" 
+                      name="fullName" 
+                      value={careerForm.fullName} 
+                      onChange={handleCareerChange} 
+                      required 
+                      className="w-full p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-[#D4AF37] outline-none" 
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-300 mb-1">Email *</label>
+                      <input 
+                        type="email" 
+                        name="email" 
+                        value={careerForm.email} 
+                        onChange={handleCareerChange} 
+                        required 
+                        className="w-full p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-[#D4AF37] outline-none" 
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-300 mb-1">Téléphone *</label>
+                      <input 
+                        type="text" 
+                        name="phone" 
+                        value={careerForm.phone} 
+                        onChange={handleCareerChange} 
+                        required 
+                        className="w-full p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-[#D4AF37] outline-none" 
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-300 mb-1">Motivation / Profil</label>
+                    <textarea 
+                      name="motivation" 
+                      value={careerForm.motivation} 
+                      onChange={handleCareerChange} 
+                      rows={4} 
+                      required 
+                      className="w-full p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-[#D4AF37] outline-none" 
+                    />
+                  </div>
+                  <button 
+                    type="submit" 
+                    className="w-full py-4 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold hover:bg-[#c5a030] transition shadow-lg shadow-[#D4AF37]/20"
+                  >
+                    Envoyer ma candidature
+                  </button>
+                </form>
+              )}
+            </div>
+          </section>
+
+          {/* Section Contact */}
+          <section id="contact" className="max-w-4xl mx-auto px-6 space-y-8">
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 md:p-12 space-y-8 shadow-2xl">
+              <div className="text-center space-y-3">
+                <span className="text-xs font-bold px-3 py-1 rounded bg-[#D4AF37]/20 text-[#D4AF37] tracking-wider uppercase">Restons en contact</span>
+                <h2 className="text-3xl font-extrabold text-white">Contactez-nous</h2>
+                <p className="text-slate-400 text-sm max-w-md mx-auto">Une question sur nos services ou besoin d'un accompagnement personnalisé ? Écrivez-nous.</p>
+              </div>
+
+              {contactSubmitted ? (
+                <div className="p-6 bg-emerald-500/10 border border-emerald-500/30 rounded-2xl text-center text-emerald-400 font-semibold text-sm">
+                  Votre message a été transmis avec succès.
+                </div>
+              ) : (
+                <form onSubmit={handleContactSubmit} className="space-y-4 text-sm">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-300 mb-1">Nom *</label>
+                      <input 
+                        type="text" 
+                        name="name" 
+                        value={contactForm.name} 
+                        onChange={handleContactChange} 
+                        required 
+                        className="w-full p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-[#D4AF37] outline-none" 
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-300 mb-1">Email *</label>
+                      <input 
+                        type="email" 
+                        name="email" 
+                        value={contactForm.email} 
+                        onChange={handleContactChange} 
+                        required 
+                        className="w-full p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-[#D4AF37] outline-none" 
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-300 mb-1">Message *</label>
+                    <textarea 
+                      name="message" 
+                      value={contactForm.message} 
+                      onChange={handleContactChange} 
+                      rows={4} 
+                      required 
+                      className="w-full p-3.5 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-[#D4AF37] outline-none" 
+                    />
+                  </div>
+                  <button 
+                    type="submit" 
+                    className="w-full py-4 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold hover:bg-[#c5a030] transition shadow-lg shadow-[#D4AF37]/20"
+                  >
+                    Envoyer le message
+                  </button>
+                </form>
+              )}
+            </div>
+          </section>
+
+        </div>
       )}
+
+      {/* Footer Officiel */}
+      <footer className="bg-slate-950 border-t border-slate-900 py-12 px-6 text-slate-400 text-xs">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="space-y-2 text-center md:text-left">
+            <p className="text-white font-bold text-sm">SAB MIDLEY — Abomey-Calavi, Bénin</p>
+            <p>Contacts : Bénin: +229 01 69 32 55 76 | Côte d'Ivoire: +225 07 104 106 04</p>
+          </div>
+          <div>
+            <p className="text-slate-500">© 2026 SAB MIDLEY. Tous droits réservés.</p>
+          </div>
+        </div>
+      </footer>
 
       {/* Bouton Scroll Top */}
       {showScrollTop && (
         <button 
-          onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-[#D4AF37] text-[#090A0C] shadow-lg hover:bg-[#c5a030] transition"
-          aria-label="Retour en haut"
+          onClick={scrollToTop} 
+          className="fixed bottom-6 right-6 z-50 p-3.5 rounded-full bg-[#D4AF37] text-[#090A0C] font-bold shadow-xl hover:bg-[#c5a030] transition"
         >
-          <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 15l7-7 7 7" />
-          </svg>
+          ↑
         </button>
       )}
 
     </div>
   );
 }
+
+```
