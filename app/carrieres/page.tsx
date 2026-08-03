@@ -36,7 +36,7 @@ export default function CarrieresPage() {
       title: 'Assistance Commerciale',
       location: 'Abomey-Calavi, Bénin',
       type: 'Temps plein (Sur place)',
-      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80',
+      image: 'https://images.unsplash.com/photo-1531343838779-7cf83c6b1a43?auto=format&fit=crop&w=800&q=80',
       summary: "Gestion de la relation client, appui au développement des ventes et coordination des opérations commerciales depuis notre siège à Abomey-Calavi.",
       missions: [
         "Accueil, conseil et suivi personnalisé des clients et partenaires.",
