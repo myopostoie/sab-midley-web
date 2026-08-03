@@ -49,7 +49,6 @@ export default function AdminDashboard() {
   const BIN_ID = '6a70e40bda38895dfeb502bb'; 
   const API_KEY = '$2a$10$j7cMEnY0wys4AhMpQIYXhe11Z5wI5bgWCY1qSNxVzCFajdeWF6nVW';
 
-  // Fonction pour charger les produits depuis le Cloud
   const fetchProductsFromCloud = async () => {
     try {
       const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
@@ -68,7 +67,6 @@ export default function AdminDashboard() {
     fetchProductsFromCloud();
   }, []);
 
-  // Fonction pour sauvegarder et propager sur tous les appareils
   const saveProductsToCloud = async (newProductsList: any[]) => {
     setProducts(newProductsList);
     try {
@@ -85,13 +83,39 @@ export default function AdminDashboard() {
     }
   };
 
+  // Champs du formulaire produit
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [newTitle, setNewTitle] = useState('');
   const [newPrice, setNewPrice] = useState('');
+  const [newOldPrice, setNewOldPrice] = useState('');
   const [newStatus, setNewStatus] = useState('En stock');
   const [newSummary, setNewSummary] = useState('');
   const [newDescription, setNewDescription] = useState('');
-  const [newImage, setNewImage] = useState('');
+  const [images, setImages] = useState<string[]>(['', '', '', '']);
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
+
+  // Fonction de conversion des fichiers locaux en Base64 (jusqu'à 4 images)
+  const handleImageUpload = (index: number, e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const updatedImages = [...images];
+        updatedImages[index] = reader.result as string;
+        setImages(updatedImages);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Fonction de formatage automatique des chiffres en XOF (ex: 10000 -> 10 000 XOF)
+  const formatXOF = (val: string) => {
+    if (!val) return '';
+    const cleanNumbers = val.replace(/\D/g, '');
+    if (!cleanNumbers) return '';
+    const formatted = Number(cleanNumbers).toLocaleString('fr-FR').replace(/\s/g, ' ');
+    return `${formatted} XOF`;
+  };
 
   const scriptURL = 'https://script.google.com/macros/s/AKfycbyCLzeK1mr3pccEO2Hc1UVtd-qA_SZe4uKQkpVr1ZP063mTc317JAAGcnPYWTb5pzuW/exec';
 
@@ -154,29 +178,85 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleAddProduct = async (e: React.FormEvent) => {
+  // Enregistrement ou mise à jour d'un article
+  const handleSaveProduct = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTitle || !newPrice) return;
 
-    const newProd = {
-      id: Date.now(),
-      title: newTitle,
-      price: newPrice,
-      status: newStatus,
-      summary: newSummary || 'Aucun résumé court.',
-      description: newDescription || 'Aucune description détaillée fournie.',
-      image: newImage || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400'
-    };
+    const formattedPrice = formatXOF(newPrice);
+    const formattedOldPrice = newOldPrice ? formatXOF(newOldPrice) : '';
+    const mainImage = images[0] || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400';
 
-    const updatedList = [newProd, ...products];
-    await saveProductsToCloud(updatedList);
+    if (editingId !== null) {
+      // Mode Modification
+      const updatedList = products.map(p => {
+        if (p.id === editingId) {
+          return {
+            ...p,
+            title: newTitle,
+            price: formattedPrice,
+            oldPrice: formattedOldPrice,
+            status: newStatus,
+            summary: newSummary || 'Aucun résumé court.',
+            description: newDescription || 'Aucune description détaillée fournie.',
+            image: mainImage,
+            images: images.filter(img => img !== '')
+          };
+        }
+        return p;
+      });
+      await saveProductsToCloud(updatedList);
+      alert('Article mis à jour avec succès !');
+    } else {
+      // Mode Ajout
+      const newProd = {
+        id: Date.now(),
+        title: newTitle,
+        price: formattedPrice,
+        oldPrice: formattedOldPrice,
+        status: newStatus,
+        summary: newSummary || 'Aucun résumé court.',
+        description: newDescription || 'Aucune description détaillée fournie.',
+        image: mainImage,
+        images: images.filter(img => img !== '')
+      };
+      const updatedList = [newProd, ...products];
+      await saveProductsToCloud(updatedList);
+      alert('Article ajouté avec succès et synchronisé !');
+    }
 
+    resetForm();
+  };
+
+  const handleEditClick = (prod: any) => {
+    setEditingId(prod.id);
+    setNewTitle(prod.title || '');
+    setNewPrice(prod.price ? prod.price.replace(' XOF', '') : '');
+    setNewOldPrice(prod.oldPrice ? prod.oldPrice.replace(' XOF', '') : '');
+    setNewStatus(prod.status || 'En stock');
+    setNewSummary(prod.summary || '');
+    setNewDescription(prod.description || '');
+    
+    const loadedImages = ['', '', '', ''];
+    if (prod.images && Array.isArray(prod.images)) {
+      prod.images.forEach((img: string, idx: number) => {
+        if (idx < 4) loadedImages[idx] = img;
+      });
+    } else if (prod.image) {
+      loadedImages[0] = prod.image;
+    }
+    setImages(loadedImages);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const resetForm = () => {
+    setEditingId(null);
     setNewTitle('');
     setNewPrice('');
+    setNewOldPrice('');
     setNewSummary('');
     setNewDescription('');
-    setNewImage('');
-    alert('Article ajouté avec succès et synchronisé sur tous vos appareils (PC & Mobile) !');
+    setImages(['', '', '', '']);
   };
 
   const handleDeleteProduct = async (id: number) => {
@@ -323,12 +403,24 @@ export default function AdminDashboard() {
         {activeTab === 'products' && (
           <div className="space-y-8">
             <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-6">
-              <div className="border-b border-slate-800 pb-4">
-                <h2 className="text-xl font-bold text-white">➕ Ajouter un nouvel article au catalogue</h2>
-                <p className="text-slate-400 text-xs mt-1">Renseignez les informations pour mettre à jour instantanément la boutique en ligne sur tous vos appareils.</p>
+              <div className="border-b border-slate-800 pb-4 flex justify-between items-center">
+                <div>
+                  <h2 className="text-xl font-bold text-white">
+                    {editingId !== null ? '✏️ Modifier l’article' : '➕ Ajouter un nouvel article au catalogue'}
+                  </h2>
+                  <p className="text-slate-400 text-xs mt-1">Renseignez les informations pour mettre à jour instantanément la boutique.</p>
+                </div>
+                {editingId !== null && (
+                  <button 
+                    onClick={resetForm}
+                    className="px-3 py-1.5 bg-slate-800 text-slate-300 rounded-lg text-xs hover:bg-slate-700 transition"
+                  >
+                    Annuler l’édition
+                  </button>
+                )}
               </div>
 
-              <form onSubmit={handleAddProduct} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <form onSubmit={handleSaveProduct} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold uppercase text-slate-400 mb-1">Nom / Titre du produit</label>
                   <input 
@@ -342,13 +434,24 @@ export default function AdminDashboard() {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold uppercase text-slate-400 mb-1">Prix</label>
+                  <label className="block text-xs font-semibold uppercase text-slate-400 mb-1">Prix principal (Ex: 10000)</label>
                   <input 
                     type="text"
                     value={newPrice}
                     onChange={(e) => setNewPrice(e.target.value)}
-                    placeholder="Ex: 45 000 XOF"
+                    placeholder="Ex: 45000"
                     required
+                    className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:border-amber-500 outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold uppercase text-slate-400 mb-1">Ancien prix promo barré (Facultatif)</label>
+                  <input 
+                    type="text"
+                    value={newOldPrice}
+                    onChange={(e) => setNewOldPrice(e.target.value)}
+                    placeholder="Ex: 60000"
                     className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:border-amber-500 outline-none"
                   />
                 </div>
@@ -366,15 +469,25 @@ export default function AdminDashboard() {
                   </select>
                 </div>
 
-                <div>
-                  <label className="block text-xs font-semibold uppercase text-slate-400 mb-1">Lien de l'image (URL)</label>
-                  <input 
-                    type="url"
-                    value={newImage}
-                    onChange={(e) => setNewImage(e.target.value)}
-                    placeholder="https://..."
-                    className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:border-amber-500 outline-none"
-                  />
+                {/* Section téléversement jusqu'à 4 images */}
+                <div className="md:col-span-2 space-y-2 bg-slate-950 p-4 rounded-2xl border border-slate-800">
+                  <label className="block text-xs font-semibold uppercase text-amber-400">Téléversement des images (Jusqu'à 4 images)</label>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                    {[0, 1, 2, 3].map((index) => (
+                      <div key={index} className="space-y-1">
+                        <span className="text-[10px] text-slate-400">Image {index + 1} {index === 0 ? '(Principale)' : ''}</span>
+                        <input 
+                          type="file" 
+                          accept="image/*"
+                          onChange={(e) => handleImageUpload(index, e)}
+                          className="w-full text-[10px] text-slate-400 file:mr-2 file:py-1 file:px-2 file:rounded-lg file:border-0 file:text-[10px] file:font-semibold file:bg-slate-800 file:text-amber-400 hover:file:bg-slate-700"
+                        />
+                        {images[index] && (
+                          <img src={images[index]} alt="Aperçu" className="w-full h-20 object-cover rounded-lg border border-slate-800 mt-1" />
+                        )}
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
                 <div className="md:col-span-2">
@@ -404,7 +517,7 @@ export default function AdminDashboard() {
                     type="submit"
                     className="w-full py-3.5 rounded-xl bg-amber-500 text-slate-950 font-bold hover:bg-amber-400 transition text-xs shadow-lg shadow-amber-500/20"
                   >
-                    Publier l'article immédiatement
+                    {editingId !== null ? 'Enregistrer les modifications' : 'Publier l’article immédiatement'}
                   </button>
                 </div>
               </form>
@@ -420,7 +533,12 @@ export default function AdminDashboard() {
                     <div className="space-y-2">
                       <img src={prod.image} alt={prod.title} className="w-full h-36 object-cover rounded-xl border border-slate-800" />
                       <h3 className="font-bold text-white text-sm">{prod.title}</h3>
-                      <p className="text-amber-400 font-extrabold text-sm">{prod.price}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="text-amber-400 font-extrabold text-sm">{prod.price}</p>
+                        {prod.oldPrice && (
+                          <p className="text-slate-500 text-xs line-through">{prod.oldPrice}</p>
+                        )}
+                      </div>
                       <p className="text-slate-400 text-xs line-clamp-2">{prod.summary}</p>
                       <span className="inline-block px-2.5 py-1 rounded-md bg-slate-900 text-slate-300 text-[11px] border border-slate-800">
                         {prod.status}
@@ -429,10 +547,16 @@ export default function AdminDashboard() {
                     
                     <div className="flex gap-2 pt-2">
                       <button 
-                        onClick={() => setSelectedProduct(prod)}
+                        onClick={() => handleEditClick(prod)}
                         className="flex-1 py-2 rounded-xl bg-slate-900 text-amber-400 hover:bg-slate-800 border border-slate-800 text-xs font-semibold transition"
                       >
-                        👁️ Visualiser
+                        ✏️ Modifier
+                      </button>
+                      <button 
+                        onClick={() => setSelectedProduct(prod)}
+                        className="py-2 px-3 rounded-xl bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800 text-xs transition"
+                      >
+                        👁️
                       </button>
                       <button 
                         onClick={() => handleDeleteProduct(prod.id)}
@@ -464,7 +588,12 @@ export default function AdminDashboard() {
                 <div className="space-y-1">
                   <span className="text-xs font-semibold text-amber-400 uppercase">{selectedProduct.status}</span>
                   <h2 className="text-2xl font-extrabold text-white">{selectedProduct.title}</h2>
-                  <p className="text-xl font-bold text-amber-400">{selectedProduct.price}</p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-xl font-bold text-amber-400">{selectedProduct.price}</p>
+                    {selectedProduct.oldPrice && (
+                      <p className="text-slate-400 text-sm line-through">{selectedProduct.oldPrice}</p>
+                    )}
+                  </div>
                 </div>
                 
                 <div className="space-y-2 bg-slate-950 p-4 rounded-2xl border border-slate-800">
