@@ -196,7 +196,6 @@ export default function Home() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    // Vérification sécurisée de l'objet FedaPay
     const FedaPayObj = (window as any).FedaPay;
     if (FedaPayObj && typeof FedaPayObj.init === 'function') {
       try {
