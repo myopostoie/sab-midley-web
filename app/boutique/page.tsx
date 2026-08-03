@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import jsPDF from 'jspdf';
 import Navbar from '../components/Navbar';
 
 export default function BoutiquePage() {
@@ -25,11 +24,11 @@ export default function BoutiquePage() {
 
   const [productsList, setProductsList] = useState<any[]>(defaultProducts);
 
-  // 🔑 Tes clés JSONBin intégrées pour la lecture en direct
+  // Clés JSONBin intégrées pour la lecture en direct
   const BIN_ID = '6a70e40bda38895dfeb502bb'; 
   const API_KEY = '$2a$10$j7cMEnY0wys4AhMpQIYXhe11Z5wI5bgWCY1qSNxVzCFajdeWF6nVW';
 
-  // Chargement automatique du script FedaPay s'il n'est pas déjà présent dans le DOM
+  // Chargement automatique du script FedaPay
   useEffect(() => {
     const checkFedaPay = () => {
       if (typeof window !== 'undefined' && (window as any).FedaPay) {
@@ -45,7 +44,7 @@ export default function BoutiquePage() {
     script.src = 'https://cdn.fedapay.com/checkout.js?v=1.1.7';
     script.async = true;
     script.onload = () => {
-      if (checkFedaPay());
+      checkFedaPay();
     };
     document.body.appendChild(script);
 
@@ -111,7 +110,11 @@ export default function BoutiquePage() {
     }
   };
 
-  const generatePDFReceipt = (orderData: any) => {
+  // Chargement dynamique de jsPDF pour éviter les erreurs de compilation SSR Next.js
+  const generatePDFReceipt = async (orderData: any) => {
+    const jsPDFModule = await import('jspdf');
+    const jsPDF = jsPDFModule.default;
+
     const doc = new jsPDF();
     doc.setFillColor(9, 10, 12);
     doc.rect(0, 0, 210, 40, 'F');
@@ -224,7 +227,7 @@ export default function BoutiquePage() {
       setOrderProduct(null);
       setSelectedProduct(null);
       setOrderSuccess(completedOrder);
-      generatePDFReceipt(completedOrder);
+      await generatePDFReceipt(completedOrder);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
