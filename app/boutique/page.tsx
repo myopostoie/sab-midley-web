@@ -10,8 +10,7 @@ export default function BoutiquePage() {
   const [orderSuccess, setOrderSuccess] = useState<any>(null);
   const [showPartnerField, setShowPartnerField] = useState(false);
   
-  // État initial par défaut
-  const [productsList, setProductsList] = useState<any[]>([
+  const defaultProducts = [
     { 
       id: 1, 
       title: "Article Premium Démo", 
@@ -21,21 +20,46 @@ export default function BoutiquePage() {
       description: "Ceci est une description complète détaillée du produit incluant les spécificités techniques et les avantages pour les clients finaux.",
       image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400" 
     }
-  ]);
+  ];
 
-  // CORRECTION : Charger dynamiquement les produits enregistrés par l'admin via localStorage
-  useEffect(() => {
-    const savedProducts = localStorage.getItem('sabmidley_products');
-    if (savedProducts) {
-      try {
+  const [productsList, setProductsList] = useState<any[]>(defaultProducts);
+
+  // Fonction robuste pour charger et écouter les produits (compatible mobile)
+  const loadProducts = () => {
+    if (typeof window === 'undefined') return;
+    try {
+      const savedProducts = localStorage.getItem('sabmidley_products');
+      if (savedProducts) {
         const parsed = JSON.parse(savedProducts);
         if (Array.isArray(parsed) && parsed.length > 0) {
           setProductsList(parsed);
+          return;
         }
-      } catch (e) {
-        console.error("Erreur de chargement des produits locaux", e);
       }
+      setProductsList(defaultProducts);
+    } catch (e) {
+      console.error("Erreur de chargement des produits locaux", e);
     }
+  };
+
+  useEffect(() => {
+    loadProducts();
+
+    // Écouter les changements de localStorage en temps réel (utile si l'admin est ouvert dans un autre onglet/fenêtre)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'sabmidley_products') {
+        loadProducts();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    // Vérification supplémentaire toutes les 2 secondes pour forcer la synchro sur mobile si le stockage est mis à jour
+    const interval = setInterval(loadProducts, 2000);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(interval);
+    };
   }, []);
 
   const [formData, setFormData] = useState({
