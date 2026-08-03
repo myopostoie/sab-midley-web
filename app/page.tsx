@@ -447,7 +447,7 @@ export default function Home() {
                   Entrer sur le portail
                 </button>
                 <div className="text-center">
-                  <p className="text-xs text-slate-500">Entrez le mot de passe fourni dans le groupe : <strong className="text-[#D4AF37]">Bonne connexion</strong></p>
+                  <p className="text-xs text-slate-500">Entrez le mot de passe fourni dans le groupe  <strong className="text-[#D4AF37]">Bonne connexion</strong></p>
                 </div>
               </form>
             </div>
@@ -482,7 +482,7 @@ export default function Home() {
                 </div>
                 <div>
                   <a
-                    href="https://github.com/myopostoie/sab-midley-files/blob/main/RC-CONTRAT%20DE%20PARTENARIAT.pdf"
+                    href="https://raw.githubusercontent.com/myopostoie/sab-midley-files/main/RC-CONTRAT%20DE%20PARTENARIAT.pdf"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-block px-6 py-3.5 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-sm hover:bg-[#c5a030] transition shadow-lg"
@@ -540,7 +540,7 @@ export default function Home() {
                 </div>
                 <div>
                   <a
-                    href="https://github.com/myopostoie/sab-midley-files/blob/main/Guide%20MAJ%20RC%20SAB%20MIDLEY%202026.pdf"
+                    href="https://raw.githubusercontent.com/myopostoie/sab-midley-files/main/Guide%20MAJ%20RC%20SAB%20MIDLEY%202026.pdf"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-block px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs border border-slate-700 transition"
