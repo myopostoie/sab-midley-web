@@ -43,45 +43,46 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<'orders' | 'partners' | 'products'>('orders');
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-
-  // Gestion des produits avec synchronisation localStorage
   const [products, setProducts] = useState<any[]>([]);
 
-  useEffect(() => {
-    const saved = localStorage.getItem('sabmidley_products');
-    if (saved) {
-      try {
-        setProducts(JSON.parse(saved));
-      } catch (e) {
-        setProducts([{ 
-          id: 1, 
-          title: "Article Premium Démo", 
-          price: "25 000 XOF", 
-          status: "En stock", 
-          summary: "Idéal pour un usage professionnel quotidien avec finitions haut de gamme.",
-          description: "Ceci est une description complète détaillée du produit incluant les spécificités techniques et les avantages pour les clients finaux.",
-          image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400" 
-        }]);
+  // 🔑 Tes clés JSONBin intégrées
+  const BIN_ID = '6a70e40bda38895dfeb502bb'; 
+  const API_KEY = '$2a$10$j7cMEnY0wys4AhMpQIYXhe11Z5wI5bgWCY1qSNxVzCFajdeWF6nVW';
+
+  // Fonction pour charger les produits depuis le Cloud
+  const fetchProductsFromCloud = async () => {
+    try {
+      const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
+        headers: { 'X-Master-Key': API_KEY }
+      });
+      const data = await response.json();
+      if (data && data.record) {
+        setProducts(data.record);
       }
-    } else {
-      setProducts([{ 
-        id: 1, 
-        title: "Article Premium Démo", 
-        price: "25 000 XOF", 
-        status: "En stock", 
-        summary: "Idéal pour un usage professionnel quotidien avec finitions haut de gamme.",
-        description: "Ceci est une description complète détaillée du produit incluant les spécificités techniques et les avantages pour les clients finaux.",
-        image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400" 
-      }]);
+    } catch (e) {
+      console.error("Erreur de chargement cloud des produits", e);
     }
+  };
+
+  useEffect(() => {
+    fetchProductsFromCloud();
   }, []);
 
-  const saveProductsToStorage = (newProductsList: any[]) => {
+  // Fonction pour sauvegarder et propager sur tous les appareils
+  const saveProductsToCloud = async (newProductsList: any[]) => {
     setProducts(newProductsList);
-    localStorage.setItem('sabmidley_products', JSON.stringify(newProductsList));
-    
-    // Déclencheur personnalisé instantané pour la page boutique
-    window.dispatchEvent(new Event('sabmidley_products_updated'));
+    try {
+      await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Master-Key': API_KEY
+        },
+        body: JSON.stringify(newProductsList)
+      });
+    } catch (e) {
+      console.error("Erreur de sauvegarde cloud", e);
+    }
   };
 
   const [newTitle, setNewTitle] = useState('');
@@ -90,7 +91,6 @@ export default function AdminDashboard() {
   const [newSummary, setNewSummary] = useState('');
   const [newDescription, setNewDescription] = useState('');
   const [newImage, setNewImage] = useState('');
-
   const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
 
   const scriptURL = 'https://script.google.com/macros/s/AKfycbyCLzeK1mr3pccEO2Hc1UVtd-qA_SZe4uKQkpVr1ZP063mTc317JAAGcnPYWTb5pzuW/exec';
@@ -123,7 +123,6 @@ export default function AdminDashboard() {
     }
   };
 
-  // Étape 1 : Vérification Identifiant & Mot de passe
   const handleCheckCredentials = (e: React.FormEvent) => {
     e.preventDefault();
     const cleanUser = username.trim().toLowerCase();
@@ -140,7 +139,6 @@ export default function AdminDashboard() {
     }
   };
 
-  // Étape 2 : Vérification de la question secrète
   const handleCheckSecret = (e: React.FormEvent) => {
     e.preventDefault();
     const cleanAnswer = secretAnswer.trim().toLowerCase();
@@ -156,7 +154,7 @@ export default function AdminDashboard() {
     }
   };
 
-  const handleAddProduct = (e: React.FormEvent) => {
+  const handleAddProduct = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTitle || !newPrice) return;
 
@@ -170,18 +168,21 @@ export default function AdminDashboard() {
       image: newImage || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400'
     };
 
-    saveProductsToStorage([newProd, ...products]);
+    const updatedList = [newProd, ...products];
+    await saveProductsToCloud(updatedList);
+
     setNewTitle('');
     setNewPrice('');
     setNewSummary('');
     setNewDescription('');
     setNewImage('');
-    alert('Article ajouté avec succès au catalogue et synchronisé avec la boutique !');
+    alert('Article ajouté avec succès et synchronisé sur tous vos appareils (PC & Mobile) !');
   };
 
-  const handleDeleteProduct = (id: number) => {
+  const handleDeleteProduct = async (id: number) => {
     if (confirm('Voulez-vous vraiment retirer cet article du catalogue ?')) {
-      saveProductsToStorage(products.filter(p => p.id !== id));
+      const updatedList = products.filter(p => p.id !== id);
+      await saveProductsToCloud(updatedList);
       setSelectedProduct(null);
     }
   };
@@ -324,7 +325,7 @@ export default function AdminDashboard() {
             <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-6">
               <div className="border-b border-slate-800 pb-4">
                 <h2 className="text-xl font-bold text-white">➕ Ajouter un nouvel article au catalogue</h2>
-                <p className="text-slate-400 text-xs mt-1">Renseignez les informations pour mettre à jour instantanément la boutique en ligne.</p>
+                <p className="text-slate-400 text-xs mt-1">Renseignez les informations pour mettre à jour instantanément la boutique en ligne sur tous vos appareils.</p>
               </div>
 
               <form onSubmit={handleAddProduct} className="grid grid-cols-1 md:grid-cols-2 gap-4">
