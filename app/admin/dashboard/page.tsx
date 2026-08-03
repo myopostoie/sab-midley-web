@@ -79,6 +79,9 @@ export default function AdminDashboard() {
   const saveProductsToStorage = (newProductsList: any[]) => {
     setProducts(newProductsList);
     localStorage.setItem('sabmidley_products', JSON.stringify(newProductsList));
+    
+    // Déclencheur personnalisé instantané pour la page boutique
+    window.dispatchEvent(new Event('sabmidley_products_updated'));
   };
 
   const [newTitle, setNewTitle] = useState('');
