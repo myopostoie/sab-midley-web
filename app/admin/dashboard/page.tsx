@@ -1,537 +1,500 @@
 'use client';
-
 import { useState, useEffect } from 'react';
+import { productsList as initialProducts } from './products';
+import jsPDF from 'jspdf';
 
-const PARTNERS_LIST = [
-  { id: 1, name: "AGBO BORIS", code: "RC26BJ6646849", phone: "229 90 70 07 70", country: "BENIN", date: "juillet 2026" },
-  { id: 2, name: "AGONSANOU AMOUR GBEMANYITEMEDE TAGNON", code: "RC26BJ6383633", phone: "229 98 98 67 34", country: "BENIN", date: "juillet 2026" },
-  { id: 3, name: "Félicien Adantohoude", code: "RC268759570974", phone: "229 65 85 83 03", country: "BENIN", date: "juillet 2026" },
-  { id: 4, name: "Vivien HOSSOU", code: "RC26BJ79373", phone: "229 69 27 21 27", country: "BENIN", date: "juillet 2026" },
-  { id: 5, name: "Sokou Dépouillé", code: "RC26BJ738373", phone: "229 93 96 18 84", country: "BENIN", date: "juillet 2026" },
-  { id: 6, name: "GUIDIGAN Jaures", code: "RC26BJ6376363", phone: "229 69 06 70 53", country: "BENIN", date: "juillet 2026" },
-  { id: 7, name: "WINGNON Ricardo", code: "RC26BJ748840", phone: "229 56 60 20 74", country: "BENIN", date: "juillet 2026" },
-  { id: 8, name: "HOSSOU vivien", code: "RC26BJ79373", phone: "229 69 27 21 27", country: "BENIN", date: "juillet 2026" },
-  { id: 9, name: "SEMEVO Emmel", code: "RC26BJ374949", phone: "229 40 58 75 45", country: "BENIN", date: "juillet 2026" },
-  { id: 10, name: "MAMADOU MIcheline", code: "RC26BJ5293673", phone: "229 60 76 68 58", country: "BENIN", date: "juillet 2026" },
-  { id: 11, name: "Damase TONASSE", code: "RC26BJGDAO", phone: "", country: "BENIN", date: "juillet 2026" },
-  { id: 12, name: "Ola Roche", code: "RC26BJ069594", phone: "229 99 45 71 46", country: "BENIN", date: "juillet 2026" },
-  { id: 13, name: "OSIRI COSMER", code: "RC26BJ0373", phone: "229 96 88 18 97", country: "BENIN", date: "juillet 2026" },
-  { id: 14, name: "ADANTOHOUDE romain", code: "RC268759570974", phone: "229 65 85 83 03", country: "BENIN", date: "juillet 2026" },
-  { id: 15, name: "HOUNNOU XAVIER", code: "RC26BJ53946", phone: "229 43 78 50 96", country: "BENIN", date: "juillet 2026" },
-  { id: 16, name: "Folly bernice", code: "RC26BJ063937", phone: "229 54 97 40 99", country: "BENIN", date: "juillet 2026" },
-  { id: 17, name: "RAMA KOUNOUTO", code: "RC26BJ58262", phone: "229 66 28 33 24", country: "BENIN", date: "juillet 2026" },
-  { id: 18, name: "jaures GUIDIGAN", code: "RC26BJ6376363", phone: "229 69 06 70 53", country: "BENIN", date: "juillet 2026" },
-  { id: 19, name: "SALOU Issslamiath", code: "RC26BJ6393", phone: "229 90 93 53 26", country: "BENIN", date: "juillet 2026" },
-  { id: 20, name: "wadoud BIGNINOU", code: "RC26BJ3758", phone: "229 67 52 86 32", country: "BENIN", date: "juillet 2026" },
-  { id: 21, name: "yves GNANHOUN", code: "RC26BJ73939", phone: "229 96 61 22 37", country: "BENIN", date: "juillet 2026" },
-  { id: 22, name: "AHONSOU Simon", code: "RC26BJ629292", phone: "229 62 67 44 22", country: "BENIN", date: "juillet 2026" },
-  { id: 23, name: "Nico IKPADON", code: "RC26BJ26858", phone: "229 52 99 10 97", country: "BENIN", date: "juillet 2026" },
-  { id: 24, name: "AGOSSOU Edguard", code: "RC26BJ58303", phone: "229 40 57 90 50", country: "BENIN", date: "juillet 2026" },
-  { id: 25, name: "Goudodessi Dieu Beni", code: "RC26BJ64474", phone: "229 43 17 44 27", country: "BENIN", date: "juillet 2026" },
-  { id: 26, name: "CHABIGADO", code: "RC26BJ53393", phone: "229 50 50 48 10", country: "BENIN", date: "juillet 2026" }
-];
-
-export default function AdminDashboard() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [step, setStep] = useState<'credentials' | 'secret'>('credentials');
+export default function Home() {
+  const [productsList, setProductsList] = useState<any[]>(initialProducts);
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+  const [orderProduct, setOrderProduct] = useState<any>(null);
+  const [orderSuccess, setOrderSuccess] = useState<any>(null);
   
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [secretAnswer, setSecretAnswer] = useState('');
-  const [currentUserRole, setCurrentUserRole] = useState('');
+  const [mobileMenuOpen, setMobileMenuOpen] = useState<any>(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  
+  const [fedapayLoaded, setFedapayLoaded] = useState(false);
+  const [editingProduct, setEditingProduct] = useState<any>(null);
 
-  const [activeTab, setActiveTab] = useState<'orders' | 'partners' | 'products'>('orders');
-  const [orders, setOrders] = useState<any[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [products, setProducts] = useState<any[]>([]);
+  const [activeTab, setActiveTab] = useState<'accueil' | 'partenaire'>('accueil');
+  const [partnerLoggedIn, setPartnerLoggedIn] = useState(false);
+  const [universalPasswordInput, setUniversalPasswordInput] = useState('');
+  
+  const UNIVERSAL_PARTNER_PASSWORD = 'rcsabmidley2026';
 
-  // 🔑 Tes clés JSONBin intégrées
-  const BIN_ID = '6a70e40bda38895dfeb502bb'; 
-  const API_KEY = '$2a$10$j7cMEnY0wys4AhMpQIYXhe11Z5wI5bgWCY1qSNxVzCFajdeWF6nVW';
-
-  // Fonction pour charger les produits depuis le Cloud
-  const fetchProductsFromCloud = async () => {
-    try {
-      const response = await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}/latest`, {
-        headers: { 'X-Master-Key': API_KEY }
-      });
-      const data = await response.json();
-      if (data && data.record) {
-        setProducts(data.record);
-      }
-    } catch (e) {
-      console.error("Erreur de chargement cloud des produits", e);
-    }
-  };
-
+  // Chargement sécurisé du script FedaPay
   useEffect(() => {
-    fetchProductsFromCloud();
+    if (typeof window !== 'undefined') {
+      if ((window as any).FedaPay) {
+        setFedapayLoaded(true);
+        return;
+      }
+      if (document.getElementById('fedapay-script')) {
+        setFedapayLoaded(true);
+        return;
+      }
+      const script = document.createElement('script');
+      script.id = 'fedapay-script';
+      script.src = 'https://cdn.fedapay.com/checkout.js?v=1.1.7';
+      script.async = true;
+      script.onload = () => setFedapayLoaded(true);
+      document.body.appendChild(script);
+    }
+
+    const handleScroll = () => {
+      setShowScrollTop(window.scrollY > 300);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Fonction pour sauvegarder et propager sur tous les appareils
-  const saveProductsToCloud = async (newProductsList: any[]) => {
-    setProducts(newProductsList);
+  const [formData, setFormData] = useState({
+    fullName: '',
+    email: '',
+    country: 'BJ',
+    city: '',
+    address: '',
+    district: '',
+    indications: '',
+    phone: '',
+    partnerCode: '',
+  });
+
+  const handleInputChange = (e: any) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleUniversalLogin = (e: any) => {
+    e.preventDefault();
+    if (universalPasswordInput.trim() === UNIVERSAL_PARTNER_PASSWORD) {
+      setPartnerLoggedIn(true);
+    } else {
+      alert("Mot de passe incorrect. Veuillez vérifier le code d'accès.");
+    }
+  };
+
+  const saveOrderToGoogleSheets = async (orderData: any) => {
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyCLzeK1mr3pccEO2Hc1UVtd-qA_SZe4uKQkpVr1ZP063mTc317JAAGcnPYWTb5pzuW/exec';
     try {
-      await fetch(`https://api.jsonbin.io/v3/b/${BIN_ID}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-Master-Key': API_KEY
-        },
-        body: JSON.stringify(newProductsList)
+      await fetch(scriptURL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData),
       });
-    } catch (e) {
-      console.error("Erreur de sauvegarde cloud", e);
-    }
-  };
-
-  const [newTitle, setNewTitle] = useState('');
-  const [newPrice, setNewPrice] = useState('');
-  const [newStatus, setNewStatus] = useState('En stock');
-  const [newSummary, setNewSummary] = useState('');
-  const [newDescription, setNewDescription] = useState('');
-  const [newImage, setNewImage] = useState('');
-  const [selectedProduct, setSelectedProduct] = useState<any | null>(null);
-
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbyCLzeK1mr3pccEO2Hc1UVtd-qA_SZe4uKQkpVr1ZP063mTc317JAAGcnPYWTb5pzuW/exec';
-
-  const fetchOrdersFromGoogleSheets = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch(scriptURL);
-      const data = await response.json();
-      
-      if (data && data.orders && Array.isArray(data.orders)) {
-        const formattedOrders = data.orders.map((item: any, index: number) => ({
-          id: `SM-2026-${index + 1000}`,
-          rowIndex: item.rowIndex,
-          date: item.date || '',
-          client: item.fullName || 'Inconnu',
-          phone: item.phone || '',
-          product: item.productTitle || '',
-          price: item.price || '0 XOF',
-          city: item.city || '',
-          parrain: item.partnerCode || 'Aucun',
-          status: item.status || 'Payé / En préparation'
-        }));
-        setOrders(formattedOrders);
-      }
     } catch (error) {
-      console.error('Erreur lors du chargement des commandes :', error);
-    } finally {
-      setLoading(false);
+      console.error("Erreur Google Sheets:", error);
     }
   };
 
-  const handleCheckCredentials = (e: React.FormEvent) => {
-    e.preventDefault();
-    const cleanUser = username.trim().toLowerCase();
-    const cleanPass = password.trim();
+  const generatePDFReceipt = (orderData: any) => {
+    const doc = new jsPDF();
+    doc.setFillColor(9, 10, 12);
+    doc.rect(0, 0, 210, 40, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(22);
+    doc.text('SAB MIDLEY', 20, 25);
+    doc.setTextColor(212, 175, 55);
+    doc.setFontSize(10);
+    doc.text('REÇU DE PAIEMENT OFFICIEL', 135, 25); 
+    
+    doc.setTextColor(50, 50, 50);
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Référence: #SM-${Math.floor(100000 + Math.random() * 900000)}`, 20, 55);
+    doc.text(`Date: ${orderData.date}`, 20, 62);
+    doc.text(`Moyen de paiement: FedaPay (Mobile Money / Carte)`, 20, 69);
 
-    if (cleanUser === 'paradize' && cleanPass === 'hongkong') {
-      setCurrentUserRole('admin');
-      setStep('secret');
-    } else if (cleanUser === 'papa' && cleanPass === 'vanice') {
-      setCurrentUserRole('director');
-      setStep('secret');
-    } else {
-      alert('Identifiant ou mot de passe incorrect.');
-    }
+    doc.setDrawColor(200, 200, 200);
+    doc.setFillColor(248, 250, 252);
+    doc.roundedRect(20, 85, 170, 45, 3, 3, 'FD');
+    doc.setFont('helvetica', 'bold');
+    doc.text('Informations du Client & Livraison :', 25, 93);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Nom: ${orderData.fullName}`, 25, 101);
+    doc.text(`Email: ${orderData.email} | Tel : ${orderData.phone}`, 25, 108);
+    doc.text(`Adresse: ${orderData.address} - Quartier: ${orderData.district}`, 25, 115);
+    doc.text(`Ville/Pays: ${orderData.city} (${orderData.country})`, 25, 122);
+
+    doc.setFillColor(9, 10, 12);
+    doc.rect(20, 138, 170, 10, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('helvetica', 'bold');
+    doc.text("Désignation de l'Article", 25, 144);
+    doc.text('Montant', 150, 144);
+
+    doc.setTextColor(50, 50, 50);
+    doc.setFont('helvetica', 'normal');
+    doc.text(orderData.productTitle, 25, 158);
+    doc.setFont('helvetica', 'bold');
+    doc.text(orderData.price, 150, 158);
+
+    doc.setDrawColor(200, 200, 200);
+    doc.line(20, 168, 190, 168);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Sous-total:', 120, 178);
+    doc.text(orderData.price, 150, 178);
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(12);
+    doc.setTextColor(212, 175, 55);
+    doc.text('Total Payé :', 120, 198);
+    doc.text(orderData.price, 150, 198);
+
+    doc.save(`Recu_SAB_MIDLEY_${orderData.fullName.replace(/\s+/g, '_')}.pdf`);
   };
 
-  const handleCheckSecret = (e: React.FormEvent) => {
+  const handleOrderSubmit = (e: any) => {
     e.preventDefault();
-    const cleanAnswer = secretAnswer.trim().toLowerCase();
-
-    if (currentUserRole === 'admin' && cleanAnswer === 'love') {
-      setIsAuthenticated(true);
-      fetchOrdersFromGoogleSheets();
-    } else if (currentUserRole === 'director' && cleanAnswer === 'manhia') {
-      setIsAuthenticated(true);
-      fetchOrdersFromGoogleSheets();
-    } else {
-      alert('Réponse à la question secrète incorrecte.');
+    if (!formData.fullName || !formData.city || !formData.phone || !formData.country || !formData.address || !formData.district) {
+      alert('Veuillez remplir tous les champs obligatoires.');
+      return;
     }
-  };
+    if (!orderProduct || !orderProduct.price) {
+      alert('Erreur: Aucun produit sélectionné.');
+      return;
+    }
 
-  const handleAddProduct = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!newTitle || !newPrice) return;
+    const rawPrice = String(orderProduct.price);
+    const cleanedPrice = rawPrice.replace(/[^0-9]/g, '');
+    const amount = parseInt(cleanedPrice, 10);
 
-    const newProd = {
-      id: Date.now(),
-      title: newTitle,
-      price: newPrice,
-      status: newStatus,
-      summary: newSummary || 'Aucun résumé court.',
-      description: newDescription || 'Aucune description détaillée fournie.',
-      image: newImage || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400'
+    if (isNaN(amount) || amount <= 0) {
+      alert('Erreur: Le montant du produit est invalide.');
+      return;
+    }
+
+    const cleanPhone = formData.phone.replace(/[^0-9+]/g, '').trim();
+    let clientEmail = formData.email ? formData.email.trim() : `client_${Date.now()}@sabmidley.co`;
+    
+    const nameParts = formData.fullName.trim().split(' ');
+    const firstname = nameParts[0] ? nameParts[0].trim() : 'Client';
+    const lastname = nameParts.slice(1).join(' ').trim() || 'Client';
+    const descriptionText = `Commande: ${orderProduct.title}`.replace(/["\\]/g, '');
+
+    const handleSuccessfulPayment = async () => {
+      const completedOrder = {
+        fullName: formData.fullName,
+        email: clientEmail,
+        productTitle: orderProduct.title,
+        price: orderProduct.price,
+        city: formData.city,
+        address: formData.address,
+        district: formData.district,
+        indications: formData.indications,
+        phone: formData.phone,
+        country: formData.country,
+        partnerCode: formData.partnerCode || 'Aucun',
+        date: new Date().toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+      };
+
+      await saveOrderToGoogleSheets(completedOrder);
+      setOrderProduct(null);
+      setSelectedProduct(null);
+      setOrderSuccess(completedOrder);
+      generatePDFReceipt(completedOrder);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
-    const updatedList = [newProd, ...products];
-    await saveProductsToCloud(updatedList);
-
-    setNewTitle('');
-    setNewPrice('');
-    setNewSummary('');
-    setNewDescription('');
-    setNewImage('');
-    alert('Article ajouté avec succès et synchronisé sur tous vos appareils (PC & Mobile) !');
-  };
-
-  const handleDeleteProduct = async (id: number) => {
-    if (confirm('Voulez-vous vraiment retirer cet article du catalogue ?')) {
-      const updatedList = products.filter(p => p.id !== id);
-      await saveProductsToCloud(updatedList);
-      setSelectedProduct(null);
+    const FedaPayObj = (window as any).FedaPay;
+    if (FedaPayObj && typeof FedaPayObj.init === 'function') {
+      try {
+        const widget = FedaPayObj.init({
+          public_key: 'pk_live_63P5upxQrTGI6nS7aZWlmujt',
+          transaction: {
+            amount: Number(amount),
+            description: descriptionText,
+            currency: { iso: 'XOF' }
+          },
+          customer: {
+            firstname: String(firstname),
+            lastname: String(lastname),
+            email: String(clientEmail),
+            phone_number: String(cleanPhone),
+            country: String(formData.country)
+          },
+          onComplete: (resp: any) => {
+            if (resp && (resp.reason === 'CHECKOUT_COMPLETE' || resp.status === 'approved' || resp.transaction)) {
+              handleSuccessfulPayment();
+            }
+          }
+        });
+        widget.open();
+      } catch (err) {
+        console.error("Erreur d'initialisation FedaPay:", err);
+        alert("Une erreur est survenue lors de l'ouverture du module de paiement.");
+      }
+    } else {
+      alert("Le module FedaPay charge encore. Veuillez patienter quelques secondes et réessayer.");
     }
   };
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
-        <div className="bg-slate-900 border border-slate-800 p-8 rounded-3xl max-w-md w-full space-y-6 shadow-2xl">
-          <div className="text-center space-y-2">
-            <span className="text-xs font-semibold text-amber-400 uppercase tracking-wider">Sécurité SAB MIDLEY</span>
-            <h1 className="text-2xl font-extrabold text-white">Connexion Back-office</h1>
-            <p className="text-slate-400 text-xs">
-              {step === 'credentials' ? 'Veuillez entrer vos identifiants.' : 'Question de sécurité requise.'}
-            </p>
-          </div>
+  const handleImageUpload = (e: any, setImagesList: (imgs: string[]) => void, currentList: string[]) => {
+    const files = Array.from(e.target.files) as File[];
+    if (files.length === 0) return;
 
-          {step === 'credentials' ? (
-            <form onSubmit={handleCheckCredentials} className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Nom d'utilisateur</label>
-                <input 
-                  type="text" 
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  placeholder="Ex: paradize ou papa"
-                  required
-                  className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-amber-500 outline-none text-sm"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Mot de passe</label>
-                <input 
-                  type="password" 
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Votre mot de passe"
-                  required
-                  className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-amber-500 outline-none text-sm"
-                />
-              </div>
-              <button 
-                type="submit"
-                className="w-full py-3.5 rounded-xl bg-amber-500 text-slate-950 font-bold hover:bg-amber-400 transition text-sm shadow-lg shadow-amber-500/20"
-              >
-                Suivant
-              </button>
-            </form>
-          ) : (
-            <form onSubmit={handleCheckSecret} className="space-y-4">
-              <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 text-center space-y-1">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-amber-400">Question secrète</span>
-                <p className="text-white font-bold text-sm">why ?</p>
-              </div>
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-1">Votre réponse</label>
-                <input 
-                  type="password" 
-                  value={secretAnswer}
-                  onChange={(e) => setSecretAnswer(e.target.value)}
-                  placeholder="Entrez la réponse secrète"
-                  required
-                  autoFocus
-                  className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white focus:border-amber-500 outline-none text-sm"
-                />
-              </div>
-              <div className="flex gap-2">
-                <button 
-                  type="button"
-                  onClick={() => { setStep('credentials'); setPassword(''); setSecretAnswer(''); }}
-                  className="w-1/3 py-3 rounded-xl bg-slate-800 text-slate-300 font-semibold hover:bg-slate-700 transition text-xs"
-                >
-                  Retour
-                </button>
-                <button 
-                  type="submit"
-                  className="w-2/3 py-3 rounded-xl bg-amber-500 text-slate-950 font-bold hover:bg-amber-400 transition text-xs shadow-lg shadow-amber-500/20"
-                >
-                  Valider l'accès
-                </button>
-              </div>
-            </form>
-          )}
-        </div>
-      </div>
-    );
-  }
+    const newImages: string[] = [...currentList];
+    files.slice(0, 3 - newImages.length).forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = (uploadEvent) => {
+        if (uploadEvent.target?.result) {
+          newImages.push(uploadEvent.target.result as string);
+          setImagesList([...newImages]);
+        }
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const handleSaveEditedProduct = (e: any) => {
+    e.preventDefault();
+    setProductsList(productsList.map(p => p.id === editingProduct.id ? editingProduct : p));
+    setEditingProduct(null);
+    alert('Article mis à jour avec succès !');
+  };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 p-6 md:p-10">
-      <div className="max-w-7xl mx-auto space-y-8">
-        
-        <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-slate-800 pb-6 gap-4">
-          <div>
-            <span className="text-xs font-semibold text-amber-400 uppercase tracking-wider">
-              Administration Générale ({currentUserRole === 'admin' ? 'Admin: paradize' : 'Directeur: papa'})
-            </span>
-            <h1 className="text-3xl font-extrabold text-white mt-1">Tableau de Bord SAB MIDLEY</h1>
-          </div>
-          <div className="flex items-center gap-3">
-            <button 
-              onClick={fetchOrdersFromGoogleSheets}
-              className="px-4 py-2 rounded-xl bg-amber-500/10 text-amber-400 hover:bg-amber-500/20 border border-amber-500/30 text-xs font-semibold transition"
-            >
-              🔄 Actualiser les données
-            </button>
-            <button 
-              onClick={() => { setIsAuthenticated(false); setStep('credentials'); setPassword(''); setSecretAnswer(''); }}
-              className="px-4 py-2 rounded-xl bg-slate-900 text-slate-300 hover:text-white border border-slate-800 text-xs font-semibold transition"
-            >
-              Se déconnecter
+    <div className="min-h-screen bg-[#090A0C] text-slate-100 font-sans relative">
+      <div className="bg-[#D4AF37] text-[#090A0C] text-xs md:text-sm font-bold py-2.5 px-4 text-center tracking-wide">
+        Expansion Régionale en cours: Bénin, Côte d'Ivoire & Burkina Faso
+      </div>
+
+      <header className="sticky top-0 z-40 bg-[#090A0C]/90 backdrop-blur-md border-b border-[#D4AF37]/20">
+        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+          <button onClick={() => setActiveTab('accueil')} className="text-xl font-black text-white tracking-wider text-left">
+            SAB <span className="text-[#D4AF37]">MIDLEY</span>
+          </button>
+
+          <nav className="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
+            <button onClick={() => setActiveTab('accueil')} className={`${activeTab === 'accueil' ? 'text-[#D4AF37]' : 'text-slate-300'} hover:text-white transition`}>Accueil</button>
+            <a href="#boutique" onClick={() => setActiveTab('accueil')} className="hover:text-[#D4AF37] transition">Boutique & Négoce</a>
+          </nav>
+
+          <div className="hidden md:flex items-center space-x-4">
+            <button onClick={() => setActiveTab('partenaire')} className={`px-5 py-2.5 rounded-lg font-bold text-sm transition shadow-md ${activeTab === 'partenaire' ? 'bg-white text-[#090A0C]' : 'bg-[#D4AF37] text-[#090A0C] hover:bg-[#c5a030]'}`}>
+              Portail Partenaire
             </button>
           </div>
         </div>
+      </header>
 
-        {/* Navigation par onglets */}
-        <div className="flex space-x-3 border-b border-slate-800 pb-4 overflow-x-auto">
-          <button 
-            onClick={() => setActiveTab('orders')}
-            className={`px-5 py-2.5 rounded-xl font-bold text-xs transition whitespace-nowrap ${activeTab === 'orders' ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20' : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'}`}
-          >
-            📦 Gestion des Commandes ({orders.length})
-          </button>
-          <button 
-            onClick={() => setActiveTab('products')}
-            className={`px-5 py-2.5 rounded-xl font-bold text-xs transition whitespace-nowrap ${activeTab === 'products' ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20' : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'}`}
-          >
-            🏷️ Gestion des Produits & Stocks ({products.length})
-          </button>
-          <button 
-            onClick={() => setActiveTab('partners')}
-            className={`px-5 py-2.5 rounded-xl font-bold text-xs transition whitespace-nowrap ${activeTab === 'partners' ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20' : 'bg-slate-900 text-slate-400 hover:text-white border border-slate-800'}`}
-          >
-            🤝 Réseau des Partenaires ({PARTNERS_LIST.length})
-          </button>
-        </div>
-
-        {/* ONGLET PRODUITS */}
-        {activeTab === 'products' && (
-          <div className="space-y-8">
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-6">
-              <div className="border-b border-slate-800 pb-4">
-                <h2 className="text-xl font-bold text-white">➕ Ajouter un nouvel article au catalogue</h2>
-                <p className="text-slate-400 text-xs mt-1">Renseignez les informations pour mettre à jour instantanément la boutique en ligne sur tous vos appareils.</p>
+      {activeTab === 'partenaire' ? (
+        <section className="py-16 px-6 max-w-4xl mx-auto min-h-[75vh] flex flex-col justify-center">
+          {!partnerLoggedIn ? (
+            <div className="bg-slate-900 border border-[#D4AF37]/40 rounded-3xl p-8 md:p-12 shadow-2xl space-y-8">
+              <div className="text-center space-y-3">
+                <span className="text-xs font-bold px-3 py-1 rounded bg-[#D4AF37]/20 text-[#D4AF37] tracking-wider uppercase">Accès Réservé Partenaires</span>
+                <h2 className="text-3xl font-extrabold text-white">Portail Partenaire RC SAB MIDLEY</h2>
               </div>
-
-              <form onSubmit={handleAddProduct} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs font-semibold uppercase text-slate-400 mb-1">Nom / Titre du produit</label>
-                  <input 
-                    type="text"
-                    value={newTitle}
-                    onChange={(e) => setNewTitle(e.target.value)}
-                    placeholder="Ex: Montre de Luxe"
-                    required
-                    className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:border-amber-500 outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold uppercase text-slate-400 mb-1">Prix</label>
-                  <input 
-                    type="text"
-                    value={newPrice}
-                    onChange={(e) => setNewPrice(e.target.value)}
-                    placeholder="Ex: 45 000 XOF"
-                    required
-                    className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:border-amber-500 outline-none"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold uppercase text-slate-400 mb-1">Statut du stock</label>
-                  <select 
-                    value={newStatus}
-                    onChange={(e) => setNewStatus(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:border-amber-500 outline-none"
-                  >
-                    <option value="En stock">🟢 En stock</option>
-                    <option value="Bientôt en stock">🟡 Bientôt en stock</option>
-                    <option value="Rupture de stock">🔴 Rupture de stock</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-xs font-semibold uppercase text-slate-400 mb-1">Lien de l'image (URL)</label>
-                  <input 
-                    type="url"
-                    value={newImage}
-                    onChange={(e) => setNewImage(e.target.value)}
-                    placeholder="https://..."
-                    className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:border-amber-500 outline-none"
-                  />
-                </div>
-
-                <div className="md:col-span-2">
-                  <label className="block text-xs font-semibold uppercase text-slate-400 mb-1">Petit résumé (accroche courte)</label>
-                  <input 
-                    type="text"
-                    value={newSummary}
-                    onChange={(e) => setNewSummary(e.target.value)}
-                    placeholder="Ex: Idéal pour un usage quotidien..."
-                    className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:border-amber-500 outline-none"
-                  />
-                </div>
-
-                <div className="md:col-span-2">
-                  <label className="block text-xs font-semibold uppercase text-slate-400 mb-1">Description complète</label>
-                  <textarea 
-                    rows={3}
-                    value={newDescription}
-                    onChange={(e) => setNewDescription(e.target.value)}
-                    placeholder="Détails complets, spécifications techniques, garanties..."
-                    className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:border-amber-500 outline-none"
-                  />
-                </div>
-
-                <div className="md:col-span-2 pt-2">
-                  <button 
-                    type="submit"
-                    className="w-full py-3.5 rounded-xl bg-amber-500 text-slate-950 font-bold hover:bg-amber-400 transition text-xs shadow-lg shadow-amber-500/20"
-                  >
-                    Publier l'article immédiatement
-                  </button>
-                </div>
+              <form onSubmit={handleUniversalLogin} className="space-y-6 max-w-md mx-auto w-full">
+                <input
+                  type="password"
+                  value={universalPasswordInput}
+                  onChange={(e) => setUniversalPasswordInput(e.target.value)}
+                  placeholder="Mot de passe universel"
+                  required
+                  className="w-full px-4 py-3.5 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none text-sm"
+                />
+                <button type="submit" className="w-full py-4 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold hover:bg-[#c5a030] transition">
+                  Entrer sur le portail
+                </button>
               </form>
             </div>
-
-            {/* Liste des articles */}
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-6">
-              <h2 className="text-xl font-bold text-white">📦 Catalogue actuel ({products.length})</h2>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {products.map((prod) => (
-                  <div key={prod.id} className="bg-slate-950 border border-slate-800 rounded-2xl p-4 space-y-3 flex flex-col justify-between">
-                    <div className="space-y-2">
-                      <img src={prod.image} alt={prod.title} className="w-full h-36 object-cover rounded-xl border border-slate-800" />
-                      <h3 className="font-bold text-white text-sm">{prod.title}</h3>
-                      <p className="text-amber-400 font-extrabold text-sm">{prod.price}</p>
-                      <p className="text-slate-400 text-xs line-clamp-2">{prod.summary}</p>
-                      <span className="inline-block px-2.5 py-1 rounded-md bg-slate-900 text-slate-300 text-[11px] border border-slate-800">
-                        {prod.status}
-                      </span>
-                    </div>
-                    
-                    <div className="flex gap-2 pt-2">
-                      <button 
-                        onClick={() => setSelectedProduct(prod)}
-                        className="flex-1 py-2 rounded-xl bg-slate-900 text-amber-400 hover:bg-slate-800 border border-slate-800 text-xs font-semibold transition"
-                      >
-                        👁️ Visualiser
-                      </button>
-                      <button 
-                        onClick={() => handleDeleteProduct(prod.id)}
-                        className="py-2 px-3 rounded-xl bg-red-950/40 text-red-400 hover:bg-red-900/50 border border-red-500/30 text-xs transition"
-                      >
-                        🗑️
-                      </button>
-                    </div>
-                  </div>
-                ))}
+          ) : (
+            <div className="bg-slate-900 border border-[#D4AF37]/40 rounded-3xl p-8 md:p-12 shadow-2xl space-y-6">
+              <div className="flex justify-between items-center border-b border-slate-800 pb-6">
+                <h2 className="text-2xl font-extrabold text-white">Espace Partenaire Actif</h2>
+                <button onClick={() => setPartnerLoggedIn(false)} className="px-4 py-2 rounded-xl bg-slate-800 text-slate-300 text-xs">Fermer la session</button>
+              </div>
+              <p className="text-slate-300 text-sm">Bienvenue dans le réseau commercial RC SAB MIDLEY.</p>
+            </div>
+          )}
+        </section>
+      ) : (
+        <>
+          {orderSuccess && (
+            <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+              <div className="bg-slate-900 border border-emerald-500/50 rounded-3xl p-8 max-w-lg w-full text-center space-y-6 shadow-2xl">
+                <div className="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto text-3xl font-bold">✓</div>
+                <div className="space-y-2">
+                  <h3 className="text-2xl font-bold text-white">Paiement validé avec succès !</h3>
+                  <p className="text-slate-400 text-sm">Merci {orderSuccess.fullName}, votre commande a bien été enregistrée.</p>
+                </div>
+                <div className="flex space-x-3">
+                  <button onClick={() => generatePDFReceipt(orderSuccess)} className="flex-1 py-3 bg-[#D4AF37] text-[#090A0C] font-bold rounded-xl text-xs hover:bg-[#c5a030] transition">
+                    Télécharger le reçu PDF
+                  </button>
+                  <button onClick={() => setOrderSuccess(null)} className="px-5 py-3 bg-slate-800 text-white font-semibold rounded-xl text-xs">
+                    Fermer
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* Modale de visualisation d'un article */}
-        {selectedProduct && (
-          <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-            <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full p-6 md:p-8 space-y-6 relative shadow-2xl">
-              <button 
-                onClick={() => setSelectedProduct(null)}
-                className="absolute top-4 right-4 text-slate-400 hover:text-white text-lg font-bold bg-slate-800 w-8 h-8 rounded-full flex items-center justify-center"
-              >
-                ✕
-              </button>
-
-              <div className="space-y-4">
-                <img src={selectedProduct.image} alt={selectedProduct.title} className="w-full h-56 object-cover rounded-2xl border border-slate-800" />
-                <div className="space-y-1">
-                  <span className="text-xs font-semibold text-amber-400 uppercase">{selectedProduct.status}</span>
+          {selectedProduct && (
+            <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+              <div className="bg-slate-900 border border-[#D4AF37]/40 rounded-3xl p-6 md:p-8 max-w-2xl w-full relative space-y-6">
+                <button onClick={() => setSelectedProduct(null)} className="absolute top-4 right-4 bg-slate-800 hover:bg-slate-700 text-white p-2 rounded-full text-xs font-bold transition">
+                  ✕ Fermer
+                </button>
+                <div className="h-72 rounded-2xl overflow-hidden">
+                  <img src={selectedProduct.image} alt={selectedProduct.title} className="w-full h-full object-cover" />
+                </div>
+                <div className="space-y-2">
+                  <span className="text-xs text-[#D4AF37] font-bold uppercase">{selectedProduct.price}</span>
                   <h2 className="text-2xl font-extrabold text-white">{selectedProduct.title}</h2>
-                  <p className="text-xl font-bold text-amber-400">{selectedProduct.price}</p>
+                  <p className="text-slate-300 text-sm leading-relaxed">{selectedProduct.description}</p>
+                </div>
+                <div className="flex space-x-4 pt-2">
+                  <button onClick={() => { setSelectedProduct(null); setOrderProduct(selectedProduct); }} className="flex-1 py-3 bg-[#D4AF37] text-[#090A0C] font-bold rounded-xl text-xs">
+                    Commander cet article
+                  </button>
+                  <button onClick={() => setSelectedProduct(null)} className="px-5 py-3 bg-slate-800 text-slate-300 font-semibold rounded-xl text-xs">
+                    Retour
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {orderProduct && (
+            <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+              <div className="bg-slate-900 border border-[#D4AF37]/40 rounded-3xl p-6 md:p-8 max-w-xl w-full relative space-y-6">
+                <button onClick={() => setOrderProduct(null)} className="absolute top-4 right-4 bg-slate-800 hover:bg-slate-700 text-white p-2 rounded-full text-xs font-bold transition">
+                  ✕ Fermer
+                </button>
+                <div className="space-y-1">
+                  <span className="text-xs text-[#D4AF37] font-bold">Finaliser l'achat</span>
+                  <h2 className="text-xl font-extrabold text-white">{orderProduct.title} ({orderProduct.price})</h2>
                 </div>
                 
-                <div className="space-y-2 bg-slate-950 p-4 rounded-2xl border border-slate-800">
-                  <h4 className="text-xs font-bold uppercase text-slate-400">Résumé</h4>
-                  <p className="text-slate-200 text-xs">{selectedProduct.summary}</p>
-                </div>
-
-                <div className="space-y-2 bg-slate-950 p-4 rounded-2xl border border-slate-800">
-                  <h4 className="text-xs font-bold uppercase text-slate-400">Description Complète</h4>
-                  <p className="text-slate-300 text-xs whitespace-pre-line">{selectedProduct.description}</p>
-                </div>
-              </div>
-
-              <button 
-                onClick={() => setSelectedProduct(null)}
-                className="w-full py-3 rounded-xl bg-slate-800 text-white font-bold hover:bg-slate-700 transition text-xs"
-              >
-                Fermer la vue détaillée
-              </button>
-            </div>
-          </div>
-        )}
-
-        {activeTab === 'orders' && (
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-6">
-            <h2 className="text-xl font-bold text-white">Suivi des Commandes</h2>
-            {loading ? (
-              <p className="text-slate-400 text-xs">Chargement des commandes depuis Google Sheets...</p>
-            ) : orders.length === 0 ? (
-              <p className="text-slate-400 text-xs">Aucune commande enregistrée pour le moment.</p>
-            ) : (
-              <div className="space-y-3">
-                {orders.map((order, idx) => (
-                  <div key={idx} className="bg-slate-950 border border-slate-800 p-4 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div className="space-y-1">
-                      <span className="text-[10px] font-bold text-amber-400 uppercase">{order.id} - {order.date}</span>
-                      <h4 className="font-bold text-white text-sm">{order.client} ({order.phone})</h4>
-                      <p className="text-slate-300 text-xs">Produit : <strong className="text-white">{order.product}</strong> ({order.price})</p>
-                      <p className="text-slate-400 text-xs">Ville : {order.city} | Parrain : {order.parrain}</p>
-                    </div>
-                    <span className="px-3 py-1 rounded-lg bg-emerald-950/40 text-emerald-400 border border-emerald-500/30 text-xs font-semibold">
-                      {order.status}
-                    </span>
+                <form onSubmit={handleOrderSubmit} className="space-y-4 text-xs">
+                  <div>
+                    <label className="block font-semibold uppercase text-slate-400 mb-1">Nom complet *</label>
+                    <input type="text" name="fullName" value={formData.fullName} onChange={handleInputChange} placeholder="Ex: Koffi Mensah" required className="w-full px-3.5 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none" />
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block font-semibold uppercase text-slate-400 mb-1">Téléphone (Mobile Money) *</label>
+                      <input type="text" name="phone" value={formData.phone} onChange={handleInputChange} placeholder="+229..." required className="w-full px-3.5 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none" />
+                    </div>
+                    <div>
+                      <label className="block font-semibold uppercase text-slate-400 mb-1">Email</label>
+                      <input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="email@example.com" className="w-full px-3.5 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none" />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block font-semibold uppercase text-slate-400 mb-1">Pays *</label>
+                      <select name="country" value={formData.country} onChange={handleInputChange} className="w-full px-3.5 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none">
+                        <option value="BJ">Bénin</option>
+                        <option value="CI">Côte d'Ivoire</option>
+                        <option value="BF">Burkina Faso</option>
+                        <option value="TG">Togo</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="block font-semibold uppercase text-slate-400 mb-1">Ville *</label>
+                      <input type="text" name="city" value={formData.city} onChange={handleInputChange} placeholder="Ex: Abomey-Calavi / Abidjan" required className="w-full px-3.5 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none" />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block font-semibold uppercase text-slate-400 mb-1">Adresse exacte *</label>
+                      <input type="text" name="address" value={formData.address} onChange={handleInputChange} placeholder="Ex: Maison bleue" required className="w-full px-3.5 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none" />
+                    </div>
+                    <div>
+                      <label className="block font-semibold uppercase text-slate-400 mb-1">Quartier *</label>
+                      <input type="text" name="district" value={formData.district} onChange={handleInputChange} placeholder="Ex: Cocody / Akogbato" required className="w-full px-3.5 py-3 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none" />
+                    </div>
+                  </div>
 
-        {activeTab === 'partners' && (
-          <div className="bg-slate-900 border border-slate-800 rounded-3xl p-6 md:p-8 space-y-6">
-            <h2 className="text-xl font-bold text-white">Réseau des Partenaires ({PARTNERS_LIST.length})</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {PARTNERS_LIST.map((partner) => (
-                <div key={partner.id} className="bg-slate-950 border border-slate-800 p-4 rounded-2xl space-y-2">
-                  <span className="text-[10px] font-bold text-amber-400">{partner.code}</span>
-                  <h4 className="font-bold text-white text-sm">{partner.name}</h4>
-                  <p className="text-slate-400 text-xs">📱 {partner.phone || 'Non renseigné'}</p>
-                  <p className="text-slate-500 text-[11px]">{partner.country} - {partner.date}</p>
+                  <div className="pt-2 flex space-x-3">
+                    <button type="submit" className="flex-1 py-3.5 bg-[#D4AF37] text-[#090A0C] font-bold rounded-xl hover:bg-[#c5a030] transition shadow-lg">
+                      Payer par FedaPay ({orderProduct.price})
+                    </button>
+                    <button type="button" onClick={() => setOrderProduct(null)} className="px-5 py-3.5 bg-slate-800 text-slate-300 font-semibold rounded-xl hover:bg-slate-700 transition">
+                      Annuler
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+
+          {editingProduct && (
+            <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+              <div className="bg-slate-900 border border-[#D4AF37]/40 rounded-3xl p-6 md:p-8 max-w-xl w-full relative space-y-6">
+                <button onClick={() => setEditingProduct(null)} className="absolute top-4 right-4 bg-slate-800 text-white p-2 rounded-full text-xs">✕ Fermer</button>
+                <h3 className="text-xl font-bold text-white">Modifier l'article</h3>
+                <form onSubmit={handleSaveEditedProduct} className="space-y-4 text-xs">
+                  <div>
+                    <label className="block uppercase text-slate-400 mb-1">Titre</label>
+                    <input type="text" value={editingProduct.title} onChange={(e) => setEditingProduct({...editingProduct, title: e.target.value})} className="w-full px-3 py-2.5 rounded-xl bg-[#090A0C] border border-slate-800 text-white" required />
+                  </div>
+                  <div>
+                    <label className="block uppercase text-slate-400 mb-1">Prix</label>
+                    <input type="text" value={editingProduct.price} onChange={(e) => setEditingProduct({...editingProduct, price: e.target.value})} className="w-full px-3 py-2.5 rounded-xl bg-[#090A0C] border border-slate-800 text-white" required />
+                  </div>
+                  <div>
+                    <label className="block uppercase text-slate-400 mb-1">Description</label>
+                    <textarea value={editingProduct.description} onChange={(e) => setEditingProduct({...editingProduct, description: e.target.value})} className="w-full px-3 py-2.5 rounded-xl bg-[#090A0C] border border-slate-800 text-white h-24" required />
+                  </div>
+                  <div>
+                    <label className="block uppercase text-slate-400 mb-1">Changer l'image (Fichier local)</label>
+                    <input type="file" accept="image/*" onChange={(e) => handleImageUpload(e, (imgs) => setEditingProduct({...editingProduct, image: imgs[0]}), [editingProduct.image])} className="w-full text-slate-400 text-xs" />
+                  </div>
+                  <button type="submit" className="w-full py-3 bg-[#D4AF37] text-[#090A0C] font-bold rounded-xl">Enregistrer</button>
+                </form>
+              </div>
+            </div>
+          )}
+
+          <section className="py-20 px-6 max-w-7xl mx-auto text-center space-y-8">
+            <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white max-w-4xl mx-auto leading-tight">
+              Votre Partenaire Stratégique en <span className="text-[#D4AF37]">Négoce et Services</span>
+            </h1>
+          </section>
+
+          <section id="boutique" className="py-20 px-6 max-w-7xl mx-auto border-t border-slate-900">
+            <div className="text-center space-y-3 mb-16">
+              <span className="text-xs font-bold px-3 py-1 rounded bg-[#D4AF37]/20 text-[#D4AF37] tracking-wider uppercase">Négoce & Distribution</span>
+              <h2 className="text-3xl font-extrabold text-white">Notre Catalogue de Produits</h2>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {productsList.map((product: any) => (
+                <div key={product.id} className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden flex flex-col justify-between hover:border-[#D4AF37]/40 transition">
+                  <div className="h-60 overflow-hidden relative">
+                    <img src={product.image} alt={product.title} className="w-full h-full object-cover" />
+                    <div className="absolute top-4 right-4 bg-[#090A0C]/90 backdrop-blur-md px-3 py-1 rounded-lg text-sm font-bold text-[#D4AF37] border border-[#D4AF37]/30">
+                      {product.price}
+                    </div>
+                  </div>
+                  <div className="p-6 space-y-4 flex-1 flex flex-col justify-between">
+                    <div className="space-y-2">
+                      <h3 className="text-lg font-bold text-white">{product.title}</h3>
+                      <p className="text-slate-400 text-xs line-clamp-2">{product.description}</p>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2 pt-2">
+                      <button onClick={() => setSelectedProduct(product)} className="py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-semibold text-xs transition">
+                        Détails
+                      </button>
+                      <button onClick={() => setOrderProduct(product)} className="py-2.5 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-xs hover:bg-[#c5a030] transition">
+                        Commander
+                      </button>
+                      <button onClick={() => setEditingProduct(product)} className="py-2.5 rounded-xl bg-slate-700 hover:bg-slate-600 text-slate-200 font-bold text-xs transition">
+                        Modifier
+                      </button>
+                    </div>
+                  </div>
                 </div>
               ))}
             </div>
-          </div>
-        )}
-
-      </div>
+          </section>
+        </>
+      )}
     </div>
   );
 }
