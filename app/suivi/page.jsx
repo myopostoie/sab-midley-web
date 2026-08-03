@@ -108,7 +108,7 @@ export default function SuiviPartenaire() {
                   activeTab === 'conseils' ? 'bg-[#D4AF37] text-[#090A0C]' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
                 }`}
               >
-                Conseils & Histoires de Succès
+                Conseils de vente & Support
               </button>
             </div>
 
@@ -164,44 +164,53 @@ export default function SuiviPartenaire() {
               </div>
             )}
 
-            {/* ONGLET 2 : CONSEILS MARKETING & HISTOIRES DE PERSÉVÉRANCE */}
+            {/* ONGLET 2 : CONSEILS DE VENTE & SUPPORT CLIENT */}
             {activeTab === 'conseils' && (
-              <div className="space-y-4 text-xs leading-relaxed max-h-[400px] overflow-y-auto pr-1">
+              <div className="space-y-4 text-xs leading-relaxed max-h-[420px] overflow-y-auto pr-1">
                 
-                {/* Stratégie Facebook & Marketplace */}
-                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
-                  <h3 className="font-bold text-[#D4AF37] text-sm">🏪 Stratégie Facebook & Marketplace</h3>
-                  <p className="text-slate-300">Ne publiez pas seulement "à vendre". Créez le besoin :</p>
-                  <ul className="list-disc list-inside space-y-1 text-slate-300 pl-2">
-                    <li>Utilisez des photos lumineuses prises directement des canaux WhatsApp.</li>
-                    <li>Mettez des prix clairs et précisez la zone (ex: <em>Disponible à Cotonou / Abidjan / Ouagadougou</em>).</li>
-                    <li>Renouvelez vos annonces tous les 3 jours pour rester en tête des recherches.</li>
-                  </ul>
+                {/* Introduction Assistance */}
+                <div className="p-4 rounded-2xl bg-[#D4AF37]/10 border border-[#D4AF37]/30 text-[#D4AF37] text-center space-y-1">
+                  <p className="font-bold text-sm">🤝 Nous sommes à vos côtés à chaque étape !</p>
+                  <p className="text-slate-300 text-[11px]">Notre équipe vous accompagne, vous forme et gère toute la logistique pour que vous puissiez vous concentrer uniquement sur vos ventes et vos profits.</p>
                 </div>
 
-                {/* Stratégie TikTok & Statuts */}
-                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-2">
-                  <h3 className="font-bold text-emerald-400 text-sm">🎬 Puissance des Statuts & TikTok</h3>
-                  <ul className="list-disc list-inside space-y-1 text-slate-300 pl-2">
-                    <li>Postez au moins 3 à 5 produits par jour sur vos statuts WhatsApp avec vos contacts.</li>
-                    <li>Sur TikTok, faites de courtes vidéos rythmées montrant l'utilité du produit.</li>
-                    <li>Rappelez toujours à la fin : <em>"Commandez via mon code RC [Votre Code]"</em>.</li>
-                  </ul>
+                {/* Section Astuces de Vente Avancées */}
+                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+                  <h3 className="font-bold text-[#D4AF37] text-sm">💡 Astuces de Vente Efficaces</h3>
+                  <div className="space-y-2 text-slate-300">
+                    <p>🔥 <strong>Créez l'urgence :</strong> Signalez à vos clients que les stocks sont limités pour déclencher l'achat immédiat.</p>
+                    <p>📸 <strong>Misez sur le visuel :</strong> Récupérez les photos nettes des canaux WhatsApp et postez-les partout (Statuts, Groupes, Facebook Marketplace).</p>
+                    <p>💬 <strong>La règle du premier contact :</strong> Soyez toujours chaleureux, réactif et posez des questions pour comprendre le vrai besoin du client.</p>
+                    <p>🏷️ <strong>N'oubliez jamais votre code :</strong> Rappelez à vos clients de mentionner votre code RC lors de leur commande pour sécuriser votre commission.</p>
+                  </div>
                 </div>
 
-                {/* Histoires et Leçons de Persévérance */}
-                <div className="p-4 rounded-2xl bg-[#D4AF37]/10 border border-[#D4AF37]/30 space-y-2">
-                  <h3 className="font-bold text-[#D4AF37] text-sm">📖 Leçon de Persévérance : L'effet de累積 (La constance)</h3>
-                  <p className="text-slate-200 italic">
-                    "Au début, le plus dur n'est pas de vendre, c'est de se faire connaître. Les plus grands vendeurs de notre réseau ont commencé avec zéro vente la première semaine. Ce qui a fait la différence ? Ils n'ont pas abandonné après 3 refus. Ils ont continué à poster chaque jour, à parler de leurs produits autour d'eux. La chance sourit à ceux qui persévèrent."
+                {/* Section Annonces (FB Marketplace & TikTok) */}
+                <div className="p-4 rounded-2xl bg-slate-950 border border-slate-800 space-y-3">
+                  <h3 className="font-bold text-emerald-400 text-sm">🚀 Optimiser vos Annonces (FB, TikTok & Statuts)</h3>
+                  <div className="space-y-2 text-slate-300">
+                    <p>📍 <strong>Facebook Marketplace :</strong> Utilisez des titres clairs et géolocalisés (ex: <em>"Article haut de gamme disponible - Livraison rapide"</em>). Renouvelez vos annonces régulièrement.</p>
+                    <p>🎬 <strong>TikTok & Reels :</strong> Filmez des vidéos courtes montrant l'article sous tous ses angles avec une musique tendance. Mettez un appel à l'action clair en description.</p>
+                    <p>🟢 <strong>Statuts WhatsApp :</strong> Publiez 3 à 5 produits par jour. C'est votre canal le plus puissant car vos contacts vous font déjà confiance.</p>
+                  </div>
+                </div>
+
+                {/* Section Contact / Support & Commande Client */}
+                <div className="p-4 rounded-2xl bg-slate-900 border border-[#D4AF37]/50 space-y-3 text-center">
+                  <h3 className="font-bold text-white text-sm">📞 Besoin d'aide ou d'effectuer une commande client ?</h3>
+                  <p className="text-slate-300 text-[11px]">
+                    Une question sur un produit, un client prêt à commander ou besoin d'un accompagnement personnalisé ? Contactez-nous directement !
                   </p>
-                  <p className="text-[11px] text-[#D4AF37] font-semibold pt-1">
-                    Règle d'or : Un client qui dit "non aujourd'hui" dira "oui le mois prochain" si vos statuts continuent de lui inspirer confiance.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-2xl bg-sky-950/30 border border-sky-500/30 text-sky-300 text-[11px] text-center">
-                  💡 <strong>Rappel :</strong> La constance bat le talent. Postez régulièrement, restez motivé, et regardez vos commissions grimper !
+                  <div className="pt-1">
+                    <a 
+                      href="https://wa.me/22969325576?text=Bonjour,%20je%20suis%20partenaire%20et%20j'ai%20besoin%20d'assistance%20pour%20une%20commande." 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="inline-block px-6 py-3 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-xs hover:bg-[#c5a030] transition shadow-lg"
+                    >
+                      Joindre le Support / Valider une commande
+                    </a>
+                  </div>
                 </div>
 
               </div>
