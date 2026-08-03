@@ -49,7 +49,7 @@ export default function SuiviPartenaire() {
                   type="text"
                   value={inputID}
                   onChange={(e) => setInputID(e.target.value)}
-                  placeholder="Ex: +22997000000"
+                  placeholder="Ex: +22969325576"
                   required
                   className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:border-[#D4AF37] outline-none"
                 />
@@ -61,7 +61,7 @@ export default function SuiviPartenaire() {
                   type="text"
                   value={inputCode}
                   onChange={(e) => setInputCode(e.target.value)}
-                  placeholder="Ex: RC001"
+                  placeholder="Ex: RC26"
                   required
                   className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:border-[#D4AF37] outline-none"
                 />
