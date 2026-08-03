@@ -196,14 +196,14 @@ export default function PartenairePage() {
                     <p className="font-bold text-amber-400 text-sm mb-1">BIENTÔT EN STOCK</p>
                     <p className="text-xs text-slate-300 leading-relaxed">Canal d'anticipation permettant de découvrir les prochains arrivages, les nouveautés en cours d'acheminement et de préparer vos ventes en amont.</p>
                   </div>
-                  <a href="https://whatsapp.com/channel/0029Vb8a9RgAzNc1IBH2X02D" target="_blank" rel="noopener noreferrer" className="px-4 py-2.5 rounded-lg bg-amber-600/25 text-amber-400 text-xs font-semibold text-center border border-amber-500/30 hover:bg-amber-600/40 transition">Rejoindre le canal</a>
+                  <a href="https://whatsapp.com/channel/0029Vb8a9RgAzNc1IBH2Xo2D" target="_blank" rel="noopener noreferrer" className="px-4 py-2.5 rounded-lg bg-amber-600/25 text-amber-400 text-xs font-semibold text-center border border-amber-500/30 hover:bg-amber-600/40 transition">Rejoindre le canal</a>
                 </div>
                 <div className="bg-slate-900 p-5 rounded-xl border border-slate-800 space-y-4 flex flex-col justify-between">
                   <div>
                     <p className="font-bold text-rose-400 text-sm mb-1">RUPTURE DE STOCK</p>
                     <p className="text-xs text-slate-300 leading-relaxed">Canal d'information répertoriant les articles momentanément indisponibles pour éviter de prendre des commandes sur des produits en rupture.</p>
                   </div>
-                  <a href="https://whatsapp.com/channel/0029VbDsUK6KbYMQEmAgCt30" target="_blank" rel="noopener noreferrer" className="px-4 py-2.5 rounded-lg bg-rose-600/25 text-rose-400 text-xs font-semibold text-center border border-rose-500/30 hover:bg-rose-600/40 transition">Rejoindre le canal</a>
+                  <a href="https://whatsapp.com/channel/0029VbDsUK6KbYMQEmAgCt3O" target="_blank" rel="noopener noreferrer" className="px-4 py-2.5 rounded-lg bg-rose-600/25 text-rose-400 text-xs font-semibold text-center border border-rose-500/30 hover:bg-rose-600/40 transition">Rejoindre le canal</a>
                 </div>
               </div>
             </div>
@@ -215,7 +215,7 @@ export default function PartenairePage() {
               <ul className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs text-slate-300 pt-2">
                 <li className="flex items-center space-x-2 bg-slate-900 p-3 rounded-xl border border-slate-800">
                   <span className="text-emerald-400 font-bold">•</span>
-                  <span>Jusqu’à 20 % de commission</span>
+                  <span>Entre 10 à 20 % de commission</span>
                 </li>
                 <li className="flex items-center space-x-2 bg-slate-900 p-3 rounded-xl border border-slate-800">
                   <span className="text-emerald-400 font-bold">•</span>
