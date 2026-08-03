@@ -1,8 +1,8 @@
 export const partenairesList = [
   {
-    identifiant: "+22997000000", // ou l'email
-    codeRc: "RC001",
-    nom: "Koffi Mensah",
+    identifiant: "+22996580081", // ou l'email
+    codeRc: "RC123",
+    nom: "Alex BAH",
     niveau: "Partenaire Or",
     ventes: 12,
     chiffreAffaires: "450 000 FCFA",
