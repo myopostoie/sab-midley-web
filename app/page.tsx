@@ -9,25 +9,17 @@ export default function Home() {
   const [orderProduct, setOrderProduct] = useState<any>(null);
   const [orderSuccess, setOrderSuccess] = useState<any>(null);
 
-  // État pour afficher ou masquer le champ du code partenaire
   const [showPartnerField, setShowPartnerField] = useState(false);
-
-  // État pour le menu mobile (burger)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  // État pour afficher ou masquer la flèche de retour en haut
   const [showScrollTop, setShowScrollTop] = useState(false);
 
-  // États pour les formulaires de Contact et Carrières
   const [contactSubmitted, setContactSubmitted] = useState(false);
   const [careerSubmitted, setCareerSubmitted] = useState(false);
 
-  // ================= ÉTATS POUR LE PORTAIL PARTENAIRE (MOT DE PASSE UNIVERSEL) =================
   const [activeTab, setActiveTab] = useState<'accueil' | 'partenaire'>('accueil');
   const [partnerLoggedIn, setPartnerLoggedIn] = useState(false);
   const [universalPasswordInput, setUniversalPasswordInput] = useState('');
 
-  // MOT DE PASSE UNIVERSEL UNIQUE POUR TOUS LES PARTENAIRES (modifiable ici)
   const UNIVERSAL_PARTNER_PASSWORD = 'rcsabmidley2026';
 
   useEffect(() => {
@@ -100,7 +92,6 @@ export default function Home() {
     setCareerForm({ fullName: '', email: '', phone: '', country: 'BJ', experience: 'Débutant', motivation: '' });
   };
 
-  // ================= VÉRIFICATION DU MOT DE PASSE UNIVERSEL =================
   const handleUniversalLogin = (e: any) => {
     e.preventDefault();
     if (universalPasswordInput.trim() === UNIVERSAL_PARTNER_PASSWORD) {
@@ -110,7 +101,6 @@ export default function Home() {
     }
   };
 
-  // Fonction pour envoyer la vente vers votre Google Sheets
   const saveOrderToGoogleSheets = async (orderData: any) => {
     const scriptURL = 'https://script.google.com/macros/s/AKfycbyCLzeK1mr3pccEO2Hc1UVtd-qA_SZe4uKQkpVr1ZP063mTc3I7JAAGcnPYWTb5pzuW/exec';
     try {
@@ -128,7 +118,6 @@ export default function Home() {
     }
   };
 
-  // Fonction de génération et téléchargement automatique du reçu PDF
   const generatePDFReceipt = (orderData: any) => {
     const doc = new jsPDF();
 
@@ -241,7 +230,7 @@ export default function Home() {
     const firstname = nameParts[0] ? nameParts[0].trim() : 'Client';
     const lastname = nameParts.slice(1).join(' ').trim() || 'Client';
 
-    const descriptionText = `Commande : ${(orderProduct as any).title}`.replace(/['"\\\/]/g, '');
+    const descriptionText = String((orderProduct as any).title || 'Commande SAB MIDLEY').replace(/[^a-zA-Z0-9éèàùêîôâäëïöüç\s-]/g, '');
 
     const handleSuccessfulPayment = async () => {
       const fedapayContainers = document.querySelectorAll('#fedapay-widget-container, .fedapay-modal, iframe[src*="fedapay"]');
@@ -275,7 +264,7 @@ export default function Home() {
           public_key: 'pk_live_63P5upxQrTGl6nS7aZWlmujt',
           transaction: {
             amount: Number(amount),
-            description: descriptionText,
+            description: String(descriptionText),
             currency: {
               iso: 'XOF'
             }
@@ -339,12 +328,10 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#090A0C] text-slate-100 font-sans relative">
       
-      {/* Top Banner d'actualité */}
       <div className="bg-[#D4AF37] text-[#090A0C] text-xs md:text-sm font-bold py-2.5 px-4 text-center tracking-wide">
         Expansion Régionale en cours : Bénin, Côte d'Ivoire & Burkina Faso — Rejoignez notre réseau commercial.
       </div>
 
-      {/* Barre de Menu / Navigation */}
       <header className="sticky top-0 z-40 bg-[#090A0C]/90 backdrop-blur-md border-b border-[#D4AF37]/20">
         <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
           <div className="flex items-center space-x-3">
@@ -353,7 +340,6 @@ export default function Home() {
             </button>
           </div>
 
-          {/* Menu Desktop */}
           <nav className="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
             <button onClick={() => setActiveTab('accueil')} className={`${activeTab === 'accueil' ? 'text-[#D4AF37]' : 'text-slate-300'} hover:text-white transition`}>Accueil</button>
             <a href="#poles" onClick={() => setActiveTab('accueil')} className="hover:text-[#D4AF37] transition">Nos Pôles</a>
@@ -371,7 +357,6 @@ export default function Home() {
             </button>
           </div>
 
-          {/* Bouton Burger Mobile */}
           <button 
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden text-white focus:outline-none p-2"
@@ -389,7 +374,6 @@ export default function Home() {
           </button>
         </div>
 
-        {/* Menu Déroulant Mobile */}
         {mobileMenuOpen && (
           <div className="md:hidden bg-[#090A0C] border-t border-[#D4AF37]/20 px-6 py-5 space-y-4 shadow-2xl">
             <button 
@@ -438,7 +422,6 @@ export default function Home() {
         )}
       </header>
 
-      {/* ================= CONTENU CONDITIONNEL : ACCUEIL OU PORTAIL PARTENAIRE ================= */}
       {activeTab === 'partenaire' ? (
         <section className="py-16 px-6 max-w-4xl mx-auto min-h-[75vh] flex flex-col justify-center">
           {!partnerLoggedIn ? (
@@ -475,10 +458,8 @@ export default function Home() {
               </form>
             </div>
           ) : (
-            /* CONTENU DE LA PAGE PARTENAIRE DEMANDÉE */
             <div className="bg-slate-900 border border-[#D4AF37]/40 rounded-3xl p-8 md:p-12 shadow-2xl space-y-12">
               
-              {/* En-tête */}
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-800 pb-6 gap-4">
                 <div className="space-y-2">
                   <span className="text-xs font-bold px-3 py-1 rounded bg-[#D4AF37]/20 text-[#D4AF37] tracking-wider uppercase">Espace Privé Partenaire</span>
@@ -498,7 +479,6 @@ export default function Home() {
                 <p className="text-slate-400">Prenez quelques minutes pour suivre les étapes ci-dessous.</p>
               </div>
 
-              {/* Étape 1 : Contrat */}
               <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-6">
                 <div className="space-y-2">
                   <h3 className="text-xl font-bold text-white">Étape 1 : Lire et signer le contrat</h3>
@@ -515,7 +495,6 @@ export default function Home() {
                   </a>
                 </div>
 
-                {/* Signature électronique */}
                 <div className="border-t border-slate-800/80 pt-6 space-y-4">
                   <h4 className="font-bold text-white text-base">Signature électronique</h4>
                   <p className="text-slate-400 text-sm">Vous n’êtes pas obligé d’imprimer le contrat. Vous pouvez le remplir directement sur votre téléphone.</p>
@@ -544,7 +523,6 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Étape 2 : Envoi */}
               <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-4">
                 <h3 className="text-xl font-bold text-white">Étape 2 : Envoyer le contrat signé</h3>
                 <p className="text-slate-400 text-sm">Une fois signé, envoyez votre contrat par WhatsApp au :</p>
@@ -558,7 +536,6 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Guide Partenaire */}
               <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
                 <div className="bg-slate-950 p-6 rounded-2xl border border-slate-800 space-y-4 flex flex-col justify-between">
                   <div className="space-y-2">
@@ -578,7 +555,6 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Canaux officiels */}
               <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-6">
                 <h3 className="text-xl font-bold text-white">Nos canaux officiels</h3>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -629,7 +605,6 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Vos avantages */}
               <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-4">
                 <h3 className="text-xl font-bold text-white">Vos avantages</h3>
                 <p className="text-slate-400 text-sm">En rejoignant RC SAB MIDLEY, vous bénéficiez de :</p>
@@ -661,7 +636,6 @@ export default function Home() {
                 </ul>
               </div>
 
-              {/* Section d'aide finale demandée */}
               <div className="text-center bg-slate-950 p-6 rounded-2xl border border-[#D4AF37]/30 space-y-2">
                 <p className="text-slate-300 text-sm">Pour toutes questions, veuillez contacter l'administration au <strong className="text-[#D4AF37]">+229 01 69 32 55 76</strong> ou l'un des admins du groupe principal.</p>
               </div>
@@ -670,10 +644,8 @@ export default function Home() {
           )}
         </section>
       ) : (
-        /* ACCUEIL CLASSIQUE / BOUTIQUE / ETC (inchangé) */
         <main className="space-y-24 pb-20">
           
-          {/* Hero Section */}
           <section className="relative py-20 px-6 max-w-7xl mx-auto text-center space-y-8">
             <div className="space-y-4 max-w-3xl mx-auto">
               <span className="text-xs font-bold px-3 py-1 rounded bg-[#D4AF37]/20 text-[#D4AF37] tracking-wider uppercase">Excellence & Fiabilité</span>
@@ -694,7 +666,6 @@ export default function Home() {
             </div>
           </section>
 
-          {/* Pôles d'activités */}
           <section id="poles" className="max-w-7xl mx-auto px-6 space-y-12">
             <div className="text-center space-y-3">
               <h2 className="text-3xl font-extrabold text-white">Nos Pôles d'Expertise</h2>
@@ -722,7 +693,6 @@ export default function Home() {
             </div>
           </section>
 
-          {/* Boutique */}
           <section id="boutique" className="max-w-7xl mx-auto px-6 space-y-12">
             <div className="text-center space-y-3">
               <h2 className="text-3xl font-extrabold text-white">Boutique & Négoce</h2>
@@ -761,7 +731,6 @@ export default function Home() {
             </div>
           </section>
 
-          {/* Carrières */}
           <section id="carrieres" className="max-w-4xl mx-auto px-6 space-y-8">
             <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 md:p-12 shadow-2xl space-y-8">
               <div className="text-center space-y-3">
@@ -852,7 +821,6 @@ export default function Home() {
             </div>
           </section>
 
-          {/* Contact */}
           <section id="contact" className="max-w-4xl mx-auto px-6 space-y-8">
             <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 md:p-12 shadow-2xl space-y-8">
               <div className="text-center space-y-3">
@@ -947,7 +915,6 @@ export default function Home() {
         </main>
       )}
 
-      {/* Modal Détails Produit */}
       {selectedProduct && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl relative space-y-6">
@@ -981,7 +948,6 @@ export default function Home() {
         </div>
       )}
 
-      {/* Modal Commande */}
       {orderProduct && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
           <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl relative space-y-6 my-8 p-6 md:p-8">
@@ -1068,7 +1034,6 @@ export default function Home() {
                 />
               </div>
 
-              {/* Bouton pour afficher/masquer le code partenaire */}
               <div className="pt-1">
                 {!showPartnerField ? (
                   <button 
@@ -1103,7 +1068,6 @@ export default function Home() {
         </div>
       )}
 
-      {/* Modal Succès Commande / Téléchargement Reçu */}
       {orderSuccess && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-slate-900 border border-emerald-500/40 rounded-3xl max-w-md w-full p-8 text-center space-y-6 shadow-2xl">
@@ -1133,7 +1097,6 @@ export default function Home() {
         </div>
       )}
 
-      {/* Flèche Retour en haut */}
       {showScrollTop && (
         <button 
           onClick={scrollToTop}
@@ -1144,7 +1107,6 @@ export default function Home() {
         </button>
       )}
 
-      {/* Footer */}
       <footer className="border-t border-slate-800 bg-[#090A0C] py-12 px-6 text-center text-slate-500 text-xs space-y-3">
         <p>© 2026 SAB MIDLEY. Tous droits réservés. Abomey-Calavi, Bénin.</p>
         <p>Contacts officiels : Bénin: +229 01 69 32 55 76 | Côte d'Ivoire: +225 07 104 106 04 | Burkina Faso: +226 04 26 18 02 | Togo: +228 92 04 66 86</p>
