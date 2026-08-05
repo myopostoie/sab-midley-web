@@ -170,7 +170,7 @@ export default function SuiviPartenaire() {
                       <span>🟡 Canal : Bientôt en stock</span>
                       <span className="text-[#D4AF37] font-bold">Accéder</span>
                     </a>
-                    <a href="https://uploadnow.io/f/2Q1vYW1" target="_blank" rel="noopener noreferrer" className="p-3 rounded-xl bg-[#D4AF37]/20 hover:bg-[#D4AF37]/30 border border-[#D4AF37]/40 transition flex items-center justify-between text-[#D4AF37] font-bold">
+                    <a href="https://raw.githubusercontent.com/myopostoie/sab-midley-files/main/Guide%20MAJ%20RC%20SAB%20MIDLEY%202026.pdf#toolbar=0>
                       <span>📄 Télécharger le Guide PDF</span>
                       <span>Ouvrir</span>
                     </a>
