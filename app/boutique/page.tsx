@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { productsList as initialProducts } from './products';
+import { productsList as initialProducts } from './produit';
 
 export default function Home() {
   const [productsList, setProductsList] = useState<any[]>(
