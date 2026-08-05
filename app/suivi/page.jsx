@@ -64,12 +64,12 @@ export default function SuiviPartenaire() {
 
             <form onSubmit={handleLogin} className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold uppercase text-slate-400 mb-1">Numéro de téléphone ou Email</label>
+                <label className="block text-xs font-semibold uppercase text-slate-400 mb-1">Numéro de téléphone </label>
                 <input
                   type="text"
                   value={inputID}
                   onChange={(e) => setInputID(e.target.value)}
-                  placeholder="Ex: +22969325576"
+                  placeholder="Ex: 22969325576"
                   required
                   className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:border-[#D4AF37] outline-none"
                 />
