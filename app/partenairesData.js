@@ -120,16 +120,6 @@ export const partenairesList = [
     motivation: "Bienvenue ! Activez votre réseau dès aujourd'hui."
   },
   {
-    identifiant: "+22969272127",
-    codeRc: "RC26BJ79373",
-    nom: "HOSSOU vivien",
-    niveau: "Partenaire Débutant",
-    ventes: 0,
-    chiffreAffaires: "0 FCFA",
-    commission: "0 FCFA",
-    motivation: "Bienvenue ! De belles opportunités vous attendent dans la région."
-  },
-  {
     identifiant: "+22960766858",
     codeRc: "RC26BJ5293673",
     nom: "MAMADOU MIcheline",
@@ -160,16 +150,6 @@ export const partenairesList = [
     motivation: "Bienvenue ! Lancez vos premières actions commerciales."
   },
   {
-    identifiant: "+22965858303",
-    codeRc: "RC268759570974",
-    nom: "ADANTOHOUDE romain",
-    niveau: "Partenaire Débutant",
-    ventes: 0,
-    chiffreAffaires: "0 FCFA",
-    commission: "0 FCFA",
-    motivation: "Bienvenue ! Tout est réuni pour réussir vos ventes."
-  },
-  {
     identifiant: "+22943785096",
     codeRc: "RC26BJ53946",
     nom: "HOUNNOU XAVIER",
@@ -198,16 +178,6 @@ export const partenairesList = [
     chiffreAffaires: "0 FCFA",
     commission: "0 FCFA",
     motivation: "Bienvenue ! C'est le moment de dynamiser votre portefeuille."
-  },
-  {
-    identifiant: "+22969067053",
-    codeRc: "RC26BJ6376363",
-    nom: "jaures GUIDIGAN",
-    niveau: "Partenaire Débutant",
-    ventes: 0,
-    chiffreAffaires: "0 FCFA",
-    commission: "0 FCFA",
-    motivation: "Bienvenue ! De belles commissions vous tendent les bras."
   },
   {
     identifiant: "+22990935326",
