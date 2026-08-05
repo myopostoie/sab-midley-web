@@ -69,7 +69,7 @@ export default function SuiviPartenaire() {
                   type="text"
                   value={inputID}
                   onChange={(e) => setInputID(e.target.value)}
-                  placeholder="Ex: 22969325576"
+                  placeholder="Ex: 2290169325576"
                   required
                   className="w-full px-4 py-3 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:border-[#D4AF37] outline-none"
                 />
