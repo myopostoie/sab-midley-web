@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { partenairesList } from '../partenairesData';
 
 export default function SuiviPartenaire() {
   const [inputID, setInputID] = useState('');
@@ -10,18 +9,38 @@ export default function SuiviPartenaire() {
   const [erreur, setErreur] = useState('');
   const [activeTab, setActiveTab] = useState('stats'); // 'stats' ou 'conseils'
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setErreur('');
 
-    const trouve = partenairesList.find(
-      (p) => p.identifiant === inputID.trim() && p.codeRc === inputCode.trim()
-    );
+    try {
+      // Récupération en direct de votre Google Sheets via l'API SheetDB
+      const res = await fetch('https://sheetdb.io/api/v1/8wip7h4q3wv3c');
+      const partenairesList = await res.json();
 
-    if (trouve) {
-      setPartenaireConnecte(trouve);
-    } else {
-      setErreur("Identifiant ou Code RC incorrect. Vérifiez vos informations.");
+      // Recherche du partenaire correspondant
+      const trouve = partenairesList.find(
+        (p) => String(p.Identifiant).trim() === inputID.trim() && String(p.CodeRC).trim() === inputCode.trim()
+      );
+
+      if (trouve) {
+        // Adaptation des données reçues pour correspondre au design de votre page
+        const partenaireFormate = {
+          identifiant: trouve.Identifiant,
+          codeRc: trouve.CodeRC,
+          nom: trouve.Nom,
+          niveau: trouve.Niveau,
+          ventes: Number(trouve.Ventes || 0),
+          chiffreAffaires: trouve.ChiffreAffaires ? trouve.ChiffreAffaires + " FCFA" : "0 FCFA",
+          commission: trouve.Commission ? trouve.Commission + " FCFA" : "0 FCFA",
+          motivation: trouve.Motivation || "Continuez vos efforts !"
+        };
+        setPartenaireConnecte(partenaireFormate);
+      } else {
+        setErreur("Identifiant ou Code RC incorrect. Vérifiez vos informations.");
+      }
+    } catch (err) {
+      setErreur("Erreur de connexion au serveur de données.");
     }
   };
 
@@ -202,7 +221,7 @@ export default function SuiviPartenaire() {
                   </p>
                   <div className="pt-1">
                     <a 
-                      href="https://wa.me/22969325576?text=Bonjour,%20je%20suis%20partenaire%20et%20j'ai%20besoin%20d'assistance%20pour%20une%20commande." 
+                      href="https://wa.me/22969325576?text=Bonjour,%2520je%2520suis%2520partenaire%2520et%2520j'ai%2520besoin%2520d'assistance%2520pour%2520une%2520commande." 
                       target="_blank" 
                       rel="noopener noreferrer" 
                       className="inline-block px-6 py-3 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold text-xs hover:bg-[#c5a030] transition shadow-lg"
