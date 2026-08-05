@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { productsList as initialProducts } from './products';
-import jsPDF from 'jspdf';
+import { productsList as initialProducts } from '../../../products';import jsPDF from 'jspdf';
 
 export default function Home() {
   const [productsList, setProductsList] = useState<any[]>(initialProducts);
