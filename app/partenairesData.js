@@ -24,7 +24,7 @@ export const partenairesList = [
     codeRc: "RC26BJ374949",
     nom: "SEMEVO Emmel",
     niveau: "Partenaire Argent",
-    ventes: 3,
+    ventes: 1,
     chiffreAffaires: "40 000 FCFA",
     commission: "4 000 FCFA",
     motivation: "Bonne dynamique en cours, continuez sur cette lancée !"
