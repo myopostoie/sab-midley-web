@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
-import { verifyPasswordAction } from './actions';
 
 export default function PartenairePage() {
   const [partnerLoggedIn, setPartnerLoggedIn] = useState(false);
@@ -15,11 +14,13 @@ export default function PartenairePage() {
     setOpenFaqIndex(openFaqIndex === index ? null : index);
   };
 
-  const handleUniversalLogin = async (e: React.FormEvent) => {
+  const handleUniversalLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    const isValid = await verifyPasswordAction(universalPasswordInput);
     
-    if (isValid) {
+    // Remplacez 'VOTRE_MOT_DE_PASSE' par le vrai mot de passe secret de votre réseau partenaire
+    const motDePasseAttendu = "sabmidley2026"; 
+
+    if (universalPasswordInput.trim() === motDePasseAttendu) {
       setPartnerLoggedIn(true);
     } else {
       alert("Mot de passe incorrect. Veuillez vérifier le code d'accès fourni par le réseau.");
