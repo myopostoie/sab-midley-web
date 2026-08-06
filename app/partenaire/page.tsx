@@ -18,7 +18,7 @@ export default function PartenairePage() {
     e.preventDefault();
     
     // Remplacez 'VOTRE_MOT_DE_PASSE' par le vrai mot de passe secret de votre réseau partenaire
-    const motDePasseAttendu = "sabmidley2026"; 
+    const motDePasseAttendu = "rcsabmidley"; 
 
     if (universalPasswordInput.trim() === motDePasseAttendu) {
       setPartnerLoggedIn(true);
