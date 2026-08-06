@@ -6,6 +6,9 @@ import Navbar from '../components/Navbar';
 export default function PartenairePage() {
   const [partnerLoggedIn, setPartnerLoggedIn] = useState(false);
   const [universalPasswordInput, setUniversalPasswordInput] = useState('');
+  
+  // État pour la suggestion d'amélioration
+  const [suggestionInput, setSuggestionInput] = useState('');
 
   // État pour gérer l'accordéon de la FAQ
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
@@ -17,7 +20,6 @@ export default function PartenairePage() {
   const handleUniversalLogin = (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Remplacez 'VOTRE_MOT_DE_PASSE' par le vrai mot de passe secret de votre réseau partenaire
     const motDePasseAttendu = "rcsabmidley2026"; 
 
     if (universalPasswordInput.trim() === motDePasseAttendu) {
@@ -25,6 +27,18 @@ export default function PartenairePage() {
     } else {
       alert("Mot de passe incorrect. Veuillez vérifier le code d'accès fourni par le réseau.");
     }
+  };
+
+  // Fonction pour envoyer la suggestion sur WhatsApp
+  const handleSendSuggestion = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!suggestionInput.trim()) {
+      alert("Veuillez écrire votre suggestion avant de l'envoyer.");
+      return;
+    }
+    const message = encodeURIComponent(`💡 Suggestion d'amélioration - Portail Partenaire :\n\n${suggestionInput}`);
+    const whatsappUrl = `https://wa.me/22969325576?text=${message}`;
+    window.open(whatsappUrl, '_blank');
   };
 
   // Liste des questions/réponses de la FAQ
@@ -118,39 +132,69 @@ export default function PartenairePage() {
   return (
     <div className="min-h-screen bg-[#090A0C] text-slate-100 font-sans relative">
       <Navbar />
-      <section className="py-16 px-6 max-w-4xl mx-auto min-h-[75vh] flex flex-col justify-center">
+      <section className="py-16 px-6 max-w-4xl mx-auto min-h-[75vh] flex flex-col justify-center space-y-8">
         {!partnerLoggedIn ? (
-          <div className="bg-slate-900 border border-[#D4AF37]/40 rounded-3xl p-8 md:p-12 shadow-2xl space-y-8">
-            <div className="text-center space-y-3">
-              <span className="text-xs font-bold px-3 py-1 rounded bg-[#D4AF37]/20 text-[#D4AF37] tracking-wider uppercase">Accès Réservé Partenaires</span>
-              <h2 className="text-3xl font-extrabold text-white">Portail Partenaire RC SAB MIDLEY</h2>
-              <p className="text-slate-400 text-sm max-w-md mx-auto">
-                Veuillez entrer le mot de passe universel du réseau pour accéder aux informations, guides et ressources de partenariat.
-              </p>
+          <>
+            {/* Boîte de Connexion */}
+            <div className="bg-slate-900 border border-[#D4AF37]/40 rounded-3xl p-8 md:p-12 shadow-2xl space-y-8">
+              <div className="text-center space-y-3">
+                <span className="text-xs font-bold px-3 py-1 rounded bg-[#D4AF37]/20 text-[#D4AF37] tracking-wider uppercase">Accès Réservé Partenaires</span>
+                <h2 className="text-3xl font-extrabold text-white">Portail Partenaire RC SAB MIDLEY</h2>
+                <p className="text-slate-400 text-sm max-w-md mx-auto">
+                  Veuillez entrer le mot de passe universel du réseau pour accéder aux informations, guides et ressources de partenariat.
+                </p>
+              </div>
+              <form onSubmit={handleUniversalLogin} className="space-y-6 max-w-md mx-auto w-full">
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Mot de passe unique</label>
+                  <input
+                    type="password"
+                    value={universalPasswordInput}
+                    onChange={(e) => setUniversalPasswordInput(e.target.value)}
+                    placeholder="Entrez le mot de passe du réseau"
+                    required
+                    className="w-full px-4 py-3.5 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="w-full py-4 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold hover:bg-[#c5a030] transition shadow-lg shadow-[#D4AF37]/20"
+                >
+                  Entrer sur le portail
+                </button>
+                <div className="text-center">
+                  <p className="text-xs text-slate-500">Entrez le mot de passe fourni dans le groupe <strong className="text-[#D4AF37]">Bonne connexion</strong></p>
+                </div>
+              </form>
             </div>
-            <form onSubmit={handleUniversalLogin} className="space-y-6 max-w-md mx-auto w-full">
-              <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">Mot de passe unique</label>
-                <input
-                  type="password"
-                  value={universalPasswordInput}
-                  onChange={(e) => setUniversalPasswordInput(e.target.value)}
-                  placeholder="Entrez le mot de passe du réseau"
+
+            {/* Section Suggestion d'amélioration (Accessible sans connexion sur l'écran d'accueil) */}
+            <div className="bg-slate-900 border border-slate-800 rounded-3xl p-8 md:p-10 shadow-xl space-y-6">
+              <div className="text-center space-y-2">
+                <span className="text-xs font-bold px-3 py-1 rounded bg-emerald-500/20 text-emerald-400 tracking-wider uppercase">Boîte à idées</span>
+                <h3 className="text-2xl font-bold text-white">Une suggestion pour améliorer le programme ?</h3>
+                <p className="text-slate-400 text-sm max-w-lg mx-auto">
+                  Votre avis compte ! Partagez vos idées ou propositions d'amélioration directement avec notre équipe via WhatsApp.
+                </p>
+              </div>
+              <form onSubmit={handleSendSuggestion} className="space-y-4 max-w-xl mx-auto w-full">
+                <textarea
+                  value={suggestionInput}
+                  onChange={(e) => setSuggestionInput(e.target.value)}
+                  placeholder="Écrivez votre suggestion ici..."
+                  rows={4}
                   required
-                  className="w-full px-4 py-3.5 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-[#D4AF37] outline-none transition text-sm"
+                  className="w-full px-4 py-3.5 rounded-xl bg-[#090A0C] border border-slate-800 text-white focus:border-emerald-500 outline-none transition text-sm resize-none"
                 />
-              </div>
-              <button
-                type="submit"
-                className="w-full py-4 rounded-xl bg-[#D4AF37] text-[#090A0C] font-bold hover:bg-[#c5a030] transition shadow-lg shadow-[#D4AF37]/20"
-              >
-                Entrer sur le portail
-              </button>
-              <div className="text-center">
-                <p className="text-xs text-slate-500">Entrez le mot de passe fourni dans le groupe <strong className="text-[#D4AF37]">Bonne connexion</strong></p>
-              </div>
-            </form>
-          </div>
+                <button
+                  type="submit"
+                  className="w-full py-3.5 rounded-xl bg-emerald-600 text-white font-bold hover:bg-emerald-500 transition shadow-lg shadow-emerald-900/20 flex items-center justify-center space-x-2 text-sm"
+                >
+                  <span>Envoyer ma suggestion sur WhatsApp</span>
+                </button>
+              </form>
+            </div>
+          </>
         ) : (
           <div className="bg-slate-900 border border-[#D4AF37]/40 rounded-3xl p-8 md:p-12 shadow-2xl space-y-12">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-800 pb-6 gap-4">
