@@ -8,6 +8,13 @@ export default function PartenairePage() {
   const [universalPasswordInput, setUniversalPasswordInput] = useState('');
   const UNIVERSAL_PARTNER_PASSWORD = 'rcsabmidley2026';
 
+  // État pour gérer l'accordéon de la FAQ (garde en mémoire quelle question est ouverte)
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+
+  const toggleFaq = (index: number) => {
+    setOpenFaqIndex(openFaqIndex === index ? null : index);
+  };
+
   const handleUniversalLogin = (e: any) => {
     e.preventDefault();
     if (universalPasswordInput.trim() === UNIVERSAL_PARTNER_PASSWORD) {
@@ -16,6 +23,94 @@ export default function PartenairePage() {
       alert("Mot de passe incorrect. Veuillez vérifier le code d'accès fourni par le réseau.");
     }
   };
+
+  // Liste des questions/réponses de la FAQ
+  const faqList = [
+    {
+      question: "1. Comment devenir partenaire ?",
+      answer: "Rendez-vous sur https://www.sabmidley.co/partenaire\n\nMot de passe universel : rcsabmidley2026\n\nVous y trouverez le contrat de partenariat et toutes les informations utiles."
+    },
+    {
+      question: "2. Dois-je remplir la partie “Code RC” du contrat ?",
+      answer: "Non.\n\nLaissez cette partie vide. Le Code RC est attribué uniquement par l’équipe SAB MIDLEY après validation de votre contrat."
+    },
+    {
+      question: "3. Comment obtenir mon Code RC Partenaire ?",
+      answer: "Après avoir rempli, signé et envoyé votre contrat, notre équipe procède à sa vérification.\n\nUne fois validé, un Code RC individuel vous est attribué.\n\nCe code permet :\n• d’identifier vos ventes ;\n• de suivre vos commissions ;\n• d’accéder à votre espace partenaire."
+    },
+    {
+      question: "4. Dois-je investir de l’argent ?",
+      answer: "Non.\n\nAucun investissement n’est demandé pour devenir partenaire."
+    },
+    {
+      question: "5. Dois-je acheter un stock ?",
+      answer: "Non.\n\nLes produits restent en stock chez SAB MIDLEY."
+    },
+    {
+      question: "6. Qui effectue les livraisons ?",
+      answer: "Toutes les livraisons sont assurées par SAB MIDLEY."
+    },
+    {
+      question: "7. Quel est le montant des commissions ?",
+      answer: "Les commissions varient entre 10 % et 20 %, selon le produit.\n\nLe taux est indiqué sur chaque publication dans le canal partenaire."
+    },
+    {
+      question: "8. Quand mes commissions sont-elles payées ?",
+      answer: "Les commissions sont versées 24 heures après la livraison effective de la commande."
+    },
+    {
+      question: "9. Comment consulter mes ventes et mes commissions ?",
+      answer: "Connectez-vous sur :\nhttps://www.sabmidley.co/suivi\n\navec :\n• votre numéro de téléphone (ou e-mail)\n• votre Code RC"
+    },
+    {
+      question: "10. J’ai oublié mon Code RC ou je n’arrive pas à me connecter.",
+      answer: "Contactez l’assistance au :\n+229 01 69 32 55 76"
+    },
+    {
+      question: "11. Puis-je envoyer mon client dans votre local ?",
+      answer: "Oui.\n\nVotre client peut visiter notre local afin d’être rassuré avant son achat.\n\nMerci de nous prévenir à l’avance afin que notre équipe puisse l’accueillir."
+    },
+    {
+      question: "12. Puis-je venir signer mon contrat dans votre local ?",
+      answer: "Oui.\n\nVous pouvez vous rendre directement dans notre local si vous souhaitez être accompagné."
+    },
+    {
+      question: "13. Comment fonctionne le paiement à la livraison ?",
+      answer: "Le paiement à la livraison est disponible à Cotonou et Abomey-Calavi pour les commandes inférieures à 70 000 FCFA.\n\nAu-delà de ce montant, ou pour les autres villes, le client devra :\n• effectuer le paiement avant l’expédition ; ou\n• se rendre dans notre local pour finaliser son achat."
+    },
+    {
+      question: "14. Puis-je modifier les prix des produits ?",
+      answer: "Non.\n\nLes prix communiqués par SAB MIDLEY doivent être respectés."
+    },
+    {
+      question: "15. Où trouver les photos et vidéos des produits ?",
+      answer: "Dans les canaux officiels partenaires."
+    },
+    {
+      question: "16. Où trouver les nouveautés ?",
+      answer: "Toutes les nouveautés sont publiées dans les canaux partenaires."
+    },
+    {
+      question: "17. Puis-je vendre partout au Bénin ?",
+      answer: "Oui, sous réserve des conditions de livraison applicables à la zone concernée."
+    },
+    {
+      question: "18. RC SAB MIDLEY peut-il me demander de l’argent ?",
+      answer: "Non.\n\nSAB MIDLEY ne demande jamais d’argent à ses partenaires pour intégrer le réseau ou recevoir leurs commissions."
+    },
+    {
+      question: "19. Un membre du groupe m’a contacté en privé. Que faire ?",
+      answer: "Ne répondez pas.\n\nBloquez-le puis signalez-le immédiatement au :\n+229 01 69 32 55 76\nafin que notre équipe puisse prendre les mesures nécessaires."
+    },
+    {
+      question: "20. Où retrouver toutes les informations officielles ?",
+      answer: "Toutes les procédures, documents et informations sont disponibles dans l’Espace Partenaire :\nhttps://www.sabmidley.co/partenaire\n\nMot de passe : rcsabmidley2026"
+    },
+    {
+      question: "21. Puis-je vendre un produit qui n’est pas publié dans les canaux officiels ?",
+      answer: "Non. Seuls les produits publiés dans le canal « En Stock » sont autorisés à la commercialisation. Les produits du canal « Bientôt en Stock » sont uniquement informatifs, et les produits du canal « Rupture de Stock » ne doivent pas être proposés aux clients jusqu’à leur retour en stock."
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-[#090A0C] text-slate-100 font-sans relative">
@@ -208,6 +303,43 @@ export default function PartenairePage() {
               </div>
             </div>
 
+            {/* SECTION FAQ : Comment travailler avec nous ? (Accordéon interactif) */}
+            <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-6">
+              <div className="text-center space-y-1">
+                <span className="text-[10px] font-bold px-2.5 py-0.5 rounded bg-[#D4AF37]/20 text-[#D4AF37] uppercase">FAQ</span>
+                <h3 className="text-xl font-extrabold uppercase tracking-wider text-[#D4AF37]">Comment travailler avec nous ?</h3>
+                <p className="text-xs text-slate-400">Cliquez sur une question pour afficher la réponse.</p>
+              </div>
+
+              <div className="space-y-2 max-h-[450px] overflow-y-auto pr-1">
+                {faqList.map((item, index) => {
+                  const isOpen = openFaqIndex === index;
+                  return (
+                    <div 
+                      key={index} 
+                      className="rounded-xl bg-slate-900 border border-slate-800 overflow-hidden transition"
+                    >
+                      <button
+                        onClick={() => toggleFaq(index)}
+                        className="w-full p-4 text-left text-xs font-semibold text-white flex justify-between items-center hover:bg-slate-800/60 transition"
+                      >
+                        <span>{item.question}</span>
+                        <span className="text-[#D4AF37] text-base font-bold ml-2">
+                          {isOpen ? '−' : '+'}
+                        </span>
+                      </button>
+                      
+                      {isOpen && (
+                        <div className="p-4 bg-slate-950/80 border-t border-slate-800 text-xs text-slate-300 whitespace-pre-line leading-relaxed">
+                          {item.answer}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
             {/* Vos avantages */}
             <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-4">
               <h3 className="text-xl font-bold text-white">Vos avantages</h3>
@@ -265,37 +397,6 @@ export default function PartenairePage() {
                   <span>Merci de ne jamais partager les liens d’accès des canaux afin de préserver les avantages du réseau.</span>
                 </li>
               </ul>
-            </div>
-
-            {/* Questions fréquentes */}
-            <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-6">
-              <h3 className="text-xl font-bold text-white">Questions fréquentes</h3>
-              <div className="space-y-4 text-xs">
-                <div className="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-1">
-                  <p className="font-bold text-white">Quand suis-je payé ?</p>
-                  <p className="text-slate-400">Sous 24 heures après confirmation de la livraison.</p>
-                </div>
-                <div className="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-1">
-                  <p className="font-bold text-white">Ai-je besoin d’acheter un stock ?</p>
-                  <p className="text-slate-400">Non.</p>
-                </div>
-                <div className="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-1">
-                  <p className="font-bold text-white">Quelles sont les conditions pour le paiement à la livraison ?</p>
-                  <p className="text-slate-400">Le paiement à la livraison est accepté uniquement à Cotonou, Abomey-Calavi, Abidjan et Ouagadougou, et uniquement pour les articles de moins de 50 000 FCFA. Pour le reste, les conditions exigent un paiement avant livraison ou que le client se rende directement sur place dans notre local.</p>
-                </div>
-                <div className="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-1">
-                  <p className="font-bold text-white">Qui effectue les livraisons ?</p>
-                  <p className="text-slate-400">RC SAB MIDLEY.</p>
-                </div>
-                <div className="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-1">
-                  <p className="font-bold text-white">Qui gère le service après-vente ?</p>
-                  <p className="text-slate-400">RC SAB MIDLEY.</p>
-                </div>
-                <div className="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-1">
-                  <p className="font-bold text-white">Puis-je vendre depuis n’importe quelle ville ?</p>
-                  <p className="text-slate-400">Oui, selon les zones couvertes.</p>
-                </div>
-              </div>
             </div>
 
             {/* Besoin d'aide */}
