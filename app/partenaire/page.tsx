@@ -3,21 +3,28 @@
 import { useState } from 'react';
 import Navbar from '../components/Navbar';
 
+// Server Action exécutée uniquement côté serveur
+async function verifyPasswordAction(password: string): Promise<boolean> {
+  // L'appel s'exécute sur le serveur, le mot de passe n'est jamais envoyé au client
+  return password.trim() === process.env.UNIVERSAL_PARTNER_PASSWORD;
+}
+
 export default function PartenairePage() {
   const [partnerLoggedIn, setPartnerLoggedIn] = useState(false);
   const [universalPasswordInput, setUniversalPasswordInput] = useState('');
-  const UNIVERSAL_PARTNER_PASSWORD = 'rcsabmidley2026';
 
-  // État pour gérer l'accordéon de la FAQ (garde en mémoire quelle question est ouverte)
+  // État pour gérer l'accordéon de la FAQ
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
 
   const toggleFaq = (index: number) => {
     setOpenFaqIndex(openFaqIndex === index ? null : index);
   };
 
-  const handleUniversalLogin = (e: any) => {
+  const handleUniversalLogin = async (e: any) => {
     e.preventDefault();
-    if (universalPasswordInput.trim() === UNIVERSAL_PARTNER_PASSWORD) {
+    const isValid = await verifyPasswordAction(universalPasswordInput);
+    
+    if (isValid) {
       setPartnerLoggedIn(true);
     } else {
       alert("Mot de passe incorrect. Veuillez vérifier le code d'accès fourni par le réseau.");
@@ -28,7 +35,7 @@ export default function PartenairePage() {
   const faqList = [
     {
       question: "1. Comment devenir partenaire ?",
-      answer: "Rendez-vous sur https://www.sabmidley.co/partenaire\n\nMot de passe universel : rcsabmidley2026\n\nVous y trouverez le contrat de partenariat et toutes les informations utiles."
+      answer: "Rendez-vous sur https://www.sabmidley.co/partenaire\n\nVous y trouverez le contrat de partenariat et toutes les informations utiles."
     },
     {
       question: "2. Dois-je remplir la partie “Code RC” du contrat ?",
@@ -104,7 +111,7 @@ export default function PartenairePage() {
     },
     {
       question: "20. Où retrouver toutes les informations officielles ?",
-      answer: "Toutes les procédures, documents et informations sont disponibles dans l’Espace Partenaire :\nhttps://www.sabmidley.co/partenaire\n\nMot de passe : rcsabmidley2026"
+      answer: "Toutes les procédures, documents et informations sont disponibles dans l’Espace Partenaire :\nhttps://www.sabmidley.co/partenaire"
     },
     {
       question: "21. Puis-je vendre un produit qui n’est pas publié dans les canaux officiels ?",
@@ -303,7 +310,7 @@ export default function PartenairePage() {
               </div>
             </div>
 
-            {/* SECTION FAQ : Comment travailler avec nous ? (Accordéon interactif) */}
+            {/* SECTION FAQ */}
             <div className="bg-slate-950 p-6 md:p-8 rounded-2xl border border-slate-800 space-y-6">
               <div className="text-center space-y-1">
                 <span className="text-[10px] font-bold px-2.5 py-0.5 rounded bg-[#D4AF37]/20 text-[#D4AF37] uppercase">FAQ</span>
